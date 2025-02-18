@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:front/features/onboarding/OnboardingView.dart';
+import 'package:front/features/committee/screen/CommitteeView.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,12 +11,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: '바로',
+      debugShowCheckedModeBanner: false,
+      title: 'Main Page UI',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigoAccent),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: OnboardingView(), //일단 시작은 무조건 온보딩 페이지로
+      home: const CommitteeView(),
     );
   }
 }
