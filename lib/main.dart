@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:front/features/committee/data/committee_retrieve_api_repository.dart';
-import 'package:front/features/committee/view/committee_account_list_widget.dart';
 import 'package:front/features/committee/viewmodel/committee_account_provider.dart';
 import 'package:front/features/onboarding/OnboardingView.dart';
 import 'package:provider/provider.dart';
