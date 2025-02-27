@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:front/features/committee/screen/CommitteeView.dart';
+import 'package:front/features/committee/view/committee_retrieve_view.dart';
 import 'OnboardingContent.dart';
 
 class OnboardingView extends StatefulWidget {

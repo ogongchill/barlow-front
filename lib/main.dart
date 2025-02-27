@@ -1,22 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:front/features/committee/data/committee_retrieve_api_repository.dart';
+import 'package:front/features/committee/view/committee_account_list_widget.dart';
+import 'package:front/features/committee/viewmodel/committee_account_provider.dart';
 import 'package:front/features/onboarding/OnboardingView.dart';
+import 'package:provider/provider.dart';
+import 'package:front/dev/provider/dummy_committee_retrieve_provider.dart';
 
 void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: '바로',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigoAccent),
-        useMaterial3: true,
-      ),
-      home: OnboardingView(), //일단 시작은 무조건 온보딩 페이지로
-    );
-  }
+  runApp(
+      MultiProvider(
+        providers: [
+          Provider<CommitteeRetrieveApiRepository>(create: (_) => DummyCommitteeRetrieveProviderFactory().withAllCommittee()),
+          ChangeNotifierProvider(create: (context) =>
+              CommitteeAccountProvider(repository: context.read<CommitteeRetrieveApiRepository>())
+          ),
+        ],
+        child:
+        MaterialApp(
+          debugShowCheckedModeBanner: false,
+          home: OnboardingView(),
+        ),
+     )
+  );
 }
