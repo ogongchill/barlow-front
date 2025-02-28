@@ -16,6 +16,10 @@ void main() {
         ],
         child:
         MaterialApp(
+          theme: ThemeData(
+            brightness: Brightness.light, // 밝은 모드 강제 적용
+            primarySwatch: Colors.blue,
+          ),
           debugShowCheckedModeBanner: false,
           home: OnboardingView(),
         ),

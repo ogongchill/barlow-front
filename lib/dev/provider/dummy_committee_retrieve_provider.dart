@@ -5,11 +5,13 @@ import 'package:front/features/committee/data/committee_retrieve_api_response.da
 class DummyCommitteeRetrieveProvider implements CommitteeRetrieveApiRepository{
 
   final CommitteeRetrieveApiResponse response;
+  final int delaySecond;
 
-  DummyCommitteeRetrieveProvider(this.response);
+  DummyCommitteeRetrieveProvider(this.response, this.delaySecond);
 
   @override
   Future<CommitteeRetrieveApiResponse> retrieve() async {
+    await Future.delayed(Duration(seconds: delaySecond));
     return response;
   }
 }
@@ -39,12 +41,12 @@ class DummyCommitteeRetrieveProviderFactory {
 
   DummyCommitteeRetrieveProvider withAllCommittee() {
     CommitteeRetrieveApiResponse response = CommitteeRetrieveApiResponse("title", "_subtitle", "_description", sampleAccounts);
-    return DummyCommitteeRetrieveProvider(response);
+    return DummyCommitteeRetrieveProvider(response, 10);
   }
 
   DummyCommitteeRetrieveProvider withEmptyCommittee() {
     CommitteeRetrieveApiResponse response = CommitteeRetrieveApiResponse("title", "_subtitle", "_description", List.empty());
-    return DummyCommitteeRetrieveProvider(response);
+    return DummyCommitteeRetrieveProvider(response, 2);
   }
 }
 
