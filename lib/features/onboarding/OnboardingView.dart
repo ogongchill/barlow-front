@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:front/features/committee/view/committee_retrieve_view.dart';
+import 'package:front/features/committee/view/committee_home_view.dart';
 import 'OnboardingContent.dart';
 
 class OnboardingView extends StatefulWidget {
@@ -69,7 +69,7 @@ class _OnboardingViewState extends State<OnboardingView> {
                       // 온보딩이 끝나면 MainPage로 이동
                       Navigator.pushReplacement(
                         context,
-                        MaterialPageRoute(builder: (context) => const CommitteeView()),
+                        MaterialPageRoute(builder: (context) => CommitteeHomeView()),
                       );                    } else {
                       _controller.nextPage(
                         duration: Duration(milliseconds: 300),

@@ -1,10 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:front/features/committee/data/committee_retrieve_api_repository.dart';
 import 'package:front/features/committee/data/committee_retrieve_api_response.dart';
 
-enum CommitteeAccountRetrieveState { initial, loading, empty, loaded, error }
+enum CommitteeAccountRetrieveState { initial, empty, loaded, error }
 
-class CommitteeAccountProvider with ChangeNotifier {
+class CommitteeAccountProvider {
 
   final CommitteeRetrieveApiRepository _repository;
   CommitteeAccountRetrieveState _state = CommitteeAccountRetrieveState.initial;
@@ -19,22 +18,10 @@ class CommitteeAccountProvider with ChangeNotifier {
   String? get errorMessage => _errorMessage;
 
   Future<void> retrieve() async {
-    if (_state == CommitteeAccountRetrieveState.loading) return; // 중복 호출 방지
-    _state = CommitteeAccountRetrieveState.loading;
-    notifyListeners(); //  UI에 즉시 반영 (로딩 상태)
-    await _fetchAndSetState();
-    notifyListeners(); //  최종적으로 한 번만 호출 (최적화)
-  }
-
-  Future<void> _fetchAndSetState() async {
     try {
       final response = await _repository.retrieve();
       _data = response;
-      if (response.accounts.isEmpty) {
-        _state = CommitteeAccountRetrieveState.empty;
-      } else {
-        _state = CommitteeAccountRetrieveState.loaded;
-      }
+      _state = response.accounts.isEmpty ? CommitteeAccountRetrieveState.empty : CommitteeAccountRetrieveState.loaded;
     } catch (e) {
       _errorMessage = e.toString();
       _state = CommitteeAccountRetrieveState.error;

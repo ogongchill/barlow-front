@@ -6,12 +6,16 @@ class DummyCommitteeRetrieveProvider implements CommitteeRetrieveApiRepository{
 
   final CommitteeRetrieveApiResponse response;
   final int delaySecond;
+  final bool throwException;
 
-  DummyCommitteeRetrieveProvider(this.response, this.delaySecond);
+  DummyCommitteeRetrieveProvider(this.response, this.delaySecond, this.throwException);
 
   @override
   Future<CommitteeRetrieveApiResponse> retrieve() async {
     await Future.delayed(Duration(seconds: delaySecond));
+    if(throwException) {
+      throw Exception("exception occurs by dev ");
+    }
     return response;
   }
 }
@@ -41,12 +45,22 @@ class DummyCommitteeRetrieveProviderFactory {
 
   DummyCommitteeRetrieveProvider withAllCommittee() {
     CommitteeRetrieveApiResponse response = CommitteeRetrieveApiResponse("title", "_subtitle", "_description", sampleAccounts);
-    return DummyCommitteeRetrieveProvider(response, 10);
+    return DummyCommitteeRetrieveProvider(response, 2, false);
   }
 
   DummyCommitteeRetrieveProvider withEmptyCommittee() {
     CommitteeRetrieveApiResponse response = CommitteeRetrieveApiResponse("title", "_subtitle", "_description", List.empty());
-    return DummyCommitteeRetrieveProvider(response, 2);
+    return DummyCommitteeRetrieveProvider(response, 2, false);
+  }
+
+  DummyCommitteeRetrieveProvider withError() {
+    CommitteeRetrieveApiResponse response = CommitteeRetrieveApiResponse("title", "_subtitle", "_description", List.empty());
+    return DummyCommitteeRetrieveProvider(response, 2, true);
+  }
+
+  DummyCommitteeRetrieveProvider withFromTopFive() {
+    CommitteeRetrieveApiResponse response = CommitteeRetrieveApiResponse("title", "_subtitle", "_description", sampleAccounts.sublist(0,4));
+    return DummyCommitteeRetrieveProvider(response, 2, false);
   }
 }
 
