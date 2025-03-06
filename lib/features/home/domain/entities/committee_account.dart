@@ -1,4 +1,4 @@
-class CommitteeAccount {
+class SubscribeCommitteeInfo {
   final String _name;
   final String _description;
   final int _legislationAccountNo;
@@ -6,7 +6,7 @@ class CommitteeAccount {
   final bool _isNotifiable;
   final String _iconUrl;
 
-  CommitteeAccount(this._name,
+  SubscribeCommitteeInfo(this._name,
       this._description,
       this._legislationAccountNo,
       this._isSubscribed,
@@ -14,7 +14,7 @@ class CommitteeAccount {
       this._iconUrl
       );
 
-  CommitteeAccount.fromJson(Map<String, dynamic> json)
+  SubscribeCommitteeInfo.fromJson(Map<String, dynamic> json)
       : _name = json['name'],
         _description = json['description'],
         _legislationAccountNo = json['year'],

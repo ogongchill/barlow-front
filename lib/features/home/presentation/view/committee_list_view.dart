@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:front/core/theme/color_palette.dart';
 import 'package:front/core/theme/test_style_preset.dart';
-import 'package:front/features/committee/view/committee_account_list_widget.dart';
-import 'package:front/features/committee/viewmodel/committee_account_provider.dart';
-import 'package:provider/provider.dart';
+import 'package:front/main.dart';
+
+import '../viewmodel/committee_account_provider.dart';
+import 'committee_account_list_widget.dart';
 
 class CommitteeListView extends StatelessWidget {
 
@@ -11,7 +12,7 @@ class CommitteeListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<CommitteeAccountProvider>(context);
+    CommitteeAccountProvider provider = getIt<CommitteeAccountProvider>();
     return FutureBuilder(
       future: provider.retrieve(),
       builder: (context, snapshot) {
@@ -34,7 +35,7 @@ class CommitteeListView extends StatelessWidget {
                 margin: const EdgeInsets.only(top: 10),
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 decoration: BoxDecoration(
-                  color: ColorPalette.whitePrimary,
+                  color: ColorPalette.innerContent,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 alignment: Alignment.center,
@@ -53,7 +54,7 @@ class CommitteeListView extends StatelessWidget {
                 margin: const EdgeInsets.only(top: 10),
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 decoration: BoxDecoration(
-                  color: ColorPalette.whitePrimary,
+                  color: ColorPalette.innerContent,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 alignment: Alignment.center,
@@ -65,7 +66,7 @@ class CommitteeListView extends StatelessWidget {
     }
     return SingleChildScrollView(
         child: _createColumn(
-            CommitteeAccountListWidget(accounts: provider.data?.accounts ?? []))
+            CommitteeAccountListWidget(accounts: provider.accounts))
     );
   }
 
@@ -91,7 +92,7 @@ class CommitteeListView extends StatelessWidget {
     return Card(
       clipBehavior: Clip.hardEdge, // 내부 위젯이 테두리 모양을 따르도록 설정
       margin: const EdgeInsets.only(top: 10),
-      color: ColorPalette.whitePrimary,
+      color: ColorPalette.innerContent,
       elevation: 0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       child: ListTile(

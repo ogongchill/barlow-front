@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:front/core/theme/color_palette.dart';
 import 'package:front/core/theme/test_style_preset.dart';
-import 'committee_icons.dart';
-import '../data/committee_account.dart';
+import 'package:front/core/utils/icon_utils.dart';
+
+import '../../domain/entities/committee_account.dart';
 
 class CommitteeAccountListWidget extends StatelessWidget {
 
-  final List<CommitteeAccount> accounts;
+  final List<SubscribeCommitteeInfo> accounts;
 
   const CommitteeAccountListWidget({super.key, required this.accounts});
 
@@ -22,7 +23,7 @@ class CommitteeAccountListWidget extends StatelessWidget {
       addRepaintBoundaries: false, // 🔥 불필요한 리빌드 방지
       cacheExtent: 1000, // 🔥 미리 로드하여 끊김 방지
       itemBuilder: (context, index) {
-        final CommitteeAccount account = accounts[index];
+        final SubscribeCommitteeInfo account = accounts[index];
         final SvgPicture icon = CommitteeIconContainer.findByName(account.name);
         return createCardWith(icon, account);
       },
@@ -30,10 +31,10 @@ class CommitteeAccountListWidget extends StatelessWidget {
   }
 }
 
-Card createCardWith(SvgPicture icon, CommitteeAccount account) {
+Card createCardWith(SvgPicture icon, SubscribeCommitteeInfo account) {
   return  Card(
     margin: EdgeInsets.zero,
-    color: ColorPalette.whitePrimary,
+    color: ColorPalette.innerContent,
     elevation: 0,
     shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
     child: ListTile(
@@ -46,7 +47,7 @@ Card createCardWith(SvgPicture icon, CommitteeAccount account) {
         margin: const EdgeInsets.only(left: 5),
         padding: const EdgeInsets.all(5),
         decoration: BoxDecoration(
-            color: ColorPalette.greyLight,
+            color: ColorPalette.background,
             borderRadius: BorderRadius.circular(12)
         ),
         child: icon,

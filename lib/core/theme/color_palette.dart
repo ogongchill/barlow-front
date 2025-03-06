@@ -20,4 +20,15 @@ class ColorPalette {
   static const Color greyLight = Color(0xFFE6E6E6);
 
   static const Color whitePrimary = Color(0xffF2F2F2);
+
+  static const Color innerContent = Color(0xffFFFFFF);
+
+  static const Color background = Color(0xffF2F2F2);
+
+  static const Color borderLight = Color(0xffE6E6E6);
+  static const Color borderDark = Color(0xff666666);
+  static const Color borderBlack = Color(0xff000000);
+
+  static const Color textHead = Color(0xff000000);
+  static const Color textContent = Color(0xff666666);
 }
