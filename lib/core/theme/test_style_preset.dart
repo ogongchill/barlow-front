@@ -17,4 +17,39 @@ class TextStylePreset {
       fontSize: 16,
       color: Colors.black
   );
+
+  static const TextStyle thumbnailTitle = TextStyle(
+      fontFamily: "gmarketSans",
+      fontWeight: FontWeight.w500,
+      fontSize: 16,
+      color: Colors.black
+  );
+
+  static const TextStyle thumbnailSubtitle = TextStyle(
+      fontFamily: "gmarketSans",
+      fontWeight: FontWeight.w500,
+      fontSize: 10,
+      color: ColorPalette.textContent
+  );
+
+  static const TextStyle innerContentSubtitle = TextStyle(
+      fontFamily: "gmarketSans",
+      fontWeight: FontWeight.w300,
+      fontSize: 16,
+      color: Colors.black
+  );
+
+  static const TextStyle innerContentLight = TextStyle(
+      fontFamily: "gmarketSans",
+      fontWeight: FontWeight.w300,
+      fontSize: 12,
+      color: ColorPalette.textContent
+  );
+
+  static const TextStyle sectionTitle = TextStyle(
+      fontFamily: "gmarketSans",
+      fontWeight: FontWeight.w500,
+      fontSize: 16,
+      color: ColorPalette.textHead
+  );
 }

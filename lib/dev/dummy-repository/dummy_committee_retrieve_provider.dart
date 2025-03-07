@@ -1,6 +1,6 @@
 
-import '../../features/home/domain/entities/committee_account.dart';
-import '../../features/home/domain/repositories/committee_account_repository.dart';
+import 'package:front/features/home/domain/entities/committee_account.dart';
+import 'package:front/features/home/domain/repositories/committee_account_repository.dart';
 
 class DummyCommitteeAccountRepository implements SubscribeCommitteeInfoRepository{
 
@@ -22,7 +22,7 @@ class DummyCommitteeAccountRepository implements SubscribeCommitteeInfoRepositor
 
 class DummyCommitteeAccountRepositoryFactory {
 
-  final List<SubscribeCommitteeInfo> sampleAccounts = [
+  static final List<SubscribeCommitteeInfo> sampleAccounts = [
     SubscribeCommitteeInfo("국회운영위원회", "_description", 1, true, true, "_iconUrl"),
     SubscribeCommitteeInfo("법제사법위원회", "_description", 2, true, true, "_iconUrl"),
     SubscribeCommitteeInfo("정무위원회", "_description", 3, true, true, "_iconUrl"),
@@ -43,19 +43,19 @@ class DummyCommitteeAccountRepositoryFactory {
     SubscribeCommitteeInfo("예산결산특별위원회", "_description", 18, true, true, "_iconUrl"),
   ];
 
-  DummyCommitteeAccountRepository withAllCommittee() {
+  static DummyCommitteeAccountRepository withAllCommittee() {
     return DummyCommitteeAccountRepository(sampleAccounts, 2, false);
   }
 
-  DummyCommitteeAccountRepository withEmptyCommittee() {
+  static DummyCommitteeAccountRepository withEmptyCommittee() {
     return DummyCommitteeAccountRepository(List.empty(), 2, false);
   }
 
-  DummyCommitteeAccountRepository withError() {
+  static DummyCommitteeAccountRepository withError() {
     return DummyCommitteeAccountRepository(List.empty(), 2, true);
   }
 
-  DummyCommitteeAccountRepository withFromTopFive() {
+  static DummyCommitteeAccountRepository withFromTopFive() {
     return DummyCommitteeAccountRepository(sampleAccounts.sublist(0,4), 2, false);
   }
 }

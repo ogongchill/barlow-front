@@ -4,7 +4,7 @@ import 'package:front/core/theme/color_palette.dart';
 import 'package:front/core/theme/test_style_preset.dart';
 import 'package:front/core/utils/icon_utils.dart';
 
-import '../../domain/entities/committee_account.dart';
+import 'package:front/features/home/domain/entities/committee_account.dart';
 
 class CommitteeAccountListWidget extends StatelessWidget {
 
@@ -39,7 +39,7 @@ Card createCardWith(SvgPicture icon, SubscribeCommitteeInfo account) {
     shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
     child: ListTile(
       visualDensity: const VisualDensity(horizontal: -4, vertical: 0), // 간격 조정
-      contentPadding: const EdgeInsets.symmetric(horizontal: 5, vertical: 0),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
       leading: Container(
         alignment: Alignment.centerLeft,
         width: 32,
@@ -56,7 +56,6 @@ Card createCardWith(SvgPicture icon, SubscribeCommitteeInfo account) {
           account.name,
           style: TextStylePreset.listElement
       ),
-      trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 12),
       onTap: () {
         // 리스트 아이템 클릭 이벤트
         print("Clicked: ${account.name}");

@@ -1,20 +1,20 @@
-import '../../domain/entities/committee_account.dart';
-import '../../domain/usecases/get_subscribe_committee_usecase.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:front/core/api/fetch_status.dart';
 
+import 'package:front/features/home/domain/entities/committee_account.dart';
+import 'package:front/features/home/domain/usecases/get_subscribe_committee_usecase.dart';
 
-enum CommitteeAccountRetrieveState { initial, empty, loaded, error }
-
-class CommitteeAccountProvider {
+class CommitteeAccountProvider with ChangeNotifier {
 
   final GetSubscribeCommitteeUseCase _getSubscribedCommitteeAccountUseCase;
-  CommitteeAccountRetrieveState _state = CommitteeAccountRetrieveState.initial;
+  FetchStatus _state = FetchStatus.initial;
   List<SubscribeCommitteeInfo> _accounts = [];
   String? _errorMessage;
 
   CommitteeAccountProvider({required GetSubscribeCommitteeUseCase useCase})
       : _getSubscribedCommitteeAccountUseCase = useCase;
 
-  CommitteeAccountRetrieveState get state => _state;
+  FetchStatus get state => _state;
   List<SubscribeCommitteeInfo> get accounts => _accounts;
   String? get errorMessage => _errorMessage;
 
@@ -22,10 +22,10 @@ class CommitteeAccountProvider {
     try {
       final response = await _getSubscribedCommitteeAccountUseCase.fetch();
       _accounts = response;
-      _state = _accounts.isEmpty ? CommitteeAccountRetrieveState.empty : CommitteeAccountRetrieveState.loaded;
+      _state = _accounts.isEmpty ? FetchStatus.empty : FetchStatus.loaded;
     } catch (e) {
       _errorMessage = e.toString();
-      _state = CommitteeAccountRetrieveState.error;
+      _state = FetchStatus.error;
     }
   }
 }
