@@ -1,4 +1,6 @@
 
+import 'dart:math';
+
 import 'package:front/features/home/domain/entities/committee_account.dart';
 import 'package:front/features/home/domain/repositories/committee_account_repository.dart';
 
@@ -17,6 +19,21 @@ class DummyCommitteeAccountRepository implements SubscribeCommitteeInfoRepositor
       throw Exception("exception occurs by dev ");
     }
     return response;
+  }
+}
+
+class RandomCommitteeAccountRepository implements SubscribeCommitteeInfoRepository{
+
+  final Random random = Random();
+
+  @override
+  Future<List<SubscribeCommitteeInfo>> retrieveSubscribedCommittee() async {
+    int delayTime = random.nextInt(2000) + 1000;
+    await Future.delayed(Duration(milliseconds: delayTime));
+    List<SubscribeCommitteeInfo> items = List.from(DummyCommitteeAccountRepositoryFactory.sampleAccounts);
+    items.shuffle(random);
+    int randomCount = random.nextInt(18);
+    return items.take(randomCount).toList();
   }
 }
 
@@ -57,6 +74,10 @@ class DummyCommitteeAccountRepositoryFactory {
 
   static DummyCommitteeAccountRepository withFromTopFive() {
     return DummyCommitteeAccountRepository(sampleAccounts.sublist(0,4), 2, false);
+  }
+
+  static RandomCommitteeAccountRepository withRandom() {
+    return RandomCommitteeAccountRepository();
   }
 }
 

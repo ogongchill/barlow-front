@@ -1,73 +1,78 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:front/core/theme/color_palette.dart';
 import 'package:front/core/theme/test_style_preset.dart';
-import 'package:front/features/home/presentation/viewmodel/get_today_bill_thumbnails_provider.dart';
-import 'package:provider/provider.dart';
+import 'package:front/features/home/presentation/viewmodel/home_view_provider.dart';
 
 import 'package:front/features/home/domain/entities/today_bill_thumbnail.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-class TodayBillThumbnailWidget extends StatelessWidget {
+class TodayBillThumbnailWidget extends ConsumerWidget{
 
   static final PageController pageController = PageController(viewportFraction: 1.0);
 
   const TodayBillThumbnailWidget({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    GetTodayBillThumbnailsProvider provider =
-        Provider.of(context, listen: false);
-    return FutureBuilder(
-        future: provider.fetch(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return _createTodayBillSection(const Center(child: CircularProgressIndicator())) ;
-          }
-          if (snapshot.hasError) {
-            return _createTodayBillSection(const Text("Err"));
-          }
-          return _createTodayBillSection(_todayBillSectionInnerContent(provider.thumbnails));
-        });
+  Widget build(BuildContext context, WidgetRef ref) {
+    final asyncValue = ref.watch(todayBillThumbnailsProvider);
+    return asyncValue.when(
+        data: (thumbnails) => _buildWidgetWIth(_buildInnerContent(thumbnails)),
+        error: (err, stack) =>_buildWidgetWIth(const Text("something went wrong,,,,")) ,
+        loading: () => _buildWidgetWIth(_buildShimmerLoading())
+    );
   }
 
-  Widget _createTodayBillSection(Widget innerContent) {
+  Widget _buildWidgetWIth(Widget innerContent) {
     return Column(
       children: [
-        _createSectionTitle(),
+        _buildTitle(),
         innerContent,
       ],
     );
   }
-  
-  Column _todayBillSectionInnerContent(List<TodayBillThumbnail> thumbnails) {
+
+  Column _buildInnerContent(List<TodayBillThumbnail> thumbnails) {
     return Column(
-      children: [
-       _buildTodayBillThumbnailCard(thumbnails),
-        Container(
-          decoration: const BoxDecoration(
-            color: ColorPalette.innerContent,
-            borderRadius:  BorderRadius.only(bottomLeft: Radius.circular(12), bottomRight: Radius.circular(12))
-          ),
-          child: _pageIndicator(thumbnails.length ~/ 4 + 1),
-        )
-      ]
+        children: [
+          _buildTodayBillThumbnailCard(thumbnails),
+          Container(
+            decoration: const BoxDecoration(
+                color: ColorPalette.innerContent,
+                borderRadius:  BorderRadius.only(bottomLeft: Radius.circular(12), bottomRight: Radius.circular(12))
+            ),
+            child: _buildPageIndicator(thumbnails.length ~/ 4 + 1),
+          )
+        ]
     );
   }
 
-  Row _createSectionTitle() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween, // ✅ 좌우 끝 정렬
-      children: [
-        Container(
-          margin: const EdgeInsets.only(left: 10),
-          child: const Text("오늘 접수된 법안", style: TextStylePreset.sectionTitle),
+  Widget _buildTitle() {
+    return Container(
+        padding: const EdgeInsets.only(top: 15, left: 10, right: 10),
+        decoration: const BoxDecoration(
+            borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
+            color: ColorPalette.innerContent
         ),
-        TextButton(
-          onPressed: ()  => print("clicked 더보기") ,
-          child: const Text("더보기",style: TextStylePreset.thumbnailSubtitle,
-          )
-        ),
-      ],
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween, // ✅ 좌우 끝 정렬
+          children: [
+            Container(
+              margin: const EdgeInsets.only(left: 10),
+              child: const Text("오늘 접수된 법안", style: TextStylePreset.sectionTitle),
+            ),
+            TextButton(
+                style: TextButton.styleFrom(
+                  foregroundColor: Colors.black, // 기본 텍스트 색상
+                  overlayColor: Colors.grey.withOpacity(0.2), // ✅ 클릭 효과 색상을 회색으로 설정
+                ),
+                onPressed: ()  => print("clicked 더보기") ,
+                child: const Text("더보기",style: TextStylePreset.thumbnailSubtitle,
+                )
+            ),
+          ],
+        )
     );
   }
 
@@ -75,8 +80,8 @@ class TodayBillThumbnailWidget extends StatelessWidget {
     return Container( // ✅ 고정된 높이 설정
       height: 465,
       decoration: const BoxDecoration(
-          color: ColorPalette.innerContent,
-          borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12),)
+        color: ColorPalette.innerContent,
+        borderRadius: BorderRadius.zero,
       ),
       child: _buildTodayBillThumbnailPages(thumbnails),
     );
@@ -92,7 +97,7 @@ class TodayBillThumbnailWidget extends StatelessWidget {
         int startIndex = pageIndex * itemsPerPage;
         int endIndex = (startIndex + itemsPerPage).clamp(0, thumbnails.length);
         List<TodayBillThumbnail> pageItems =
-            thumbnails.sublist(startIndex, endIndex);
+        thumbnails.sublist(startIndex, endIndex);
         return Container(
           alignment: Alignment.center,
           margin: const EdgeInsets.only(top: 15),
@@ -116,7 +121,7 @@ class TodayBillThumbnailWidget extends StatelessWidget {
     );
   }
 
-  Container _pageIndicator(int pageSize) {
+  Container _buildPageIndicator(int pageSize) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.only(bottom: 15),
@@ -174,6 +179,36 @@ class TodayBillThumbnailWidget extends StatelessWidget {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildShimmerLoading() {
+    return Column(
+      children: [
+        _buildShimmerCard(), // 🔥 로딩용 카드
+        Container(
+          decoration: const BoxDecoration(
+              color: ColorPalette.innerContent,
+              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(12), bottomRight: Radius.circular(12))),
+          child: _buildPageIndicator(1), // Skeleton 로딩 중에도 페이지 인디케이터 유지
+        ),
+      ],
+    );
+  }
+
+  Widget _buildShimmerCard() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: Container(
+        height: 465,
+        margin: EdgeInsets.zero,
+        decoration: BoxDecoration(
+          color: Colors.white, // Shimmer가 덮어씌우므로 중요하지 않음
+          borderRadius: BorderRadius.zero,
+          border: Border.all(color: ColorPalette.borderLight, width: 1),
         ),
       ),
     );

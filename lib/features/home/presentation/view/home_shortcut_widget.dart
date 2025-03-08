@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:front/core/theme/color_palette.dart';
 import 'package:front/core/theme/test_style_preset.dart';
