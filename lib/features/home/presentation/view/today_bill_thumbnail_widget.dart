@@ -154,7 +154,7 @@ class TodayBillThumbnailWidget extends ConsumerWidget{
       ),
       margin: const EdgeInsets.symmetric(vertical: 0),
       child: InkWell(
-        onTap: () => ApplicationNavigatorService.pushToBillDetail(thumbnail.billId),
+        onTap: () => ApplicationNavigatorService.pushToBillDetail(billId: thumbnail.billId, title: "오늘 접수된 법안"),
         child: SizedBox(
           height: 120,
           child: Stack(

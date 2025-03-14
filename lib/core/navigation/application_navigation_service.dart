@@ -5,7 +5,7 @@ class ApplicationNavigatorService {
 
   static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-  static void pushToBillDetail(String billId) {
-    navigatorKey.currentState?.context.push('/bill/detail/$billId');
+  static void pushToBillDetail({required String billId, required String title, String? subtitle}) {
+    navigatorKey.currentState?.context.push('/bill/detail/$billId', extra: {"title" : title, "subtitle" : subtitle});
   }
 }

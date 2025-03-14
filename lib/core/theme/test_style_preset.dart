@@ -63,9 +63,9 @@ class TextStylePreset {
 
   static const TextStyle billDetailHead = TextStyle(
       fontFamily: "gmarketSans",
-      fontWeight: FontWeight.w300,
-      fontSize: 30,
-      color: ColorPalette.textHead
+      fontWeight: FontWeight.w500,
+      fontSize: 24,
+      color: Colors.black
   );
 
   static const TextStyle barInnerText = TextStyle(
@@ -73,5 +73,19 @@ class TextStylePreset {
       fontWeight: FontWeight.w500,
       fontSize: 14,
       color: Colors.white
+  );
+
+  static const TextStyle appBarTitle = TextStyle(
+      fontFamily: "gmarketSans",
+      fontWeight: FontWeight.w500,
+      fontSize: 18,
+      color: ColorPalette.textHead
+  );
+
+  static const TextStyle appBarSubtitle = TextStyle(
+      fontFamily: "gmarketSans",
+      fontWeight: FontWeight.w300,
+      fontSize: 14,
+      color: ColorPalette.textHead
   );
 }

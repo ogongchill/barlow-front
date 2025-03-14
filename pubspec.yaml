@@ -44,6 +44,7 @@ dependencies:
   flutter_riverpod: ^2.6.1
   go_router: ^14.8.1
   fl_chart: ^0.70.2
+  intl: ^0.20.2
 
 dev_dependencies:
   flutter_test:
@@ -74,6 +75,7 @@ flutter:
   assets:
     - assets/icons/committee/
     - assets/icons/party/
+    - assets/pictures/
   fonts:
     - family: GmarketSans
       fonts:

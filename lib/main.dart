@@ -36,7 +36,7 @@ class DevApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: BillDetailView(billId: "PRC_V2T5U0S3R0R5Z1Z3Y2Z6X5X3W7S8S5"),
+      home: BillDetailView(title: "" , billId: "PRC_V2T5U0S3R0R5Z1Z3Y2Z6X5X3W7S8S5"),
     );
   }
 }

@@ -32,8 +32,11 @@ final GoRoute _billRouter = GoRoute(
       GoRoute(
           path: '/detail/:billId',
           builder: (context, state) {
+            final Map<String, dynamic>? extraData = state.extra as Map<String, dynamic>?; // ✅ extra를 Map으로 변환
+            final String title = extraData?["title"] ?? "법안 상세 정보";
+            String? subtitle = extraData?["subtitile"];
             final String billId = state.pathParameters['billId']!; // ✅ id 추출
-            return BillDetailView(billId: billId);
+            return BillDetailView(title: title, subtitle: subtitle, billId: billId);
           })
     ]
 );
