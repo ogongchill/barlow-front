@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:front/core/navigation/application_navigation_service.dart';
 import 'package:front/core/theme/color_palette.dart';
 import 'package:front/core/theme/test_style_preset.dart';
 import 'package:front/features/home/presentation/viewmodel/home_view_provider.dart';
@@ -153,7 +154,7 @@ class TodayBillThumbnailWidget extends ConsumerWidget{
       ),
       margin: const EdgeInsets.symmetric(vertical: 0),
       child: InkWell(
-        onTap: () => print(thumbnail.billId),
+        onTap: () => ApplicationNavigatorService.pushToBillDetail(thumbnail.billId),
         child: SizedBox(
           height: 120,
           child: Stack(

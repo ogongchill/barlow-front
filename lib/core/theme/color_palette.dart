@@ -31,4 +31,13 @@ class ColorPalette {
 
   static const Color textHead = Color(0xff000000);
   static const Color textContent = Color(0xff666666);
+
+  static const Color democraticBlue = Color(0xff002bff);
+  static const Color rebuildingKoreaBlue = Color(0xff0073CF);
+  static const Color peoplePowerRed = Color(0xffE61E2B);
+  static const Color reformOrange = Color(0xffff4d00);
+  static const Color progressivePurple = Color(0xff6950a1);
+  static const Color basicIncomeMint = Color(0xff00D2C3);
+  static const Color socialDemocraticOrange = Color(0xfff58400);
+  static const Color independent = Color(0xff666666);
 }

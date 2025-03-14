@@ -52,4 +52,26 @@ class TextStylePreset {
       fontSize: 16,
       color: ColorPalette.textHead
   );
+
+  static const TextStyle billDetailText = TextStyle(
+      fontFamily: "gmarketSans",
+      fontWeight: FontWeight.w500,
+      fontSize: 18,
+      height: 1.5,
+      color: ColorPalette.textContent
+  );
+
+  static const TextStyle billDetailHead = TextStyle(
+      fontFamily: "gmarketSans",
+      fontWeight: FontWeight.w300,
+      fontSize: 30,
+      color: ColorPalette.textHead
+  );
+
+  static const TextStyle barInnerText = TextStyle(
+      fontFamily: "gmarketSans",
+      fontWeight: FontWeight.w500,
+      fontSize: 14,
+      color: Colors.white
+  );
 }

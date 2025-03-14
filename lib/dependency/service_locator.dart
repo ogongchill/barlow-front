@@ -1,5 +1,8 @@
+import 'package:front/dev/dummy-repository/dummy_bill_detail_repository.dart';
 import 'package:front/dev/dummy-repository/dummy_committee_retrieve_provider.dart';
 import 'package:front/dev/dummy-repository/dummy_today_bill_thumbnail_repository.dart';
+import 'package:front/features/bill_info/domain/repositories/bill_repository.dart';
+import 'package:front/features/bill_info/domain/usecases/get_bill_detail_usecase.dart';
 import 'package:front/features/home/domain/repositories/committee_account_repository.dart';
 import 'package:front/features/home/domain/repositories/today_bill_thumbnail_repository.dart';
 import 'package:front/features/home/domain/usecases/get_subscribe_committee_usecase.dart';
@@ -21,4 +24,9 @@ void setupLocator() {
   getIt.registerLazySingleton<GetSubscribeCommitteeUseCase>(
           () => GetSubscribeCommitteeUseCase(getIt<SubscribeCommitteeInfoRepository>()));
 
+  // for fetching bill detail
+  getIt.registerLazySingleton<BillDetailRepository>(
+           () => DummyBillDetailRepositoryFactory.withSamples());
+  getIt.registerLazySingleton<GetBillDetailUseCase>(
+           () => GetBillDetailUseCase(billDetailRepository: getIt<BillDetailRepository>()));
 }

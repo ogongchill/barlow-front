@@ -1,3 +1,6 @@
+import 'dart:ui';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class CommitteeIconContainer {
@@ -27,4 +30,41 @@ class CommitteeIconContainer {
   static SvgPicture findByName(String name) {
     return _svgIcons[name] ?? defaultIcon;
   }
+}
+
+class PartyIcon {
+
+  final String _path;
+
+  const PartyIcon._(this._path);
+
+  static const PartyIcon reformParty = PartyIcon._('assets/icons/party/icon_개혁신당.svg');
+  static const PartyIcon peoplePowerParty = PartyIcon._('assets/icons/party/icon_국민의힘.svg');
+  static const PartyIcon basicIncomeParty = PartyIcon._('assets/icons/party/icon_기본소득당.svg');
+  static const PartyIcon democraticParty = PartyIcon._('assets/icons/party/icon_더불어민주당.svg');
+  static const PartyIcon socialDemocraticParty = PartyIcon._('assets/icons/party/icon_사회민주당.svg');
+  static const PartyIcon progressiveParty = PartyIcon._('assets/icons/party/icon_진보당.svg');
+  static const PartyIcon rebuildingKoreaParty = PartyIcon._('assets/icons/party/icon_조국혁신당.svg');
+  static const PartyIcon independent = PartyIcon._('assets/icons/party/icon_무소속.svg');
+
+  // ✅ 모든 아이콘을 리스트로 관리 (필요할 경우)
+  static const List<PartyIcon> values = [
+    reformParty,
+    peoplePowerParty,
+    basicIncomeParty,
+    democraticParty,
+    socialDemocraticParty,
+    progressiveParty,
+    rebuildingKoreaParty,
+    independent
+  ];
+
+  SvgPicture toSvgPicture({double size = 24.0, Color? color}) => SvgPicture.asset(
+    _path,
+    width: size,
+    height: size,
+    colorFilter: color != null
+        ? ColorFilter.mode(color, BlendMode.srcIn)
+        : null,
+  );
 }
