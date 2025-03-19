@@ -78,6 +78,7 @@ flutter:
     - assets/icons/committee/
     - assets/icons/party/
     - assets/pictures/
+    - assets/animations/lottie/
   fonts:
     - family: GmarketSans
       fonts:
