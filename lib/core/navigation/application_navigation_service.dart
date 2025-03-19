@@ -8,4 +8,8 @@ class ApplicationNavigatorService {
   static void pushToBillDetail({required String billId, required String title, String? subtitle}) {
     navigatorKey.currentState?.context.push('/bill/detail/$billId', extra: {"title" : title, "subtitle" : subtitle});
   }
+
+  static void pushToCommitteeSubscription() {
+    navigatorKey.currentState?.context.push('/committee');
+  }
 }

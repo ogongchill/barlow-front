@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:front/core/navigation/application_navigation_service.dart';
 import 'package:front/features/bill_info/presentation/view/bill_detail_view.dart';
+import 'package:front/features/committee/presentation/view/committee_subscription_view.dart';
 import 'package:front/features/home/presentation/view/committee_home_view.dart';
 import 'package:go_router/go_router.dart';
 
@@ -14,7 +15,8 @@ final GoRouter applicationRouter = GoRouter(
   initialLocation: '/',
   routes: <RouteBase>[
     _homeRouter,
-    _billRouter
+    _billRouter,
+    _committeeRouter
   ],
 );
 
@@ -39,4 +41,9 @@ final GoRoute _billRouter = GoRoute(
             return BillDetailView(title: title, subtitle: subtitle, billId: billId);
           })
     ]
+);
+
+final GoRoute _committeeRouter = GoRoute(
+      path: '/committee',
+      builder: (context, state) => const CommitteeSubscriptionView()
 );
