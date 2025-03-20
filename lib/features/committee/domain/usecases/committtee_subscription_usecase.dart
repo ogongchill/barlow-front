@@ -1,5 +1,5 @@
 import 'package:front/features/committee/domain/entities/committee_subscription.dart';
-import 'package:front/features/committee/domain/repositories/committee_repository.dart';
+import 'package:front/features/committee/domain/repositories/committee_subscription_repository.dart';
 
 class FetchCommitteeSubscriptionUseCase {
 

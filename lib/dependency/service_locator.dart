@@ -4,7 +4,7 @@ import 'package:front/dev/dummy-repository/dummy_committee_subscription_reposito
 import 'package:front/dev/dummy-repository/dummy_today_bill_thumbnail_repository.dart';
 import 'package:front/features/bill_info/domain/repositories/bill_repository.dart';
 import 'package:front/features/bill_info/domain/usecases/get_bill_detail_usecase.dart';
-import 'package:front/features/committee/domain/repositories/committee_repository.dart';
+import 'package:front/features/committee/domain/repositories/committee_subscription_repository.dart';
 import 'package:front/features/committee/domain/usecases/committtee_subscription_usecase.dart';
 import 'package:front/features/home/domain/repositories/committee_account_repository.dart';
 import 'package:front/features/home/domain/repositories/today_bill_thumbnail_repository.dart';
