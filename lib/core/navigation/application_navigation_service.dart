@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:front/features/shared/domain/committee.dart';
 import 'package:go_router/go_router.dart';
 
 class ApplicationNavigatorService {
@@ -10,6 +11,13 @@ class ApplicationNavigatorService {
   }
 
   static void pushToCommitteeSubscription() {
-    navigatorKey.currentState?.context.push('/committee');
+    GoRouter.of(navigatorKey.currentContext!).push('/committee');
+
+    // navigatorKey.currentState?.context.push('/committee');
+  }
+
+  static void pushToCommitteeProfile(Committee committee) {
+    GoRouter.of(navigatorKey.currentContext!).push('/committee/profile/${committee.name}');
+    // navigatorKey.currentState?.context.push('/committee/profile/${committee.name}');
   }
 }

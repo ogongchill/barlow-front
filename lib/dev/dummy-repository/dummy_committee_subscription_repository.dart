@@ -1,6 +1,7 @@
 import 'dart:collection';
 import 'dart:math';
 
+import 'package:front/dev/dummy-repository/dummy_cache.dart';
 import 'package:front/features/committee/domain/entities/committee_subscription.dart';
 import 'package:front/features/committee/domain/repositories/committee_subscription_repository.dart';
 import 'package:front/features/shared/domain/committee.dart';
@@ -8,30 +9,43 @@ import 'package:front/features/shared/domain/committee.dart';
 class DummyCommitteeSubscriptionRepository implements CommitteeSubscriptionRepository {
 
   final LinkedHashSet<CommitteeSubscription> _committeeSubscriptions;
+  final CommitteeSubscriptionCache _subscriptionCache;
 
-  DummyCommitteeSubscriptionRepository({required LinkedHashSet<CommitteeSubscription> committeeSubscriptions})
-    : _committeeSubscriptions = committeeSubscriptions;
+  DummyCommitteeSubscriptionRepository({
+    required LinkedHashSet<CommitteeSubscription> committeeSubscriptions,
+    required CommitteeSubscriptionCache subscriptionCache
+  })
+    : _committeeSubscriptions = committeeSubscriptions,
+      _subscriptionCache = subscriptionCache;
   
   @override
   Future<List<CommitteeSubscription>> retrieve() async {
+    if(_subscriptionCache.hasAll()) {
+      return _subscriptionCache.getAll();
+    }
+    print("fetching,,,,,");
+    List<CommitteeSubscription> fetched = _committeeSubscriptions.toList();
+    _subscriptionCache.addAll(fetched);
     return _committeeSubscriptions.toList();
   }
 
   @override
   Future<void> subscribe(CommitteeSubscription subscribe) async {
     print("구독 요청 :  ${subscribe.committee.name}");
+    _subscriptionCache.add(subscribe.committee, true);
+    print("POST : subscribe ${subscribe.committee.name}");
     _committeeSubscriptions.firstWhere((committeeSubscription) => committeeSubscription.committee == subscribe.committee)
         .subscribe();
-    print("POST : subscribe ${subscribe.committee.name}");
     _sendDummyPostRequest();
   }
 
   @override
   Future<void> unsubscribe(CommitteeSubscription unsubscribe) async {
     print("구독 취시 요청 :  ${unsubscribe.committee.name}");
+    _subscriptionCache.add(unsubscribe.committee, false);
+    print("POST : unsubscribe  ${unsubscribe.committee.name}");
     _committeeSubscriptions.firstWhere((committeeSubscription) => committeeSubscription.committee == unsubscribe.committee)
         .unSubscribe();
-    print("POST : unsubscribe  ${unsubscribe.committee.name}");
     _sendDummyPostRequest();
   }
 
@@ -39,40 +53,28 @@ class DummyCommitteeSubscriptionRepository implements CommitteeSubscriptionRepos
     await Future.delayed(Duration(seconds: 1));
     print("응답 확인");
   }
+
+  @override
+  Future<CommitteeSubscription> retrieveByCommittee(Committee committee) async {
+    if(_subscriptionCache.hit(committee)) {
+      return CommitteeSubscription(committee: committee, isSubscribed: _subscriptionCache.get(committee));
+    }
+    retrieve();
+    return CommitteeSubscription(committee: committee, isSubscribed: _subscriptionCache.get(committee));
+  }
 }
 
 class DummyCommitteeSubscriptionRepositoryFactory {
 
-  static CommitteeSubscriptionRepository withRandom() {
-    return DummyCommitteeSubscriptionRepository(committeeSubscriptions: _createRandom());
+  static CommitteeSubscriptionRepository withRandom({required CommitteeSubscriptionCache subscriptionCache}) {
+    return DummyCommitteeSubscriptionRepository(committeeSubscriptions: _createRandom(), subscriptionCache: subscriptionCache);
   }
 }
-
-final List<CommitteeSubscription> _committeeSubscriptions = [
-  CommitteeSubscription(committee: Committee.specialCommitteeOnBudgetAccounts, isSubscribed: true),
-  CommitteeSubscription(committee: Committee.genderEqualityFamily, isSubscribed: true),
-  CommitteeSubscription(committee: Committee.intelligence, isSubscribed: true),
-  CommitteeSubscription(committee: Committee.landInfrastructureAndTransport, isSubscribed: true),
-  CommitteeSubscription(committee: Committee.environmentAndLabor, isSubscribed: true),
-  CommitteeSubscription(committee: Committee.healthAndWelfare, isSubscribed: true),
-  CommitteeSubscription(committee: Committee.tradeIndustryEnergySmesAndStartups, isSubscribed: true),
-  CommitteeSubscription(committee: Committee.agricultureFoodRuralAffairsOceansAndFisheries, isSubscribed: true),
-  CommitteeSubscription(committee: Committee.cultureSportsAndTourism, isSubscribed: true),
-  CommitteeSubscription(committee: Committee.publicAdministrationAndSecurity, isSubscribed: true),
-  CommitteeSubscription(committee: Committee.nationalDefense, isSubscribed: true),
-  CommitteeSubscription(committee: Committee.foreignAffairsAndUnification, isSubscribed: true),
-  CommitteeSubscription(committee: Committee.scienceIctBroadcastingAndCommunications, isSubscribed: true),
-  CommitteeSubscription(committee: Committee.education, isSubscribed: true),
-  CommitteeSubscription(committee: Committee.strategyAndFinance, isSubscribed: true),
-  CommitteeSubscription(committee: Committee.nationalPolicy, isSubscribed: true),
-  CommitteeSubscription(committee: Committee.legislationAndJudiciary, isSubscribed: true),
-  CommitteeSubscription(committee: Committee.houseSteering, isSubscribed: true),
-];
 
 LinkedHashSet<CommitteeSubscription> _createRandom() {
   Random random = Random();
   return LinkedHashSet<CommitteeSubscription>.from(
       Committee.values
           .map( (committee) => CommitteeSubscription(committee: committee, isSubscribed: random.nextBool()))
-      );
+  );
 }

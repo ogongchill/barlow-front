@@ -2,8 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:front/core/navigation/application_navigation_service.dart';
 import 'package:front/features/bill_info/presentation/view/bill_detail_view.dart';
+import 'package:front/features/committee/presentation/view/committee_profile_view.dart';
 import 'package:front/features/committee/presentation/view/committee_subscription_view.dart';
+import 'package:front/features/committee/presentation/viewmodel/committee_subscription_viewmodel.dart';
 import 'package:front/features/home/presentation/view/committee_home_view.dart';
+import 'package:front/features/shared/domain/committee.dart';
 import 'package:go_router/go_router.dart';
 
 final applicationRouterProvider = Provider<GoRouter> ((ref) {
@@ -45,5 +48,14 @@ final GoRoute _billRouter = GoRoute(
 
 final GoRoute _committeeRouter = GoRoute(
       path: '/committee',
-      builder: (context, state) => const CommitteeSubscriptionView()
+      builder: (context, state) => const CommitteeSubscriptionView(),
+      routes: [
+        GoRoute(
+            path: '/profile/:committeeName',
+            builder : (context, state) {
+              final Committee target = Committee.findByName(state.pathParameters['committeeName']!);
+              return CommitteeProfileView(target);
+            }
+        )
+      ]
 );

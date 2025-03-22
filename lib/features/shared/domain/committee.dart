@@ -26,7 +26,7 @@ enum Committee {
 
   const  Committee(this.name, this.icon);
 
-  Committee findByName(String targetName) {
+  static Committee findByName(String targetName) {
     return Committee.values
         .firstWhere((value) =>
           value.name == targetName,

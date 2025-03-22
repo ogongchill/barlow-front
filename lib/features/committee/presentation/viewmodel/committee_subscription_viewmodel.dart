@@ -9,31 +9,9 @@ final fetchCommitteeSubscriptionUseCaseProvider = Provider<FetchCommitteeSubscri
   return getIt<FetchCommitteeSubscriptionUseCase>();
 });
 
-final committeeSubscriptionFutureProvider = FutureProvider<List<CommitteeSubscription>>((ref) async {
+final committeeSubscriptionFutureProvider = FutureProvider.autoDispose<List<CommitteeSubscription>>((ref) async {
   final useCase = ref.watch(fetchCommitteeSubscriptionUseCaseProvider);
   return useCase.execute();
-});
-
-final singleCommitteeSubscriptionFutureProvider = FutureProvider.family<CommitteeSubscription, Committee>((ref, target) async {
-  // ✅ 먼저 캐싱된 데이터 확인
-  final asyncSubscriptions = ref.watch(committeeSubscriptionFutureProvider);
-
-  List<CommitteeSubscription> subscriptions;
-
-  if (asyncSubscriptions.hasValue) {
-    // ✅ 캐싱된 데이터가 있으면 사용
-    subscriptions = asyncSubscriptions.value!;
-  } else {
-    // ✅ 없으면 FetchUseCase 실행
-    final useCase = ref.watch(fetchCommitteeSubscriptionUseCaseProvider);
-    subscriptions = await useCase.execute();
-  }
-
-  // ✅ 데이터가 존재하면 반환, 없으면 예외 발생
-  return subscriptions.firstWhere(
-        (subscription) => subscription.committee == target,
-    orElse: () => throw Exception("Subscription not found for committee: ${target.name}"),
-  );
 });
 
 final toggleCommitteeSubscriptionProvider =
@@ -67,3 +45,6 @@ final fireworkAnimationProvider = StateProvider.family<bool, Committee>((ref, co
 
 final subscribeButtonDisabledProvider = StateProvider.family<bool, Committee>((ref, committeeId) => false);
 
+final notificationToggleAnimationProvider = StateProvider.family<bool, Committee>((ref, committee) => false);
+
+final notificationButtonDisabledProvider = StateProvider.family<bool, Committee>((ref, committee) => false);
