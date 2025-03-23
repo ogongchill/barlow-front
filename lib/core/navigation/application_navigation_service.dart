@@ -1,23 +1,45 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:front/features/committee/presentation/viewmodel/committee_subscription_viewmodel.dart';
 import 'package:front/features/shared/domain/committee.dart';
 import 'package:go_router/go_router.dart';
 
-class ApplicationNavigatorService {
+import 'package:front/features/home/presentation/viewmodel/home_view_provider.dart';
 
+class ApplicationNavigatorService {
   static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
+  static BuildContext? get _context => navigatorKey.currentState?.overlay?.context;
+
   static void pushToBillDetail({required String billId, required String title, String? subtitle}) {
-    navigatorKey.currentState?.context.push('/bill/detail/$billId', extra: {"title" : title, "subtitle" : subtitle});
+    final context = _context;
+    if (context == null) return;
+    context.push('/bill/detail/$billId', extra: {"title": title, "subtitle": subtitle});
   }
 
-  static void pushToCommitteeSubscription() {
-    GoRouter.of(navigatorKey.currentContext!).push('/committee');
+  static Future<void> pushToCommitteeSubscription(WidgetRef ref) async {
+    final context = _context;
+    if (context == null) return;
 
-    // navigatorKey.currentState?.context.push('/committee');
+    final result = await GoRouter.of(context).push<bool>('/committee');
+
+    if (result is bool && result) {
+      ref.invalidate(subscribeCommitteeAccountFutureProvider);
+    }
   }
 
-  static void pushToCommitteeProfile(Committee committee) {
-    GoRouter.of(navigatorKey.currentContext!).push('/committee/profile/${committee.name}');
-    // navigatorKey.currentState?.context.push('/committee/profile/${committee.name}');
+  static Future<void> pushToCommitteeProfile(WidgetRef ref, Committee committee) async {
+    final context = _context;
+    if (context == null) return;
+
+    final result = await GoRouter.of(context).push<bool>('/committee/profile/${committee.name}');
+
+    if (result is bool && result) {
+      ref.invalidate(committeeSubscriptionFutureProvider);
+    }
+  }
+
+  static void popWithResult(BuildContext context) {
+    return Navigator.pop(context, true);
   }
 }

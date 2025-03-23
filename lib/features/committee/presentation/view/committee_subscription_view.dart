@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:front/core/navigation/application_navigation_service.dart';
 import 'package:front/core/theme/color_palette.dart';
 import 'package:front/core/theme/test_style_preset.dart';
 import 'package:front/features/committee/domain/entities/committee_subscription.dart';
 import 'package:front/features/committee/presentation/view/committe_subscription_list_widget.dart';
-import 'package:front/features/committee/presentation/view/committee_susbcription_appbar_widget.dart';
 import 'package:front/features/committee/presentation/viewmodel/committee_subscription_viewmodel.dart';
+import 'package:front/features/shared/view/appbar.dart';
 
 class CommitteeSubscriptionView extends ConsumerWidget{
 
@@ -15,16 +16,19 @@ class CommitteeSubscriptionView extends ConsumerWidget{
   Widget build(BuildContext context, WidgetRef ref) {
     final asyncValue = ref.watch(committeeSubscriptionFutureProvider);
     return asyncValue.when(
-        data: (committeeSubscriptions) => _buildScaffold(committeeSubscriptions),
+        data: (committeeSubscriptions) => _buildScaffold(committeeSubscriptions, context),
         error: (exception, stack) => ErrorWidget(exception),
         loading: () => Text("is loading")
     );
   }
 
-  Scaffold _buildScaffold(List<CommitteeSubscription> subscriptions) {
+  Scaffold _buildScaffold(List<CommitteeSubscription> subscriptions, BuildContext context) {
     return Scaffold(
       backgroundColor: ColorPalette.background,
-      appBar: CommitteeSubscriptionAppbarWidget(title: "상임위원회 알아보기"),
+      appBar: TextAppBar(
+          title: "상임위원회 알아보기",
+          onPressedBack: () => ApplicationNavigatorService.popWithResult(context)
+      ),
       body: _buildBody(subscriptions),
     );
   }

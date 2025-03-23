@@ -45,7 +45,7 @@ class CommitteeSubscriptionWidget extends ConsumerWidget {
                     await ref.read(toggleCommitteeSubscriptionViewModelProvider).execute(committeeSubscription);
                     ref.invalidate(committeeSubscriptionFutureProvider);
                   }),
-              onTap: () => ApplicationNavigatorService.pushToCommitteeProfile(committeeSubscription.committee),
+              onTap: () => ApplicationNavigatorService.pushToCommitteeProfile(ref, committeeSubscription.committee),
             ),
           );
         },

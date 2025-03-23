@@ -5,10 +5,10 @@ import 'package:front/core/theme/test_style_preset.dart';
 import 'package:front/dependency/service_locator.dart';
 import 'package:front/features/bill_info/domain/entities/bill_detail.dart';
 import 'package:front/features/bill_info/domain/repositories/bill_repository.dart';
-import 'package:front/features/bill_info/presentation/view/bill_detail_appbar_widget.dart';
 import 'package:front/features/bill_info/presentation/view/bill_detail_paragraph_widget.dart';
 import 'package:front/features/bill_info/presentation/view/bill_proposer_section_widget.dart';
 import 'package:front/features/bill_info/presentation/viewmodel/bill_detail_provider.dart';
+import 'package:front/features/shared/view/appbar.dart';
 import 'package:front/features/shared/view/error.dart';
 import 'package:intl/intl.dart';
 import 'package:shimmer/shimmer.dart';
@@ -38,7 +38,7 @@ class BillDetailView extends ConsumerWidget {
   Widget _buildSkeletonLoader(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorPalette.background,
-      appBar: BillDetailAppBar(title: _title, subtitle: _subtitle,),
+      appBar: TextAppBar(title: _title, subtitle: _subtitle,),
       body: Shimmer.fromColors(
         baseColor: Colors.grey[300]!, // 어두운 회색
         highlightColor: Colors.grey[100]!, // 밝은 회색
@@ -59,7 +59,7 @@ class BillDetailView extends ConsumerWidget {
   Scaffold _buildError() {
     return Scaffold(
         backgroundColor: ColorPalette.background,
-        appBar: BillDetailAppBar(title: _title, subtitle: _subtitle,),
+        appBar: TextAppBar(title: _title, subtitle: _subtitle,),
         body: SingleChildScrollView(
           child: Container(
             padding: const EdgeInsets.all(20),
@@ -75,7 +75,7 @@ class BillDetailView extends ConsumerWidget {
   Scaffold _buildScaffold(Widget body) {
     return Scaffold(
       backgroundColor: ColorPalette.background,
-      appBar: BillDetailAppBar(title: _title, subtitle: _subtitle,),
+      appBar: TextAppBar(title: _title, subtitle: _subtitle,),
       body: SingleChildScrollView(
           child: Container(
             padding: const EdgeInsets.all(20),
@@ -95,7 +95,6 @@ class BillDetailView extends ConsumerWidget {
           _createBillThumbnailInfo(billDetail),
           BillDetailParagraphWidget(text: billDetail.detail),
           _createBillProposerSection(billDetail)
-        ,
       ]
     );
   }
@@ -103,7 +102,7 @@ class BillDetailView extends ConsumerWidget {
   _createBillThumbnailInfo(BillDetail billDetail) {
     return Container(
       alignment: Alignment.topLeft,
-      margin: EdgeInsets.only(bottom: 50, top: 20),
+      margin: const EdgeInsets.only(bottom: 50, top: 20),
       child : Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
