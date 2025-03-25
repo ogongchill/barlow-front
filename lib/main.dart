@@ -23,6 +23,11 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp.router(
+      theme: ThemeData(
+        chipTheme: const ChipThemeData(
+        showCheckmark: false, // ✅ 체크 아이콘 제거
+      ),
+    ),
       debugShowCheckedModeBanner: true,
       routerConfig: applicationRouter, // ✅ GoRouter 적용
     );

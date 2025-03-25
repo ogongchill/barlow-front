@@ -52,10 +52,9 @@ class CommitteeProfileWidget extends ConsumerWidget {
 
     return Container(
       padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         borderRadius: BorderRadius.zero,
         color: Colors.white,
-        boxShadow: [BoxShadow(color: Colors.grey.shade300, blurRadius: 5)],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,

@@ -7,7 +7,7 @@ enum Committee {
   nationalPolicy("정무위원회", CommitteeIcon.nationalPolicy),
   strategyAndFinance("기획재정위원회", CommitteeIcon.strategyAndFinance),
   education("교육위원회", CommitteeIcon.education),
-  scienceIctBroadcastingAndCommunications("과학기술정보방송통신위위원회", CommitteeIcon.scienceIctBroadcastingAndCommunications),
+  scienceIctBroadcastingAndCommunications("과학기술정보방송통신위원회", CommitteeIcon.scienceIctBroadcastingAndCommunications),
   foreignAffairsAndUnification("외교통일위원회", CommitteeIcon.foreignAffairsAndUnification),
   nationalDefense("국방위원회", CommitteeIcon.nationalDefense),
   publicAdministrationAndSecurity("행정안전위원회", CommitteeIcon.publicAdministrationAndSecurity),

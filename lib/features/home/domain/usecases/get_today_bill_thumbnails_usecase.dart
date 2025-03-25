@@ -1,4 +1,4 @@
-import 'package:front/features/home/domain/entities/today_bill_thumbnail.dart';
+import 'package:front/features/shared/domain/bill_thumbnail.dart';
 import 'package:front/features/home/domain/repositories/today_bill_thumbnail_repository.dart';
 
 class GetTodayBillThumbnailsUseCase {
@@ -7,7 +7,7 @@ class GetTodayBillThumbnailsUseCase {
 
   GetTodayBillThumbnailsUseCase(this._repository);
 
-  Future<List<TodayBillThumbnail>> fetch() {
+  Future<List<BillThumbnail>> fetch() {
     return _repository.retrieveTodayBillThumbnails();
   }
 }
