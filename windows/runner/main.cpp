@@ -5,6 +5,9 @@
 #include "flutter_window.h"
 #include "utils.h"
 
+#define MOBILE_WIDTH 380
+#define MOBILE_HEIGHT 750
+
 int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
                       _In_ wchar_t *command_line, _In_ int show_command) {
   // Attach to console when present (e.g., 'flutter run') or create a
@@ -26,8 +29,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
 
   FlutterWindow window(project);
   Win32Window::Point origin(10, 10);
-  Win32Window::Size size(1280, 720);
-  if (!window.Create(L"front", origin, size)) {
+ ///Win32Window::Size size(1280, 720);
+  Win32Window::Size size(MOBILE_WIDTH, MOBILE_HEIGHT);
+if (!window.Create(L"front", origin, size)) {
     return EXIT_FAILURE;
   }
   window.SetQuitOnClose(true);
