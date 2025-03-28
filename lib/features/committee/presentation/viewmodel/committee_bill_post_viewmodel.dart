@@ -70,6 +70,16 @@ class CommitteeBillPostViewModel extends StateNotifier<CommitteeBillPostState> {
     _fetchBills();
   }
 
+  void changeTags(List<BillPostTag> tags) {
+    _updateStateTo(state.copyWith(
+      selectedTags: tags,
+      currentPage: Page(),
+      previousBills: [],
+      fetchingBills: const AsyncValue.loading()
+    ));
+    _fetchBills();
+  }
+
   /// ✅ 다음 페이지 요청 (이전 데이터 유지)
   Future<void> nextPage() async {
     CommitteeBillPostState stateToUpdate = state.copyWith();

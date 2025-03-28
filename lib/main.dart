@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:front/core/navigation/application_router.dart';
-import 'package:front/core/theme/color_palette.dart';
 import 'package:front/dependency/service_locator.dart';
 import 'package:front/features/bill_info/presentation/view/bill_detail_view.dart';
-
-import 'features/home/presentation/view/committee_home_view.dart';
 
 void main() {
   setupLocator();

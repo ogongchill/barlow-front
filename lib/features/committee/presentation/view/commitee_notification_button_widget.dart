@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:front/core/theme/color_palette.dart';
-import 'package:front/core/theme/test_style_preset.dart';
 import 'package:front/features/committee/domain/entities/committe_notification.dart';
-import 'package:front/features/committee/domain/entities/committee_subscription.dart';
 import 'package:front/features/committee/presentation/viewmodel/committee_subscription_viewmodel.dart';
 import 'package:lottie/lottie.dart';
 

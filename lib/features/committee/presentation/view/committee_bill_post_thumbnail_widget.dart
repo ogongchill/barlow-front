@@ -118,7 +118,7 @@ class _CommitteeBillPostWidgetState extends ConsumerState<CommitteeBillPostThumb
       padding: const EdgeInsets.all(10),
       color: Colors.white,
       child: Row(
-        children: ProgressStatusTag.getAll().map((tag) {
+        children: ProgressStatusTag.getTagsAfterPlenarySubmitted().map((tag) {
           final isSelected = ref.watch(committeeBillPostProvider(widget._committee)).selectedTags.contains(tag);
           return ChoiceChip(
             label: Text(tag.value.value),

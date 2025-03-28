@@ -1,9 +1,12 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:front/core/navigation/application_navigation_service.dart';
 import 'package:front/core/theme/color_palette.dart';
 import 'package:front/features/committee/presentation/view/committee_bill_post_tag_widget.dart';
 import 'package:front/features/committee/presentation/view/committee_profile_widget.dart';
+import 'package:front/features/committee/presentation/viewmodel/committe_bill_post_tag_viewmodel.dart';
 import 'package:front/features/committee/presentation/viewmodel/committee_bill_post_viewmodel.dart';
 import 'package:front/features/shared/domain/bill_post_tag.dart';
 import 'package:front/features/shared/domain/committee.dart';
@@ -107,9 +110,10 @@ class _CommitteeProfileViewState extends ConsumerState<CommitteeProfileView> {
   }
 
   Widget _createTag(BillPostTag tag, Widget label) {
-    final state =  ref.watch(committeeBillPostProvider(widget._committee));
-    final stateNotifier = ref.read(committeeBillPostProvider(widget._committee).notifier);
-    final isSelected = state.selectedTags.contains(tag);
+    final state =  ref.watch(billPostTagProvider(widget._committee));
+    final stateNotifier = ref.read(billPostTagProvider(widget._committee).notifier);
+    final billFetchNotifier = ref.read(committeeBillPostProvider(widget._committee).notifier);
+    final isSelected = state.contains(tag);
     return Padding(
       padding: const EdgeInsets.only(right: 8.0),
       child: ChoiceChip(
@@ -132,19 +136,29 @@ class _CommitteeProfileViewState extends ConsumerState<CommitteeProfileView> {
             child: label,
           ),
           selected: isSelected,
-          onSelected: (selected) => stateNotifier.toggleTag(tag)
+          onSelected: (selected) {
+            stateNotifier.toggleTag(tag);
+            billFetchNotifier.changeTags(state.toList());
+          }
       ),
     );
   }
 
   void _showPersistentBottomSheet(BuildContext context) {
-    showBottomSheet(
+    showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
+      barrierColor: Colors.black54,
       builder: (context) {
-        return Container(
-          height: 600, // ✅ 고정된 높이
-          color: ColorPalette.whitePrimary,
-          child: CommitteeBillPostTagWidget(widget._committee),
+        return FractionallySizedBox(
+          heightFactor: 0.7, // ✅ 화면의 60% 차지 (0.5로 설정하면 50%만 올라옴)
+          child: Container(
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+              color: ColorPalette.whitePrimary,
+            ),
+            child: CommitteeBillPostTagModalView(widget._committee),
+          ),
         );
       },
     );
