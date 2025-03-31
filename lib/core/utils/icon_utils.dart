@@ -32,6 +32,62 @@ class CommitteeIconContainer {
   }
 }
 
+class CommitteeIcon {
+
+  final String _path;
+
+  const CommitteeIcon._(this._path);
+
+  static const CommitteeIcon houseSteering = CommitteeIcon._('assets/icons/committee/icon_국회운영위원회.svg');
+  static const CommitteeIcon legislationAndJudiciary = CommitteeIcon._('assets/icons/committee/icon_법제사법위원회.svg');
+  static const CommitteeIcon nationalPolicy = CommitteeIcon._('assets/icons/committee/icon_정무위원회.svg');
+  static const CommitteeIcon strategyAndFinance = CommitteeIcon._('assets/icons/committee/icon_기획재정위원회.svg');
+  static const CommitteeIcon education = CommitteeIcon._('assets/icons/committee/icon_교육위원회.svg');
+  static const CommitteeIcon scienceIctBroadcastingAndCommunications = CommitteeIcon._('assets/icons/committee/icon_과학기술정보방송통신위원회.svg');
+  static const CommitteeIcon foreignAffairsAndUnification = CommitteeIcon._('assets/icons/committee/icon_외교통일위원회.svg');
+  static const CommitteeIcon nationalDefense = CommitteeIcon._('assets/icons/committee/icon_국방위원회.svg');
+  static const CommitteeIcon publicAdministrationAndSecurity = CommitteeIcon._('assets/icons/committee/icon_행정안전위원회.svg');
+  static const CommitteeIcon cultureSportsAndTourism = CommitteeIcon._('assets/icons/committee/icon_문화체육관광위원회.svg');
+  static const CommitteeIcon agricultureFoodRuralAffairsOceansAndFisheries = CommitteeIcon._('assets/icons/committee/icon_농림축산식품해양수산위원회.svg');
+  static const CommitteeIcon tradeIndustryEnergySmesAndStartups = CommitteeIcon._('assets/icons/committee/icon_산업통상자원중소벤처기업위원회.svg');
+  static const CommitteeIcon healthAndWelfare = CommitteeIcon._('assets/icons/committee/icon_보건복지위원회.svg');
+  static const CommitteeIcon environmentAndLabor = CommitteeIcon._('assets/icons/committee/icon_환경노동위원회.svg');
+  static const CommitteeIcon landInfrastructureAndTransport = CommitteeIcon._('assets/icons/committee/icon_국토교통위원회.svg');
+  static const CommitteeIcon intelligence = CommitteeIcon._('assets/icons/committee/icon_정보위원회.svg');
+  static const CommitteeIcon genderEqualityFamily = CommitteeIcon._('assets/icons/committee/icon_여성가족위원회.svg');
+  static const CommitteeIcon specialCommitteeOnBudgetAccounts = CommitteeIcon._('assets/icons/committee/icon_예산결산특별위원회.svg');
+
+  static const List<CommitteeIcon> values = [
+    houseSteering,
+    legislationAndJudiciary,
+    nationalPolicy,
+    strategyAndFinance,
+    education,
+    scienceIctBroadcastingAndCommunications,
+    foreignAffairsAndUnification,
+    nationalDefense,
+    publicAdministrationAndSecurity,
+    cultureSportsAndTourism,
+    agricultureFoodRuralAffairsOceansAndFisheries,
+    tradeIndustryEnergySmesAndStartups,
+    healthAndWelfare,
+    environmentAndLabor,
+    landInfrastructureAndTransport,
+    intelligence,
+    genderEqualityFamily,
+    specialCommitteeOnBudgetAccounts
+  ];
+
+  SvgPicture toSvgPicture({double size = 24.0, Color? color}) => SvgPicture.asset(
+    _path,
+    width: size,
+    height: size,
+    colorFilter: color != null
+        ? ColorFilter.mode(color, BlendMode.srcIn)
+        : null,
+  );
+}
+
 class PartyIcon {
 
   final String _path;

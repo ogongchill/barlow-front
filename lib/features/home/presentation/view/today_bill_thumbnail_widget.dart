@@ -5,7 +5,7 @@ import 'package:front/core/theme/color_palette.dart';
 import 'package:front/core/theme/test_style_preset.dart';
 import 'package:front/features/home/presentation/viewmodel/home_view_provider.dart';
 
-import 'package:front/features/home/domain/entities/today_bill_thumbnail.dart';
+import 'package:front/features/shared/domain/bill_thumbnail.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -34,7 +34,7 @@ class TodayBillThumbnailWidget extends ConsumerWidget{
     );
   }
 
-  Column _buildInnerContent(List<TodayBillThumbnail> thumbnails) {
+  Column _buildInnerContent(List<BillThumbnail> thumbnails) {
     return Column(
         children: [
           _buildTodayBillThumbnailCard(thumbnails),
@@ -77,7 +77,7 @@ class TodayBillThumbnailWidget extends ConsumerWidget{
     );
   }
 
-  Widget _buildTodayBillThumbnailCard(List<TodayBillThumbnail> thumbnails) {
+  Widget _buildTodayBillThumbnailCard(List<BillThumbnail> thumbnails) {
     return Container( // ✅ 고정된 높이 설정
       height: 465,
       decoration: const BoxDecoration(
@@ -88,7 +88,7 @@ class TodayBillThumbnailWidget extends ConsumerWidget{
     );
   }
 
-  Widget _buildTodayBillThumbnailPages(List<TodayBillThumbnail> thumbnails) {
+  Widget _buildTodayBillThumbnailPages(List<BillThumbnail> thumbnails) {
     int itemsPerPage = 4; // 한 페이지당 4개 요소 표시
     int pageCount = (thumbnails.length / itemsPerPage).ceil();
     return PageView.builder(
@@ -97,7 +97,7 @@ class TodayBillThumbnailWidget extends ConsumerWidget{
       itemBuilder: (context, pageIndex) {
         int startIndex = pageIndex * itemsPerPage;
         int endIndex = (startIndex + itemsPerPage).clamp(0, thumbnails.length);
-        List<TodayBillThumbnail> pageItems =
+        List<BillThumbnail> pageItems =
         thumbnails.sublist(startIndex, endIndex);
         return Container(
           alignment: Alignment.center,
@@ -140,7 +140,7 @@ class TodayBillThumbnailWidget extends ConsumerWidget{
     );
   }
 
-  Card _createTodayBillThumbnailCard(TodayBillThumbnail thumbnail) {
+  Card _createTodayBillThumbnailCard(BillThumbnail thumbnail) {
     return Card(
       clipBehavior: Clip.hardEdge,
       color: ColorPalette.innerContent,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:front/core/navigation/application_navigation_service.dart';
 import 'package:front/core/theme/color_palette.dart';
 import 'package:front/core/theme/test_style_preset.dart';
 import 'package:front/features/home/domain/entities/committee_account.dart';
@@ -18,22 +19,22 @@ class SubscribeCommitteeWidget extends ConsumerWidget {
     return asyncValue.when(
         data: (subscribeAccounts) {
           if(asyncValue.isLoading) {
-            _buildWith(_buildSkeletonLoader());
+            _buildWith(_buildSkeletonLoader(),ref);
           }
-          return _buildWith(_buildInnerContainer(subscribeAccounts));
+          return _buildWith(_buildInnerContainer(subscribeAccounts),ref);
         },
-        error: (err, stack) => _buildWith(_buildFetchFail()),
-        loading: () => _buildWith(_buildSkeletonLoader())
+        error: (err, stack) => _buildWith(_buildFetchFail(),ref),
+        loading: () => _buildWith(_buildSkeletonLoader(),ref)
     );
   }
 
-  Column _buildWith(Widget innerContent) {
+  Column _buildWith(Widget innerContent, WidgetRef ref) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start, // 제목 왼쪽 정렬
       children: [
       _buildTitle(),
       innerContent,
-      _buildBottomCommitteeButton()
+      _buildBottomCommitteeButton(ref)
       ],
     );
   }
@@ -75,7 +76,7 @@ class SubscribeCommitteeWidget extends ConsumerWidget {
     );
   }
 
-  Widget _buildBottomCommitteeButton() {
+  Widget _buildBottomCommitteeButton(WidgetRef ref) {
     return Card(
         clipBehavior: Clip.hardEdge,
         elevation: 0,
@@ -94,7 +95,7 @@ class SubscribeCommitteeWidget extends ConsumerWidget {
             style: TextStylePreset.innerContentSubtitle, // 기존 스타일 적용
           ),
           trailing: const Icon(Icons.keyboard_arrow_right_rounded),
-          onTap: () => print("clicked 상임위원회 더 알아보기"),
+          onTap: () => ApplicationNavigatorService.pushToCommitteeSubscription(ref),
         )
     );
   }

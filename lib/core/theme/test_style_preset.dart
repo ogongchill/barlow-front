@@ -88,4 +88,11 @@ class TextStylePreset {
       fontSize: 14,
       color: ColorPalette.textHead
   );
+
+  static const TextStyle toggleButton = TextStyle(
+      fontFamily: "gmarketSans",
+      fontWeight: FontWeight.w800,
+      fontSize: 14,
+      color: ColorPalette.whitePrimary
+  );
 }
