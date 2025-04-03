@@ -5,8 +5,10 @@ import 'package:front/dev/dummy-repository/dummy_committee_bill_post_thumbnail_r
 import 'package:front/dev/dummy-repository/dummy_committee_notification_repository.dart';
 import 'package:front/dev/dummy-repository/dummy_committee_retrieve_provider.dart';
 import 'package:front/dev/dummy-repository/dummy_committee_subscription_repository.dart';
+import 'package:front/dev/dummy-repository/dummy_recent_bill_thumbnail_repository.dart';
 import 'package:front/dev/dummy-repository/dummy_today_bill_thumbnail_repository.dart';
 import 'package:front/features/bill_info/domain/repositories/bill_repository.dart';
+import 'package:front/features/bill_info/domain/usecases/fetch_recent_bill_thumbail_usecase.dart';
 import 'package:front/features/bill_info/domain/usecases/get_bill_detail_usecase.dart';
 import 'package:front/features/committee/domain/repositories/commitee_notification_repository.dart';
 import 'package:front/features/committee/domain/repositories/committee_bill_post_repository.dart';
@@ -73,4 +75,10 @@ void setupLocator() {
   getIt.registerLazySingleton<CommitteeBillPostRepository>(() => DummyCommitteeBillPostThumbnailRepository());
   getIt.registerLazySingleton<FetchCommitteeBillPostThumbnailsUseCase> (
       () => FetchCommitteeBillPostThumbnailsUseCase(repository: getIt<CommitteeBillPostRepository>()));
+
+  // recent bill thumbnails
+  getIt.registerLazySingleton<RecentBillRepository>(
+      () => DummyRecentBillThumbnailRepository());
+  getIt.registerLazySingleton<FetchRecentBillThumbnailUseCase>(
+      () => FetchRecentBillThumbnailUseCase(repository: getIt<RecentBillRepository>()));
 }

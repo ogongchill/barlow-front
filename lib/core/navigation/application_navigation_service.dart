@@ -39,6 +39,10 @@ class ApplicationNavigatorService {
     }
   }
 
+  static Future<void> pushToRecentBill() {
+    return GoRouter.of(_context!).push('/bill/recent');
+  }
+
   static void popWithResult(BuildContext context) {
     return Navigator.pop(context, true);
   }

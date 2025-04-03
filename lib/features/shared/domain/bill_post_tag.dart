@@ -1,4 +1,5 @@
 import 'package:front/features/shared/domain/bill_progress_status.dart';
+import 'package:front/features/shared/domain/bill_proposer_type.dart';
 import 'package:front/features/shared/domain/party.dart';
 
 abstract class BillPostTag<T> {
@@ -103,6 +104,35 @@ class PartyTag extends BillPostTag<Party> {
       progressive,
       rebuildingKorea,
       independent
+    ];
+  }
+}
+
+class BillProposerTypeTag extends BillPostTag<BillProposerType> {
+
+  static const String _name = "billProposerType";
+
+  BillProposerTypeTag._({required BillProposerType billProposerType})
+   : super(tagName: _name, value: billProposerType);
+
+  static BillProposerTypeTag government = BillProposerTypeTag._(billProposerType: BillProposerType.government);
+  static BillProposerTypeTag chairman = BillProposerTypeTag._(billProposerType: BillProposerType.chairman);
+  static BillProposerTypeTag speaker = BillProposerTypeTag._(billProposerType: BillProposerType.speaker);
+  static BillProposerTypeTag lawmaker = BillProposerTypeTag._(billProposerType: BillProposerType.lawmaker);
+  static BillProposerTypeTag etc = BillProposerTypeTag._(billProposerType: BillProposerType.etc);
+
+  @override
+  String getValueAsString() {
+    return super._value.value;
+  }
+
+  static List<BillProposerTypeTag> getAll() {
+    return [
+      government,
+      chairman,
+      speaker,
+      lawmaker,
+      etc
     ];
   }
 }

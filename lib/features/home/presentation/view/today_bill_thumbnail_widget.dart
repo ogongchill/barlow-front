@@ -68,7 +68,7 @@ class TodayBillThumbnailWidget extends ConsumerWidget{
                   foregroundColor: Colors.black, // 기본 텍스트 색상
                   overlayColor: Colors.grey.withOpacity(0.2), // ✅ 클릭 효과 색상을 회색으로 설정
                 ),
-                onPressed: ()  => print("clicked 더보기") ,
+                onPressed: ()  => ApplicationNavigatorService.pushToRecentBill() ,
                 child: const Text("더보기",style: TextStylePreset.thumbnailSubtitle,
                 )
             ),

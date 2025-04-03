@@ -23,7 +23,7 @@ class TextAppBar extends StatelessWidget implements PreferredSizeWidget {
         _tintColor = tintColor ?? ColorPalette.greyLight;
 
   @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => const Size.fromHeight(50);
 
   @override
   Widget build(BuildContext context) {
