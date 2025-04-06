@@ -3,10 +3,11 @@ import 'package:front/features/shared/domain/bill_post_tag.dart';
 import 'package:front/features/shared/domain/bill_thumbnail.dart';
 import 'package:front/features/shared/domain/page.dart';
 
-class InfiniteScrollBillPostState {
-  final AsyncValue<List<BillThumbnail>> fetchingBills;
-  final List<BillThumbnail> previousBills;
+class InfiniteScrollBillPostState<T extends BillThumbnail> {
+  final AsyncValue<List<T>> fetchingBills;
+  final List<T> previousBills;
   final List<BillPostTag> selectedTags;
+  final dynamic sortKey;
   final Page currentPage;
 
   InfiniteScrollBillPostState({
@@ -14,23 +15,26 @@ class InfiniteScrollBillPostState {
     required this.previousBills,
     required this.selectedTags,
     required this.currentPage,
+    this.sortKey
   });
 
-  InfiniteScrollBillPostState copyWith({
-    AsyncValue<List<BillThumbnail>>? fetchingBills,
-    List<BillThumbnail>? previousBills,
+  InfiniteScrollBillPostState<T> copyWith({
+    AsyncValue<List<T>>? fetchingBills,
+    List<T>? previousBills,
     List<BillPostTag>? selectedTags,
     Page? currentPage,
+    dynamic sortKey,
   }) {
-    return InfiniteScrollBillPostState(
+    return InfiniteScrollBillPostState<T>(
       fetchingBills: fetchingBills ?? this.fetchingBills,
       previousBills: previousBills ?? this.previousBills,
       selectedTags: selectedTags ?? this.selectedTags,
       currentPage: currentPage ?? this.currentPage,
+      sortKey: sortKey ?? this.sortKey
     );
   }
 
-  List<BillThumbnail> getFetchedBill() {
+  List<T> getFetchedBill() {
     return fetchingBills.when(
         data: (billThumbnails) => [...previousBills, ...billThumbnails],
         error: (error, stack) => previousBills,

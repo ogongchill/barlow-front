@@ -1,5 +1,6 @@
 import 'package:front/features/shared/domain/bill_progress_status.dart';
 import 'package:front/features/shared/domain/bill_proposer_type.dart';
+import 'package:front/features/shared/domain/committee.dart';
 import 'package:front/features/shared/domain/party.dart';
 
 abstract class BillPostTag<T> {
@@ -134,5 +135,60 @@ class BillProposerTypeTag extends BillPostTag<BillProposerType> {
       lawmaker,
       etc
     ];
+  }
+}
+
+class CommitteeTag extends BillPostTag<Committee> {
+
+  static const String _name = "committee";
+
+  CommitteeTag._({required Committee committee})
+    : super(tagName: _name, value: committee);
+
+  static CommitteeTag houseSteering = CommitteeTag._(committee : Committee.houseSteering);
+  static CommitteeTag legislationAndJudiciary = CommitteeTag._(committee : Committee.legislationAndJudiciary);
+  static CommitteeTag nationalPolicy = CommitteeTag._(committee : Committee.nationalPolicy);
+  static CommitteeTag strategyAndFinance = CommitteeTag._(committee : Committee.strategyAndFinance);
+  static CommitteeTag education = CommitteeTag._(committee : Committee.education);
+  static CommitteeTag scienceIctBroadcastingAndCommunications = CommitteeTag._(committee : Committee.scienceIctBroadcastingAndCommunications);
+  static CommitteeTag foreignAffairsAndUnification = CommitteeTag._(committee : Committee.foreignAffairsAndUnification);
+  static CommitteeTag nationalDefense = CommitteeTag._(committee : Committee.nationalDefense);
+  static CommitteeTag publicAdministrationAndSecurity = CommitteeTag._(committee : Committee.publicAdministrationAndSecurity);
+  static CommitteeTag cultureSportsAndTourism = CommitteeTag._(committee : Committee.cultureSportsAndTourism);
+  static CommitteeTag agricultureFoodRuralAffairsOceansAndFisheries = CommitteeTag._(committee : Committee.agricultureFoodRuralAffairsOceansAndFisheries);
+  static CommitteeTag tradeIndustryEnergySmesAndStartups = CommitteeTag._(committee : Committee.tradeIndustryEnergySmesAndStartups);
+  static CommitteeTag healthAndWelfare = CommitteeTag._(committee : Committee.healthAndWelfare);
+  static CommitteeTag environmentAndLabor = CommitteeTag._(committee : Committee.environmentAndLabor);
+  static CommitteeTag landInfrastructureAndTransport = CommitteeTag._(committee : Committee.landInfrastructureAndTransport);
+  static CommitteeTag intelligence = CommitteeTag._(committee : Committee.intelligence);
+  static CommitteeTag genderEqualityFamily = CommitteeTag._(committee : Committee.genderEqualityFamily);
+  static CommitteeTag specialCommitteeOnBudgetAccounts = CommitteeTag._(committee: Committee.specialCommitteeOnBudgetAccounts);
+
+  static List<CommitteeTag> getAll() {
+    return [
+      houseSteering,
+      legislationAndJudiciary,
+      nationalPolicy,
+      strategyAndFinance,
+      education,
+      scienceIctBroadcastingAndCommunications,
+      foreignAffairsAndUnification,
+      nationalDefense,
+      publicAdministrationAndSecurity,
+      cultureSportsAndTourism,
+      agricultureFoodRuralAffairsOceansAndFisheries,
+      tradeIndustryEnergySmesAndStartups,
+      healthAndWelfare,
+      environmentAndLabor,
+      landInfrastructureAndTransport,
+      intelligence,
+      genderEqualityFamily,
+      specialCommitteeOnBudgetAccounts
+    ];
+  }
+
+  @override
+  String getValueAsString() {
+    return super._value.name;
   }
 }

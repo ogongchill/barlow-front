@@ -37,6 +37,7 @@ class Party {
   String get name => _name;
   Color get color => _color;
   SvgPicture get svgPicture => _icon.toSvgPicture();
+  PartyIcon get partyIcon => _icon;
 
   static Party findByName(String name) {
     if(_partyMap.containsKey(name)) {

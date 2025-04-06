@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:front/core/navigation/application_navigation_service.dart';
 import 'package:front/core/theme/color_palette.dart';
 import 'package:front/core/theme/test_style_preset.dart';
 
 class HomeShortcutWidget extends StatelessWidget {
+  const HomeShortcutWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +15,7 @@ class HomeShortcutWidget extends StatelessWidget {
     return Column(
       children: [
         _createCard("상임위원회 더 알아보기", () => print("clicked 상임위원회 더 알아보기")),
-        _createCard("최근 접수된 법안 보러가기", () => print("clicked 최근 접수된 법안 보러가기")),
+        _createCard("진행중인 입법예고 보러가기", () => ApplicationNavigatorService.pushToPreAnnounce()),
       ],
     );
   }

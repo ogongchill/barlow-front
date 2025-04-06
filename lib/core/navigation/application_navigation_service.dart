@@ -43,6 +43,10 @@ class ApplicationNavigatorService {
     return GoRouter.of(_context!).push('/bill/recent');
   }
 
+  static Future<void> pushToPreAnnounce() {
+    return GoRouter.of(_context!).push('/pre-announce');
+  }
+
   static void popWithResult(BuildContext context) {
     return Navigator.pop(context, true);
   }
