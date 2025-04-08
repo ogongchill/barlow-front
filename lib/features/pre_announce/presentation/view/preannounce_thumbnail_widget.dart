@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:front/core/navigation/application_navigation_service.dart';
 import 'package:front/core/theme/color_palette.dart';
 import 'package:front/core/theme/test_style_preset.dart';
 import 'package:front/features/pre_announce/domain/entities/preannounce_bill_thumbnail.dart';
@@ -19,6 +20,7 @@ class PreAnnounceThumbnailWidgetState extends ConsumerState<PreAnnounceThumbnail
 
   @override
   void initState() {
+    super.initState();
     ref.read(preAnnounceThumbnailProvider.notifier).init();
   }
 
@@ -68,7 +70,7 @@ class PreAnnounceThumbnailWidgetState extends ConsumerState<PreAnnounceThumbnail
       borderRadius: BorderRadius.circular(15),
       clipBehavior: Clip.hardEdge,
       child: InkWell(
-        onTap: () => print("to preannouncebilldetail"),
+        onTap: () => ApplicationNavigatorService.pushToPreAnnounceDetail(thumbnail.billId),
         child: Container(
           padding: const EdgeInsets.all(15),
           child: Column(

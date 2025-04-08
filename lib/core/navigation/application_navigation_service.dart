@@ -39,13 +39,11 @@ class ApplicationNavigatorService {
     }
   }
 
-  static Future<void> pushToRecentBill() {
-    return GoRouter.of(_context!).push('/bill/recent');
-  }
+  static void pushToRecentBill() => GoRouter.of(_context!).push('/bill/recent');
 
-  static Future<void> pushToPreAnnounce() {
-    return GoRouter.of(_context!).push('/pre-announce');
-  }
+  static void pushToPreAnnounce() => GoRouter.of(_context!).push('/pre-announce');
+
+  static void pushToPreAnnounceDetail(billId) => GoRouter.of(_context!).push('/pre-announce/detail/$billId');
 
   static void popWithResult(BuildContext context) {
     return Navigator.pop(context, true);

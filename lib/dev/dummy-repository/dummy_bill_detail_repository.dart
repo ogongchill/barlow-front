@@ -1,5 +1,6 @@
 import 'package:front/features/bill_info/domain/entities/bill_detail.dart';
 import 'package:front/features/bill_info/domain/repositories/bill_repository.dart';
+import 'package:front/features/shared/domain/bil_detail.dart';
 
 class DummyBillDetailRepository extends BillDetailRepository {
 

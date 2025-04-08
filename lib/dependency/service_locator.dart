@@ -5,6 +5,7 @@ import 'package:front/dev/dummy-repository/dummy_committee_bill_post_thumbnail_r
 import 'package:front/dev/dummy-repository/dummy_committee_notification_repository.dart';
 import 'package:front/dev/dummy-repository/dummy_committee_retrieve_provider.dart';
 import 'package:front/dev/dummy-repository/dummy_committee_subscription_repository.dart';
+import 'package:front/dev/dummy-repository/dummy_preannounce_bill_detail_repository.dart';
 import 'package:front/dev/dummy-repository/dummy_preannounce_bill_thumbnail_repository.dart';
 import 'package:front/dev/dummy-repository/dummy_recent_bill_thumbnail_repository.dart';
 import 'package:front/dev/dummy-repository/dummy_today_bill_thumbnail_repository.dart';
@@ -23,7 +24,9 @@ import 'package:front/features/home/domain/repositories/committee_account_reposi
 import 'package:front/features/home/domain/repositories/today_bill_thumbnail_repository.dart';
 import 'package:front/features/home/domain/usecases/get_subscribe_committee_usecase.dart';
 import 'package:front/features/home/domain/usecases/get_today_bill_thumbnails_usecase.dart';
+import 'package:front/features/pre_announce/domain/repositories/preannounce_bill_detail_respository.dart';
 import 'package:front/features/pre_announce/domain/repositories/preannounce_bill_thumbnail_repository.dart';
+import 'package:front/features/pre_announce/domain/usecases/fetch_preannounce_bill_detail_usecase.dart';
 import 'package:front/features/pre_announce/domain/usecases/fetch_preannounce_thumbnail_usecase.dart';
 import 'package:get_it/get_it.dart';
 
@@ -90,4 +93,8 @@ void setupLocator() {
       () => DummyPreAnnounceBillThumbnailRepository());
   getIt.registerLazySingleton<FetchPreAnnounceThumbnailUseCase>(
       () => FetchPreAnnounceThumbnailUseCase(repository: getIt<PreAnnounceBillThumbnailRepository>()));
+  getIt.registerLazySingleton<PreAnnounceBillDetailRepository>(
+      () => DummyPreAnnounceBillDetailRepository());
+  getIt.registerLazySingleton<FetchPreAnnounceBillDetailUseCase>(
+      () => FetchPreAnnounceBillDetailUseCase(repository: getIt<PreAnnounceBillDetailRepository>()));
 }

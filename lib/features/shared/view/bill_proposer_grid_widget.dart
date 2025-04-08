@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:front/features/bill_info/domain/entities/bill_detail.dart';
+import 'package:front/features/shared/domain/bil_detail.dart';
 
 class BillProposerGridWidget extends StatelessWidget {
   final List<BillProposer> billProposers;
