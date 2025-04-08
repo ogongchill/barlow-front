@@ -6,6 +6,7 @@ import 'package:front/features/home/presentation/view/home_shortcut_widget.dart'
 import 'package:front/features/home/presentation/view/subscirbe_committee_widget.dart';
 import 'package:front/features/home/presentation/view/today_bill_thumbnail_widget.dart';
 import 'package:front/features/home/presentation/viewmodel/home_view_provider.dart';
+import 'package:front/features/shared/view/bottom_nav_bar_widget.dart';
 
 class CommitteeHomeView extends ConsumerWidget { // ✅ ConsumerWidget으로 변경
   const CommitteeHomeView({super.key});
@@ -20,16 +21,17 @@ class CommitteeHomeView extends ConsumerWidget { // ✅ ConsumerWidget으로 변
       home: Scaffold(
         backgroundColor: ColorPalette.background,
         appBar: AppBar(title: const Text("App Bar in Progress,,,,")),
+        bottomNavigationBar: const ApplicationBottomNavigationBarWidget(),
         body: RefreshIndicator( // 새로고침
           color: ColorPalette.bluePrimary,
           backgroundColor: ColorPalette.whitePrimary,
           onRefresh: () => _refresh(ref),
           child: ListView(
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-            children: [
+            children: const [
               HomeShortcutWidget(),
-              const SubscribeCommitteeWidget(),
-              const TodayBillThumbnailWidget(),
+              SubscribeCommitteeWidget(),
+              TodayBillThumbnailWidget(),
             ],
           ),
         ),

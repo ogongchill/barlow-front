@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:front/core/theme/color_palette.dart';
 import 'package:front/core/theme/test_style_preset.dart';
+import 'package:go_router/go_router.dart';
 
 class TextAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String _title;
@@ -34,10 +35,11 @@ class TextAppBar extends StatelessWidget implements PreferredSizeWidget {
     Function goBackFunction = _onPressedBack ?? () => Navigator.pop(context);
     return AppBar(
       centerTitle: true,
-      leading: IconButton(
-        icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.black),
-        onPressed: () => goBackFunction(),
-      ),
+      leading: context.canPop()
+          ? IconButton(
+            icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.black),
+            onPressed: () => goBackFunction(),)
+          : null,
       title: _titleSection(),
       backgroundColor: _backgroundColor,
       surfaceTintColor: _tintColor,

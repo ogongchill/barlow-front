@@ -7,6 +7,7 @@ import 'package:front/features/committee/domain/entities/committee_subscription.
 import 'package:front/features/committee/presentation/view/committe_subscription_list_widget.dart';
 import 'package:front/features/committee/presentation/viewmodel/committee_subscription_viewmodel.dart';
 import 'package:front/features/shared/view/appbar.dart';
+import 'package:front/features/shared/view/bottom_nav_bar_widget.dart';
 
 class CommitteeSubscriptionView extends ConsumerWidget{
 
@@ -29,6 +30,7 @@ class CommitteeSubscriptionView extends ConsumerWidget{
           title: "상임위원회 알아보기",
           onPressedBack: () => ApplicationNavigatorService.popWithResult(context)
       ),
+      bottomNavigationBar: const ApplicationBottomNavigationBarWidget(),
       body: _buildBody(subscriptions),
     );
   }

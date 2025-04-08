@@ -28,6 +28,8 @@ class ApplicationNavigatorService {
     }
   }
 
+  static void goToCommitteeSubscription() => GoRouter.of(_context!).go('/committee');
+
   static Future<void> pushToCommitteeProfile(WidgetRef ref, Committee committee) async {
     final context = _context;
     if (context == null) return;
@@ -44,6 +46,8 @@ class ApplicationNavigatorService {
   static void pushToPreAnnounce() => GoRouter.of(_context!).push('/pre-announce');
 
   static void pushToPreAnnounceDetail(billId) => GoRouter.of(_context!).push('/pre-announce/detail/$billId');
+
+  static void goToHome() => GoRouter.of(_context!).go('/');
 
   static void popWithResult(BuildContext context) {
     return Navigator.pop(context, true);
