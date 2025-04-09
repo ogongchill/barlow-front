@@ -8,6 +8,7 @@ import 'package:front/features/committee/presentation/view/committee_subscriptio
 import 'package:front/features/home/presentation/view/committee_home_view.dart';
 import 'package:front/features/pre_announce/presentation/view/preannounce_bill_detail_view.dart';
 import 'package:front/features/pre_announce/presentation/view/preannounce_view.dart';
+import 'package:front/features/settings/presentation/view/setting_view.dart';
 import 'package:front/features/shared/domain/committee.dart';
 import 'package:go_router/go_router.dart';
 
@@ -22,7 +23,8 @@ final GoRouter applicationRouter = GoRouter(
     _homeRouter,
     _billRouter,
     _committeeRouter,
-    _preAnnounceRouter
+    _preAnnounceRouter,
+    _settingRouter
   ],
 );
 
@@ -76,4 +78,9 @@ final GoRoute _preAnnounceRouter = GoRoute(
       builder: (context, state) => PreAnnounceBillDetailView(billId: state.pathParameters['billId']!)
     )
   ]
+);
+
+final GoRoute _settingRouter = GoRoute(
+  path: '/settings',
+  builder: (context, state) => const SettingView()
 );

@@ -44,7 +44,7 @@ class ApplicationBottomNavigationBarWidget extends StatelessWidget {
           _navigationIcon(
               icon: const Icon(Icons.settings),
               text: "설정",
-              onTapFunction: () => print("to settigns")
+              onTapFunction: () => ApplicationNavigatorService.goToSettings()
           )
         ],
       ),

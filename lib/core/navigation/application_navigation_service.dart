@@ -49,6 +49,8 @@ class ApplicationNavigatorService {
 
   static void goToHome() => GoRouter.of(_context!).go('/');
 
+  static void goToSettings() => GoRouter.of(_context!).go('/settings');
+
   static void popWithResult(BuildContext context) {
     return Navigator.pop(context, true);
   }

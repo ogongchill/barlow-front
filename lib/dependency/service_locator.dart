@@ -5,10 +5,12 @@ import 'package:front/dev/dummy-repository/dummy_committee_bill_post_thumbnail_r
 import 'package:front/dev/dummy-repository/dummy_committee_notification_repository.dart';
 import 'package:front/dev/dummy-repository/dummy_committee_retrieve_provider.dart';
 import 'package:front/dev/dummy-repository/dummy_committee_subscription_repository.dart';
+import 'package:front/dev/dummy-repository/dummy_notification_repository.dart';
 import 'package:front/dev/dummy-repository/dummy_preannounce_bill_detail_repository.dart';
 import 'package:front/dev/dummy-repository/dummy_preannounce_bill_thumbnail_repository.dart';
 import 'package:front/dev/dummy-repository/dummy_recent_bill_thumbnail_repository.dart';
 import 'package:front/dev/dummy-repository/dummy_today_bill_thumbnail_repository.dart';
+import 'package:front/dev/dummy-repository/dummy_user_repository.dart';
 import 'package:front/features/bill_info/domain/repositories/bill_repository.dart';
 import 'package:front/features/bill_info/domain/usecases/fetch_recent_bill_thumbail_usecase.dart';
 import 'package:front/features/bill_info/domain/usecases/get_bill_detail_usecase.dart';
@@ -28,6 +30,10 @@ import 'package:front/features/pre_announce/domain/repositories/preannounce_bill
 import 'package:front/features/pre_announce/domain/repositories/preannounce_bill_thumbnail_repository.dart';
 import 'package:front/features/pre_announce/domain/usecases/fetch_preannounce_bill_detail_usecase.dart';
 import 'package:front/features/pre_announce/domain/usecases/fetch_preannounce_thumbnail_usecase.dart';
+import 'package:front/features/settings/domain/repositories/notification_repository.dart';
+import 'package:front/features/settings/domain/repositories/user_repository.dart';
+import 'package:front/features/settings/domain/usecases/load_user_info_usecase.dart';
+import 'package:front/features/settings/domain/usecases/notification_usecase.dart';
 import 'package:get_it/get_it.dart';
 
 final GetIt getIt = GetIt.instance;
@@ -97,4 +103,16 @@ void setupLocator() {
       () => DummyPreAnnounceBillDetailRepository());
   getIt.registerLazySingleton<FetchPreAnnounceBillDetailUseCase>(
       () => FetchPreAnnounceBillDetailUseCase(repository: getIt<PreAnnounceBillDetailRepository>()));
+
+  //setting
+  getIt.registerLazySingleton<UserRepository>(
+      () => DummyUserInfoRepository());
+  getIt.registerLazySingleton<LoadUserInfoUseCase>(
+      () => LoadUserInfoUseCase(repository: getIt<UserRepository>()));
+  getIt.registerLazySingleton<NotificationRepository> (
+      () => DummyNotificationRepository());
+  getIt.registerLazySingleton<ChangeNotificationUseCase>(
+      () => ChangeNotificationUseCase(repository: getIt<NotificationRepository>()));
+  getIt.registerLazySingleton<FetchNotificationUseCase>(
+      () => FetchNotificationUseCase(repository: getIt<NotificationRepository>()));
 }
