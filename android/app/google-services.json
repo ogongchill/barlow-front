@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "946102809592",
+    "project_id": "barlow-bd0cc",
+    "storage_bucket": "barlow-bd0cc.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:946102809592:android:aabb91e228915c36f49c0d",
+        "android_client_info": {
+          "package_name": "com.barlow.front"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDo-qouTrJnLBSW-wtRlfiz9iNTbcL4e5c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

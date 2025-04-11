@@ -1,11 +1,24 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:front/core/navigation/application_router.dart';
 import 'package:front/dependency/service_locator.dart';
-import 'package:front/features/bill_info/presentation/view/bill_detail_view.dart';
+import 'package:front/infra/firebase/fcm_config.dart';
 
-void main() {
+void main() async {
   setupLocator();
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  FcmInitializer(
+    plugin: FlutterLocalNotificationsPlugin(),
+    onMessageForegroundHandler: (RemoteMessage message) {},
+    onMessageBackgroundHandler: (RemoteMessage message) {},
+    onMessageTerminatedHandler: (RemoteMessage message) {},
+  ).initialize();
+  String? fcmToken = await FirebaseMessaging.instance.getToken();
+  print("TOKEN : $fcmToken");
   runApp(
     const ProviderScope(
       child: MyApp(),
@@ -27,18 +40,6 @@ class MyApp extends ConsumerWidget {
     ),
       debugShowCheckedModeBanner: true,
       routerConfig: applicationRouter, // ✅ GoRouter 적용
-    );
-  }
-}
-
-class DevApp extends StatelessWidget {
-
-  const DevApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: BillDetailView(title: "" , billId: "PRC_V2T5U0S3R0R5Z1Z3Y2Z6X5X3W7S8S5"),
     );
   }
 }
