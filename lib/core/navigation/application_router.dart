@@ -11,6 +11,7 @@ import 'package:front/features/pre_announce/presentation/view/preannounce_bill_d
 import 'package:front/features/pre_announce/presentation/view/preannounce_view.dart';
 import 'package:front/features/settings/presentation/view/setting_view.dart';
 import 'package:front/features/shared/domain/committee.dart';
+import 'package:front/features/shared/view/donation/donation_view.dart';
 import 'package:go_router/go_router.dart';
 
 final applicationRouterProvider = Provider<GoRouter> ((ref) {
@@ -26,7 +27,8 @@ final GoRouter applicationRouter = GoRouter(
     _committeeRouter,
     _preAnnounceRouter,
     _settingRouter,
-    _notificationRouter
+    _notificationRouter,
+    _donationRouter
   ],
 );
 
@@ -90,4 +92,9 @@ final GoRoute _settingRouter = GoRoute(
 final GoRoute _notificationRouter = GoRoute(
     path: '/notifications',
     builder: (context, state) => const NotificationCenterView()
+);
+
+final GoRoute _donationRouter = GoRoute(
+    path: '/donation',
+    builder: (context, state) => const DonationView()
 );

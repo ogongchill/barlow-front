@@ -39,7 +39,7 @@ class ApplicationBottomNavigationBarWidget extends StatelessWidget {
           _navigationIcon(
               icon: const Icon(Icons.people),
               text: "국회의원",
-              onTapFunction: () => print("to 국회의원")
+              onTapFunction: () => ApplicationNavigatorService.pushToDonation()
           ),
           _navigationIcon(
               icon: const Icon(Icons.settings),

@@ -53,6 +53,8 @@ class ApplicationNavigatorService {
 
   static void pushToNotificationCenter() => GoRouter.of(_context!).push('/notifications');
 
+  static void pushToDonation() => GoRouter.of(_context!).push('/donation');
+
   static void popWithResult(BuildContext context) {
     return Navigator.pop(context, true);
   }
