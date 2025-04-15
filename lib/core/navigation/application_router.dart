@@ -6,6 +6,7 @@ import 'package:front/features/bill_info/presentation/view/recent_bill_thumbnail
 import 'package:front/features/committee/presentation/view/committee_profile_view.dart';
 import 'package:front/features/committee/presentation/view/committee_subscription_view.dart';
 import 'package:front/features/home/presentation/view/committee_home_view.dart';
+import 'package:front/features/notification/presentation/view/notification_center_view.dart';
 import 'package:front/features/pre_announce/presentation/view/preannounce_bill_detail_view.dart';
 import 'package:front/features/pre_announce/presentation/view/preannounce_view.dart';
 import 'package:front/features/settings/presentation/view/setting_view.dart';
@@ -24,7 +25,8 @@ final GoRouter applicationRouter = GoRouter(
     _billRouter,
     _committeeRouter,
     _preAnnounceRouter,
-    _settingRouter
+    _settingRouter,
+    _notificationRouter
   ],
 );
 
@@ -32,7 +34,7 @@ final GoRoute _homeRouter = GoRoute(
   path: '/',
   builder: (context, state) {
     return const CommitteeHomeView();
-  }
+  },
 );
 
 final GoRoute _billRouter = GoRoute(
@@ -83,4 +85,9 @@ final GoRoute _preAnnounceRouter = GoRoute(
 final GoRoute _settingRouter = GoRoute(
   path: '/settings',
   builder: (context, state) => const SettingView()
+);
+
+final GoRoute _notificationRouter = GoRoute(
+    path: '/notifications',
+    builder: (context, state) => const NotificationCenterView()
 );

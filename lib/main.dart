@@ -3,14 +3,18 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:front/core/database/hive_configs.dart';
 import 'package:front/core/navigation/application_router.dart';
 import 'package:front/dependency/service_locator.dart';
-import 'package:front/infra/firebase/fcm_config.dart';
+
+import 'core/notification/fcm_config.dart';
 
 void main() async {
   setupLocator();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await HiveInitializer.initializeApp();
+  await HiveInitializer.clearBox();
   FcmInitializer(
     plugin: FlutterLocalNotificationsPlugin(),
     onMessageForegroundHandler: (RemoteMessage message) {},

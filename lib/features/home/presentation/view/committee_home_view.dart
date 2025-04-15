@@ -2,17 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:front/core/theme/color_palette.dart';
+import 'package:front/features/home/presentation/view/home_appbar.dart';
 import 'package:front/features/home/presentation/view/home_shortcut_widget.dart';
 import 'package:front/features/home/presentation/view/subscirbe_committee_widget.dart';
 import 'package:front/features/home/presentation/view/today_bill_thumbnail_widget.dart';
 import 'package:front/features/home/presentation/viewmodel/home_view_provider.dart';
 import 'package:front/features/shared/view/bottom_nav_bar_widget.dart';
 
-class CommitteeHomeView extends ConsumerWidget { // ✅ ConsumerWidget으로 변경
+class CommitteeHomeView extends ConsumerWidget {
   const CommitteeHomeView({super.key});
 
   Future<void> _refresh(WidgetRef ref) async {
-    ref.read(homeRefreshTriggerProvider.notifier).state = !ref.read(homeRefreshTriggerProvider); // ✅ 트리거 변경
+    ref.read(homeRefreshTriggerProvider.notifier).state = !ref.read(homeRefreshTriggerProvider);
   }
 
   @override
@@ -20,9 +21,9 @@ class CommitteeHomeView extends ConsumerWidget { // ✅ ConsumerWidget으로 변
     return MaterialApp(
       home: Scaffold(
         backgroundColor: ColorPalette.background,
-        appBar: AppBar(title: const Text("App Bar in Progress,,,,")),
+        appBar: const HomeAppbar(),
         bottomNavigationBar: const ApplicationBottomNavigationBarWidget(),
-        body: RefreshIndicator( // 새로고침
+        body: RefreshIndicator(
           color: ColorPalette.bluePrimary,
           backgroundColor: ColorPalette.whitePrimary,
           onRefresh: () => _refresh(ref),

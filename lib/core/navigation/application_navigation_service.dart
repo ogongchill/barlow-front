@@ -51,6 +51,8 @@ class ApplicationNavigatorService {
 
   static void goToSettings() => GoRouter.of(_context!).go('/settings');
 
+  static void pushToNotificationCenter() => GoRouter.of(_context!).push('/notifications');
+
   static void popWithResult(BuildContext context) {
     return Navigator.pop(context, true);
   }

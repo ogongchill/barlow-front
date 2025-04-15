@@ -1,6 +1,15 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:front/infra/firebase/notification_channels.dart';
+import 'package:front/core/notification/firebase_options.dart';
+
+import 'notification_channels.dart';
+
+@pragma('vm:entry-point') // Flutter 3.3.0 이상에서 권장
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  print("백그라운드 메시지 처리 시작: ${message.messageId}");
+  return;
+}
 
 class FcmInitializer {
 
@@ -20,6 +29,9 @@ class FcmInitializer {
       _onMessageForegroundHandler = onMessageForegroundHandler;
 
   Future<void> initialize() async {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
     await _initializePlugin();
     await _registerNotificationChannels();
     _setupFcmListeners();
@@ -56,6 +68,8 @@ class FcmInitializer {
         print('📬 앱 종료 상태에서 메시지 탭하고 열림: ${message.notification?.title}');
       }
     });
+
+    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   }
 
   Future<void> _showNotification(RemoteMessage message) async {
@@ -73,11 +87,4 @@ class FcmInitializer {
       );
     }
   }
-  // @pragma('vm:entry-point')
-  // Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  //   await Firebase.initializeApp();
-  //   print('🔙 백그라운드 메시지 수신: ${message.messageId}');
-  // }
 }
-
-

@@ -44,3 +44,6 @@ app.*.map.json
 
 # widget preview plugin
 .widget_preview/
+
+# for build runner outputs
+*.g.dart

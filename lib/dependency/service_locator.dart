@@ -1,3 +1,4 @@
+import 'package:front/core/database/notification/notification_read_status_repository_adapter.dart';
 import 'package:front/dev/dummy-repository/dummy_bill_detail_repository.dart';
 import 'package:front/dev/dummy-repository/dummy_cache.dart';
 import 'package:front/dev/dummy-repository/dummy_committe_profile_repository.dart';
@@ -8,6 +9,7 @@ import 'package:front/dev/dummy-repository/dummy_committee_subscription_reposito
 import 'package:front/dev/dummy-repository/dummy_notification_repository.dart';
 import 'package:front/dev/dummy-repository/dummy_preannounce_bill_detail_repository.dart';
 import 'package:front/dev/dummy-repository/dummy_preannounce_bill_thumbnail_repository.dart';
+import 'package:front/dev/dummy-repository/dummy_received_notification_repository.dart';
 import 'package:front/dev/dummy-repository/dummy_recent_bill_thumbnail_repository.dart';
 import 'package:front/dev/dummy-repository/dummy_today_bill_thumbnail_repository.dart';
 import 'package:front/dev/dummy-repository/dummy_user_repository.dart';
@@ -26,6 +28,10 @@ import 'package:front/features/home/domain/repositories/committee_account_reposi
 import 'package:front/features/home/domain/repositories/today_bill_thumbnail_repository.dart';
 import 'package:front/features/home/domain/usecases/get_subscribe_committee_usecase.dart';
 import 'package:front/features/home/domain/usecases/get_today_bill_thumbnails_usecase.dart';
+import 'package:front/features/notification/domain/repositories/read_status_repository.dart';
+import 'package:front/features/notification/domain/repositories/received_notification_repository.dart';
+import 'package:front/features/notification/domain/usecases/fetch_received_notification_usecase.dart';
+import 'package:front/features/notification/domain/usecases/notification_read_status_usecase.dart';
 import 'package:front/features/pre_announce/domain/repositories/preannounce_bill_detail_respository.dart';
 import 'package:front/features/pre_announce/domain/repositories/preannounce_bill_thumbnail_repository.dart';
 import 'package:front/features/pre_announce/domain/usecases/fetch_preannounce_bill_detail_usecase.dart';
@@ -115,4 +121,16 @@ void setupLocator() {
       () => ChangeNotificationUseCase(repository: getIt<NotificationRepository>()));
   getIt.registerLazySingleton<FetchNotificationUseCase>(
       () => FetchNotificationUseCase(repository: getIt<NotificationRepository>()));
+
+  //notification
+  getIt.registerLazySingleton<ReceivedNotificationRepository>(
+      () => DummyReceivedNotificationRepository());
+  getIt.registerLazySingleton<FetchReceivedNotificationUseCase>(
+      () => FetchReceivedNotificationUseCase(repository: getIt<ReceivedNotificationRepository>()));
+  getIt.registerLazySingleton<ReadStatusRepository>(
+      () => NotificationReadStatusRepositoryAdapter());
+  getIt.registerLazySingleton<MarkAsReadNotificationUseCase> (
+      () => MarkAsReadNotificationUseCase(repository: getIt<ReadStatusRepository>()));
+  getIt.registerLazySingleton<CheckIsReadNotificationUseCase> (
+          () => CheckIsReadNotificationUseCase(repository: getIt<ReadStatusRepository>()));
 }
