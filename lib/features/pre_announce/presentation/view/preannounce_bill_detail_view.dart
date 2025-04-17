@@ -9,6 +9,7 @@ import 'package:front/features/pre_announce/presentation/viewmodel/preannounce_b
 import 'package:front/features/shared/view/appbar.dart';
 import 'package:front/features/shared/view/bill_detail_paragraph_widget.dart';
 import 'package:front/features/shared/view/bill_proposer_section_widget.dart';
+import 'package:front/features/shared/view/capturable_widget.dart';
 import 'package:front/features/shared/view/error.dart';
 import 'package:intl/intl.dart';
 import 'package:shimmer/shimmer.dart';
@@ -50,14 +51,18 @@ class PreAnnounceBillDetailView extends ConsumerWidget {
 
   Widget _buildBody(PreAnnounceBillDetail billDetail) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        children: [
-          _buildPreAnnouncementSectionWidget(billDetail),
-          BillDetailParagraphWidget(text: billDetail.detail),
-          if(billDetail.proposerSection != null)
-            BillProposerSectionWidget(billProposerSection: billDetail.proposerSection!)
-        ],
+      child: CaptureAndShareWidget(
+          body: Container(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              children: [
+                _buildPreAnnouncementSectionWidget(billDetail),
+                BillDetailParagraphWidget(text: billDetail.detail),
+                if(billDetail.proposerSection != null)
+                  BillProposerSectionWidget(billProposerSection: billDetail.proposerSection!)
+              ],
+            ),
+          )
       ),
     );
   }

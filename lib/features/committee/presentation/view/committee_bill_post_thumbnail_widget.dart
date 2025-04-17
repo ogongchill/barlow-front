@@ -82,7 +82,7 @@ class _CommitteeBillPostWidgetState extends ConsumerState<CommitteeBillPostThumb
       ),
       margin: const EdgeInsets.symmetric(vertical: 0),
       child: InkWell(
-        onTap: () => ApplicationNavigatorService.pushToBillDetail(billId: thumbnail.billId, title: "오늘 접수된 법안"),
+        onTap: () => ApplicationNavigatorService.pushToBillDetail(billId: thumbnail.billId, title: widget._committee.name),
         child: SizedBox(
           height: 120,
           child: Stack(

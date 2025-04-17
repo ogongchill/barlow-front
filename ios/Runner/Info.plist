@@ -51,5 +51,8 @@
         <string>https</string>
         <string>kakaotalk</string>
         <string>kakaopay</string>
+
+    <key>NSPhotoLibraryAddUsageDescription</key>
+    <string>갤러리에 이미지를 저장하려고 합니다</string>
 </dict>
 </plist>

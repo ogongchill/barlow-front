@@ -9,6 +9,7 @@ import 'package:front/features/shared/view/bill_detail_paragraph_widget.dart';
 import 'package:front/features/shared/view/bill_proposer_section_widget.dart';
 import 'package:front/features/bill_info/presentation/viewmodel/bill_detail_provider.dart';
 import 'package:front/features/shared/view/appbar.dart';
+import 'package:front/features/shared/view/capturable_widget.dart';
 import 'package:front/features/shared/view/error.dart';
 import 'package:intl/intl.dart';
 import 'package:shimmer/shimmer.dart';
@@ -72,30 +73,33 @@ class BillDetailView extends ConsumerWidget {
     );
   }
 
-  Scaffold _buildScaffold(Widget body) {
+  Widget _buildScaffold(Widget body) {
     return Scaffold(
       backgroundColor: ColorPalette.background,
       appBar: TextAppBar(title: _title, subtitle: _subtitle,),
       body: SingleChildScrollView(
           child: Container(
-            padding: const EdgeInsets.all(20),
-            decoration: const BoxDecoration(
-            color: ColorPalette.innerContent,
-            borderRadius: BorderRadius.zero
-          ),
-          child: body,
-        ),
-      )
+              decoration: const BoxDecoration(
+                  color: ColorPalette.innerContent,
+                  borderRadius: BorderRadius.zero
+            ),
+            child: CaptureAndShareWidget(body: body),
+         ),
+      ),
     );
   }
 
   Widget _createInnerContent(BillDetail billDetail) {
-    return Column(
-      children: [
-          _createBillThumbnailInfo(billDetail),
-          BillDetailParagraphWidget(text: billDetail.detail),
-          _createBillProposerSection(billDetail)
-      ]
+    return Container(
+      color: ColorPalette.innerContent,
+      padding: const EdgeInsets.all(20),
+      child: Column(
+          children: [
+            _createBillThumbnailInfo(billDetail),
+            BillDetailParagraphWidget(text: billDetail.detail),
+            _createBillProposerSection(billDetail)
+          ]
+      ),
     );
   }
 
