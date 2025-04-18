@@ -95,4 +95,11 @@ class TextStylePreset {
       fontSize: 14,
       color: ColorPalette.whitePrimary
   );
+
+  static const TextStyle tagStyle = TextStyle(
+      fontFamily: "gmarketSans",
+      fontWeight: FontWeight.w500,
+      fontSize: 14,
+      color: ColorPalette.borderBlack
+  );
 }

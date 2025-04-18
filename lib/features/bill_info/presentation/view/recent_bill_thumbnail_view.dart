@@ -79,17 +79,48 @@ class RecentBillThumbnailView extends ConsumerWidget {
       scrollDirection: Axis.horizontal,
       padding: const EdgeInsets.symmetric(horizontal: 0),
       child: Row(
+        spacing: 10,
           children: [
             Container(
               margin: const EdgeInsets.only(right: 20),
               child: IconButton(onPressed: () => {_showPersistentBottomSheet(context)}, icon: const Icon(Icons.filter_list)),
             ),
-            _createTag(BillProposerTypeTag.lawmaker, const Text("의원 발의"), ref),
-            _createTag(ProgressStatusTag.promulgated, const Text("공포"), ref),
-            _createTag(ProgressStatusTag.plenaryDecided, const Text("본회의의결"), ref),
-            _createTag(PartyTag.democratic, Party.democratic.svgPicture, ref),
-            _createTag(PartyTag.peoplePower, Party.peoplePower.svgPicture, ref),
+            _createTagBox(BillProposerTypeTag.lawmaker, const Text("의원 발의", style: TextStylePreset.tagStyle,), ref),
+            _createTagBox(ProgressStatusTag.promulgated, const Text("공포", style: TextStylePreset.tagStyle), ref),
+            _createTagBox(ProgressStatusTag.plenaryDecided, const Text("본회의의결", style: TextStylePreset.tagStyle), ref),
+            _createTagBox(PartyTag.democratic, Party.democratic.svgPicture, ref),
+            _createTagBox(PartyTag.peoplePower, Party.peoplePower.svgPicture, ref),
           ]
+      ),
+    );
+  }
+
+
+  Widget _createTagBox(BillPostTag tag, Widget label, WidgetRef ref) {
+    final state =  ref.watch(recentBillTagProvider);
+    final stateNotifier = ref.read(recentBillTagProvider.notifier);
+    final billFetchNotifier = ref.read(recentBillProvider.notifier);
+    bool isSelected = state.contains(tag);
+    return Material(
+      color: isSelected ? ColorPalette.greyLight : ColorPalette.innerContent,
+      borderRadius: BorderRadius.circular(10),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(10),
+        onTap: () {
+          stateNotifier.toggleTag(tag);
+          billFetchNotifier.changeTags(ref.read(recentBillTagProvider).toList());
+        },
+        child: SizedBox(
+          height: 34,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: ColorPalette.greyDark, width: 1.0),
+            ),
+            child: Align(alignment: Alignment.center, child: label,),
+          ),
+        ),
       ),
     );
   }

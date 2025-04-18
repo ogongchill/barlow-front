@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:front/core/navigation/application_navigation_service.dart';
 import 'package:front/core/theme/color_palette.dart';
+import 'package:front/core/theme/test_style_preset.dart';
 import 'package:front/features/committee/presentation/view/committee_bill_post_tag_widget.dart';
 import 'package:front/features/committee/presentation/view/committee_profile_widget.dart';
 import 'package:front/features/committee/presentation/viewmodel/committe_bill_post_tag_viewmodel.dart';
@@ -57,8 +58,8 @@ class _CommitteeProfileViewState extends ConsumerState<CommitteeProfileView> {
             SliverPersistentHeader(
               pinned: true, // ✅ 스크롤해도 고정됨
               delegate: _SliverCustomHeaderDelegate(
-                minHeight: 70, // ✅ 최소 크기 (축소될 때 남는 부분)
-                maxHeight: 70, // ✅ 최대 크기 (펼쳐졌을 때 크기)
+                minHeight: 60, // ✅ 최소 크기 (축소될 때 남는 부분)
+                maxHeight: 60, // ✅ 최대 크기 (펼쳐졌을 때 크기)
                 child: Container(
                   decoration: const BoxDecoration(
                     color: ColorPalette.innerContent,
@@ -91,53 +92,48 @@ class _CommitteeProfileViewState extends ConsumerState<CommitteeProfileView> {
   Widget _buildPreferredTags(WidgetRef ref, BuildContext context) {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
-      padding: const EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsets.all(0),
       child: Row(
+        spacing: 10,
         children: [
           Container(
             margin: const EdgeInsets.only(right: 20),
             child: IconButton(onPressed: () => {_showPersistentBottomSheet(context)}, icon: const Icon(Icons.filter_list)),
           ),
-          _createTag(ProgressStatusTag.promulgated, Text("공포")),
-          _createTag(ProgressStatusTag.plenaryDecided, Text("본회의의결")),
-          _createTag(PartyTag.democratic, Party.democratic.svgPicture),
-          _createTag(PartyTag.peoplePower, Party.peoplePower.svgPicture)
+          _createTagBox(ProgressStatusTag.promulgated, const Text("공포", style: TextStylePreset.tagStyle,), ref),
+          _createTagBox(ProgressStatusTag.plenaryDecided, const Text("본회의의결", style: TextStylePreset.tagStyle), ref),
+          _createTagBox(PartyTag.democratic, Party.democratic.svgPicture, ref),
+          _createTagBox(PartyTag.peoplePower, Party.peoplePower.svgPicture, ref)
         ]
       ),
     );
   }
 
-  Widget _createTag(BillPostTag tag, Widget label) {
+  Widget _createTagBox(BillPostTag tag, Widget label, WidgetRef ref) {
     final state =  ref.watch(billPostTagProvider(widget._committee));
     final stateNotifier = ref.read(billPostTagProvider(widget._committee).notifier);
     final billFetchNotifier = ref.read(committeeBillPostProvider(widget._committee).notifier);
-    final isSelected = state.contains(tag);
-    return Padding(
-      padding: const EdgeInsets.only(right: 8.0),
-      child: ChoiceChip(
-          clipBehavior: Clip.hardEdge,
-          elevation: 0,
-          padding: const EdgeInsets.symmetric(vertical: 10),
-          backgroundColor: ColorPalette.innerContent,
-          selectedColor: ColorPalette.greyLight,
-          labelStyle: _tagStyle,
-          shape: RoundedRectangleBorder(
-            side: const BorderSide(
-              color: ColorPalette.greyLight,
-              width: 1.5,
+    bool isSelected = state.contains(tag);
+    return Material(
+      color: isSelected ? ColorPalette.greyLight : ColorPalette.innerContent,
+      borderRadius: BorderRadius.circular(10),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(10),
+        onTap: () {
+          stateNotifier.toggleTag(tag);
+          billFetchNotifier.changeTags(ref.read(billPostTagProvider(widget._committee)).toList());
+        },
+        child: SizedBox(
+          height: 34,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: ColorPalette.greyDark, width: 1.0),
             ),
-            borderRadius: BorderRadius.circular(8), // ✅ 사각형 유지 (둥글게 하려면 숫자 조정)
+            child: Align(alignment: Alignment.center, child: label,),
           ),
-          label: Container(
-            height: 25,
-            alignment: Alignment.bottomCenter,
-            child: label,
-          ),
-          selected: isSelected,
-          onSelected: (selected) {
-            stateNotifier.toggleTag(tag);
-            billFetchNotifier.changeTags(state.toList());
-          }
+        ),
       ),
     );
   }
