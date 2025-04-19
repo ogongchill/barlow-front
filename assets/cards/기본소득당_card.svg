@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="_카드" data-name="카드" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <g id="_카드배경">
+    <g>
+      <rect x="96.46" y="17.22" width="831.08" height="989.56" rx="176.47" ry="176.47" fill="#00d2c3"/>
+      <path d="M926.57,737.31V187.75c0-46.58-18.68-88.78-48.95-119.56L113.89,737.31h812.69Z" fill="#091e3a"/>
+    </g>
+  </g>
+</svg>

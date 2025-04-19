@@ -121,8 +121,8 @@ class PreAnnounceView extends ConsumerWidget {
             child: IconButton(onPressed: () => {_showPersistentBottomSheet(context)}, icon: const Icon(Icons.filter_list)),
           ),
           _createTagBox(CommitteeTag.legislationAndJudiciary,  Text(Committee.legislationAndJudiciary.name, style: _tagStyle,), ref),
-          _createTagBox(PartyTag.democratic, Party.democratic.svgPicture, ref),
-          _createTagBox(PartyTag.peoplePower, Party.peoplePower.svgPicture, ref),
+          _createTagBox(PartyTag.democratic, Party.democratic.toSvgPicture(24), ref),
+          _createTagBox(PartyTag.peoplePower, Party.peoplePower.toSvgPicture(24), ref),
           _createSortFilter(context, ref)
         ]
       ),

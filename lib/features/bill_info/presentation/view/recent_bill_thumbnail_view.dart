@@ -11,14 +11,7 @@ import 'package:front/features/shared/domain/party.dart';
 import 'package:front/features/shared/view/appbar.dart';
 
 class RecentBillThumbnailView extends ConsumerWidget {
-
-  static const TextStyle _tagStyle = TextStyle(
-      fontFamily: "gmarketSans",
-      fontWeight: FontWeight.w500,
-      fontSize: 12,
-      color: ColorPalette.borderBlack
-  );
-
+  
   const RecentBillThumbnailView({super.key});
 
   @override
@@ -88,8 +81,8 @@ class RecentBillThumbnailView extends ConsumerWidget {
             _createTagBox(BillProposerTypeTag.lawmaker, const Text("의원 발의", style: TextStylePreset.tagStyle,), ref),
             _createTagBox(ProgressStatusTag.promulgated, const Text("공포", style: TextStylePreset.tagStyle), ref),
             _createTagBox(ProgressStatusTag.plenaryDecided, const Text("본회의의결", style: TextStylePreset.tagStyle), ref),
-            _createTagBox(PartyTag.democratic, Party.democratic.svgPicture, ref),
-            _createTagBox(PartyTag.peoplePower, Party.peoplePower.svgPicture, ref),
+            _createTagBox(PartyTag.democratic, Party.democratic.toSvgPicture(24), ref),
+            _createTagBox(PartyTag.peoplePower, Party.peoplePower.toSvgPicture(24), ref),
           ]
       ),
     );
@@ -121,40 +114,6 @@ class RecentBillThumbnailView extends ConsumerWidget {
             child: Align(alignment: Alignment.center, child: label,),
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _createTag(BillPostTag tag, Widget label, WidgetRef ref) {
-    final state =  ref.watch(recentBillTagProvider);
-    final stateNotifier = ref.read(recentBillTagProvider.notifier);
-    final billFetchNotifier = ref.read(recentBillProvider.notifier);
-    return Padding(
-      padding: const EdgeInsets.only(right: 8.0),
-      child: ChoiceChip(
-          clipBehavior: Clip.hardEdge,
-          elevation: 0,
-          padding: const EdgeInsets.symmetric(vertical: 0),
-          backgroundColor: ColorPalette.innerContent,
-          selectedColor: ColorPalette.greyLight,
-          labelStyle: _tagStyle,
-          shape: RoundedRectangleBorder(
-            side: const BorderSide(
-              color: ColorPalette.greyDark,
-              width: 1,
-            ),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          label: Container(
-            height: 20,
-            alignment: Alignment.bottomCenter,
-            child: label,
-          ),
-          selected: state.contains(tag),
-          onSelected: (selected) {
-            stateNotifier.toggleTag(tag);
-            billFetchNotifier.changeTags(ref.read(recentBillTagProvider).toList());
-          }
       ),
     );
   }

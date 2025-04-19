@@ -90,6 +90,7 @@ flutter:
     - assets/icons/party/
     - assets/pictures/
     - assets/animations/lottie/
+    - assets/cards/
   fonts:
     - family: GmarketSans
       fonts:

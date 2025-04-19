@@ -37,6 +37,7 @@ class Party {
   String get name => _name;
   Color get color => _color;
   SvgPicture get svgPicture => _icon.toSvgPicture();
+  SvgPicture toSvgPicture(double? size) => _icon.toSvgPicture(size: size);
   PartyIcon get partyIcon => _icon;
 
   static Party findByName(String name) {

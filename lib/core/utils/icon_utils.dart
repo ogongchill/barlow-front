@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:front/features/shared/domain/party.dart';
 
 class CommitteeIconContainer {
 
@@ -115,8 +116,90 @@ class PartyIcon {
     independent
   ];
 
-  SvgPicture toSvgPicture({double size = 24.0, Color? color}) => SvgPicture.asset(
+  SvgPicture toSvgPicture({double? size, Color? color}) => SvgPicture.asset(
     _path,
+    width: size,
+    height: size,
+    colorFilter: color != null
+        ? ColorFilter.mode(color, BlendMode.srcIn)
+        : null,
+  );
+}
+
+class PartyCard {
+
+  final String _cardPath;
+  final String _nameTagPath;
+  final Party party;
+
+  const PartyCard._(this._cardPath, this._nameTagPath, this.party);
+
+  static const PartyCard reformParty = PartyCard._(
+      'assets/cards/개혁신당_card.svg',
+      'assets/cards/개혁신당_name_tag_card.svg',
+      Party.reform
+  );
+  static const PartyCard peoplePowerParty = PartyCard._(
+      'assets/cards/국민의힘_card.svg',
+      'assets/cards/국민의힘_name_tag_card.svg',
+      Party.peoplePower
+  );
+  static const PartyCard basicIncomeParty = PartyCard._(
+      'assets/cards/기본소득당_card.svg',
+      'assets/cards/기본소득당_name_tag_card.svg',
+      Party.basicIncome
+  );
+  static const PartyCard democraticParty = PartyCard._(
+      'assets/cards/더불어민주당_card.svg',
+      'assets/cards/더불어민주당_name_tag_card.svg',
+      Party.democratic
+  );
+  static const PartyCard socialDemocraticParty = PartyCard._(
+      'assets/cards/사회민주당_card.svg',
+      'assets/cards/사회민주당_name_tag_card.svg',
+      Party.socialDemocratic
+  );
+  static const PartyCard progressiveParty = PartyCard._(
+      'assets/cards/진보당_card.svg',
+      'assets/cards/진보당_name_tag_card.svg',
+      Party.progressive
+  );
+  static const PartyCard rebuildingKoreaParty = PartyCard._(
+      'assets/cards/조국혁신당_card.svg',
+      'assets/cards/조국혁신당_name_tag_card.svg',
+      Party.rebuildingKorea
+  );
+  static const PartyCard independent = PartyCard._(
+      'assets/cards/무소속_card.svg',
+      'assets/cards/무소속_name_tag_card.svg',
+      Party.independent
+  );
+
+  static const List<PartyCard> values = [
+    reformParty,
+    peoplePowerParty,
+    basicIncomeParty,
+    democraticParty,
+    socialDemocraticParty,
+    progressiveParty,
+    rebuildingKoreaParty,
+    independent
+  ];
+
+  static findByParty(Party party) => values.firstWhere(
+          (partyCard) => partyCard.party == party, orElse: () => independent);
+
+  SvgPicture getCard({double? width, double? height, Color? color}) => SvgPicture.asset(
+    _cardPath,
+    width: width,
+    height: height,
+    colorFilter: color != null
+        ? ColorFilter.mode(color, BlendMode.srcIn)
+        : null,
+  );
+
+  SvgPicture getNameTag({double? size, Color? color}) => SvgPicture.asset(
+    _nameTagPath,
     width: size,
     height: size,
     colorFilter: color != null

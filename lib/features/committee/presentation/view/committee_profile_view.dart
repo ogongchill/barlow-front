@@ -24,13 +24,6 @@ class CommitteeProfileView extends ConsumerStatefulWidget {
 
 class _CommitteeProfileViewState extends ConsumerState<CommitteeProfileView> {
 
-  static const TextStyle _tagStyle = TextStyle(
-      fontFamily: "gmarketSans",
-      fontWeight: FontWeight.w500,
-      fontSize: 16,
-      color: ColorPalette.greyDark
-  );
-
   @override
   void initState() {
     super.initState();
@@ -102,8 +95,8 @@ class _CommitteeProfileViewState extends ConsumerState<CommitteeProfileView> {
           ),
           _createTagBox(ProgressStatusTag.promulgated, const Text("공포", style: TextStylePreset.tagStyle,), ref),
           _createTagBox(ProgressStatusTag.plenaryDecided, const Text("본회의의결", style: TextStylePreset.tagStyle), ref),
-          _createTagBox(PartyTag.democratic, Party.democratic.svgPicture, ref),
-          _createTagBox(PartyTag.peoplePower, Party.peoplePower.svgPicture, ref)
+          _createTagBox(PartyTag.democratic, Party.democratic.toSvgPicture(24), ref),
+          _createTagBox(PartyTag.peoplePower, Party.peoplePower.toSvgPicture(24), ref)
         ]
       ),
     );
