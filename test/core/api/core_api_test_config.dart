@@ -1,0 +1,9 @@
+import 'package:front/core/api/auth/auth_requests.dart';
+
+class TestUserInfo {
+  static const deviceOs = DeviceOs.android;
+  static const deviceId = "test-id-android3";
+  static const deviceToken = "dODGXw36TKKWz2LuPbXOin:APA91bGY3xYMFszpjeMlH6DUbzw6FRDhug_Lpjl5-v8gXEZl9NtUzZiEJtAVeSyAau8iUkPl-RbSLVSgrvb4C3w2Fa5o53zMoUs4IJipKIzRH2bUEsxF8a4";
+  static const nickname = "test-user-nickname";
+  static const accessToken = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJiYXJsb3ctY29yZS1hdXRoIiwibWVtYmVyTm8iOjgsInJvbGUiOiJHVUVTVCJ9.mBAfmIS9mB_ua5_zdj-EqWPzsgMfd0BRfDLACBzVWgumBJmSty3Mzp0wazNMO8lghC4Se6qvDFsSChd9ZLu71goyqWFuOUUyKkHL2aVCPkGviac9YCDlAxeYeb8TTie8J4Dyn5cWkhBhalm3VnQybcPyhIgtn-dHDHi1DbrEAxBnFrzIx1ZsW7Gr5HZ9YibHSx-Vgg3lYz8N1edSbhZ9RNdQZVe426o7QRxiXfBjNcozvzZ3mitOucTxgy4JTXMrfsHDisUKk85Q7P8rjxwPvNxv5mbslr319aMCnwsUw_UfUqmRFqe1MByHL7eLYe37o7ZIObu2p8YtSElS6L7Fsw";
+}
