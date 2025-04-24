@@ -1,4 +1,9 @@
+import 'package:front/core/api/dio/dio.dart';
+import 'package:front/core/api/dio/dio_configs.dart';
+import 'package:front/core/api/dio/interceptors.dart';
 import 'package:front/core/database/notification/notification_read_status_repository_adapter.dart';
+import 'package:front/core/database/secure-storage/token_repository.dart';
+import 'package:front/core/utils/device_info_manager.dart';
 import 'package:front/dev/dummy-repository/dummy_bill_detail_repository.dart';
 import 'package:front/dev/dummy-repository/dummy_cache.dart';
 import 'package:front/dev/dummy-repository/dummy_committe_profile_repository.dart';
@@ -133,4 +138,15 @@ void setupLocator() {
       () => MarkAsReadNotificationUseCase(repository: getIt<ReadStatusRepository>()));
   getIt.registerLazySingleton<CheckIsReadNotificationUseCase> (
           () => CheckIsReadNotificationUseCase(repository: getIt<ReadStatusRepository>()));
+  
+  //dio
+  getIt.registerLazySingleton<DioClient>(
+      () => DioClient(
+          dioConfig: testServerConfig,
+          interceptors: [
+            TokenInterceptor(tokenRepository: SecureStorageTokenRepository()),
+            DeviceInfoInterceptor(deviceInfo: DeviceInfoManager())
+          ]
+      )
+  );
 }

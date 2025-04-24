@@ -1,17 +1,18 @@
 import 'package:front/core/api/api_router.dart';
 import 'package:front/core/api/common/api_response.dart';
-import 'package:front/core/api/dio.dart';
+import 'package:front/core/api/dio/dio.dart';
 
 import 'auth_requests.dart';
 import 'auth_response.dart';
 
 class AuthRouter {
-  static final AuthRouter instance = AuthRouter._internal();
 
-  AuthRouter._internal();
+  final _GuestSignUp _guestSignUp;
+  final _GuestLogin _guestLogin;
 
-  static final _guestSignUp = _GuestSignUp();
-  static final _guestLogin = _GuestLogin();
+  AuthRouter({required DioClient dioClientWithoutBearer, required DioClient dioClient})
+      : _guestSignUp = _GuestSignUp(dioClientWithoutBearer),
+        _guestLogin = _GuestLogin(dioClient);
 
   ApiRequestEndpoint<SignupRequest, LoginResponse> get guestSignUp => _guestSignUp;
   ApiRequestEndpoint<LoginRequest, LoginResponse> get guestLogin => _guestLogin;
@@ -21,14 +22,15 @@ class AuthRouter {
 
 class _GuestSignUp extends ApiRequestEndpoint<SignupRequest, LoginResponse>{
 
-  _GuestSignUp(): super(
+  _GuestSignUp(DioClient client): super(
       endpointPath: 'api/v1/auth/guest/signup',
-      method: Method.post
+      method: Method.post,
+      dioClient: client
   );
 
   @override
-  Future<LoginResponse> send(request) async {
-    final response = await DioClient.testServerClient.post(endpointPath, data: request.toJson());
+  Future<LoginResponse> send(SignupRequest request) async {
+    final response = await dioClient.dio.post(endpointPath, data: request.body);
     Map<String, dynamic> responseBody = response.data;
     ApiResponse<LoginResponse> apiResponse = ApiResponse<LoginResponse>.fromJson(
       responseBody,
@@ -40,14 +42,15 @@ class _GuestSignUp extends ApiRequestEndpoint<SignupRequest, LoginResponse>{
 
 class _GuestLogin extends ApiRequestEndpoint<LoginRequest, LoginResponse>{
 
-  _GuestLogin(): super(
+  _GuestLogin(DioClient client): super(
       endpointPath: 'api/v1/auth/guest/login',
-      method: Method.post
+      method: Method.post,
+      dioClient: client
   );
 
   @override
   Future<LoginResponse> send(request) async {
-    final response = await DioClient.testServerClient.post(endpointPath, data: request.toJson());
+    final response = await dioClient.dio.post(endpointPath, data: request.body);
     Map<String, dynamic> responseBody = response.data;
     ApiResponse<LoginResponse> apiResponse = ApiResponse<LoginResponse>.fromJson(
       responseBody,
