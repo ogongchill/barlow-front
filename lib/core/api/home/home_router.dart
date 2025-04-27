@@ -18,12 +18,12 @@ class HomeRouter {
 
   HomeRouter(this._apiClient);
 
-  Future<HomeResponse> retrieveHome() => _apiClient.request(
+  Future<HomeResponse?> retrieveHome() => _apiClient.request(
     apiRoute: homeRoute,
     fromJson: (json) => HomeResponse.fromJson(json)
   );
 
-  Future<HomeNotificationCenterResponse> retrieveNotificationCenter({NotificationFilterParam? notificationFilterParam}) => _apiClient.request(
+  Future<HomeNotificationCenterResponse?> retrieveNotificationCenter({NotificationFilterParam? notificationFilterParam}) => _apiClient.request(
       apiRoute: notificationCenterRoute,
       fromJson: (json) => HomeNotificationCenterResponse.fromJson(json),
       params: notificationFilterParam != null

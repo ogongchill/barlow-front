@@ -35,7 +35,7 @@ class ApiClient {
     _tokenRepository = tokenRepository,
     _deviceInfo = deviceInfo;
 
-  Future<TRes> request<TReq, TRes>({
+  Future<TRes?> request<TReq, TRes>({
     required ApiRoute apiRoute,
     Map<String, dynamic>? params,
     dynamic data,
@@ -43,15 +43,17 @@ class ApiClient {
   }) async {
     Options options = await _createHeaders(apiRoute);
     Response response = await _sendRequest(apiRoute, params, options, data);
-    return _handleResponse(response, fromJson);
+
+    return _parseResponse(response, fromJson);
   }
 
-  TRes _handleResponse<TRes>(Response response, TRes Function(Map<String, dynamic>) fromJson) {
+  TRes? _parseResponse<TRes>(Response response, TRes Function(Map<String, dynamic>) fromJson) {
     ApiResponse<TRes> apiResponse = ApiResponse<TRes>.fromJson(
       response.data,
           (json) => fromJson(json as Map<String, dynamic>),
     );
-    return apiResponse.data!;
+
+    return apiResponse.data;
   }
 
   Future<Response<dynamic>> _sendRequest(ApiRoute apiRoute, Map<String, dynamic>? params, Options options, data) async {

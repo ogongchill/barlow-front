@@ -4,6 +4,14 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'api_response.g.dart';
 
+class EmptyResponse {
+  const EmptyResponse();
+
+  factory EmptyResponse.fromJson(Map<String, dynamic> json) {
+    return const EmptyResponse();
+  }
+}
+
 enum ResultType {
 
   @JsonValue("SUCCESS")

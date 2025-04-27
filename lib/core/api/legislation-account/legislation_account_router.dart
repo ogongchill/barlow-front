@@ -31,7 +31,7 @@ class LegislationAccountRouter {
 
   LegislationAccountRouter(this._apiClient);
 
-  Future<LegislationAccountBillPostThumbnailsResponseBody> retrieveLegislationAccountBillPostThumbnails({required Committee committee, BillPostParams? requestParams}) =>
+  Future<LegislationAccountBillPostThumbnailsResponseBody?> retrieveLegislationAccountBillPostThumbnails({required Committee committee, BillPostParams? requestParams}) =>
       _apiClient.request(
           apiRoute: retrieveLegislationAccountBillPostThumbnailsRoute(committee),
           params: requestParams != null
@@ -40,19 +40,19 @@ class LegislationAccountRouter {
           fromJson: (json) => LegislationAccountBillPostThumbnailsResponseBody.fromJson(json)
   );
   
-  Future<LegislationAccountBillPostDetailResponseBody> retrieveLegislationAccountBillPostDetail({required String billId}) =>
+  Future<LegislationAccountBillPostDetailResponseBody?> retrieveLegislationAccountBillPostDetail({required String billId}) =>
       _apiClient.request(
           apiRoute: retrieveLegislationAccountBillDetailRoute(billId),
           fromJson: (json) => LegislationAccountBillPostDetailResponseBody.fromJson(json)
   );
 
-  Future<LegislationAccountProfileResponseBody> retrieveProfile(LegislationType legislationType) =>
+  Future<LegislationAccountProfileResponseBody?> retrieveProfile(LegislationType legislationType) =>
       _apiClient.request(
           apiRoute: retrieveProfileRoute(legislationType),
           fromJson: (json) => LegislationAccountProfileResponseBody.fromJson(json)
   );
 
-  Future<CommitteeAccountResponseBody> retrieveCommitteeAccounts() =>
+  Future<CommitteeAccountResponseBody?> retrieveCommitteeAccounts() =>
       _apiClient.request(
           apiRoute: retrieveCommitteeAccountsRoute(),
           fromJson: (json) => CommitteeAccountResponseBody.fromJson(json)

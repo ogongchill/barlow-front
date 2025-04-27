@@ -17,6 +17,6 @@ void main() {
     AuthRouter apiService = AuthRouter(mockClient);
     final expectedResponse = LoginResponse(accessToken: TestUserInfo.accessToken);
     final actual = await apiService.guestLogin(request);
-    expect(actual.accessToken, expectedResponse.accessToken);
+    expect(actual!.accessToken, expectedResponse.accessToken);
   });
 }

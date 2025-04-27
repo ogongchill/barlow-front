@@ -20,13 +20,13 @@ class AuthRouter {
 
   AuthRouter(this._apiClient);
 
-  Future<LoginResponse> guestSingUp(SignupRequestBody requestBody) => _apiClient.request(
+  Future<LoginResponse?> guestSingUp(SignupRequestBody requestBody) => _apiClient.request(
       apiRoute: guestSignUpRoute,
       fromJson: (json) => LoginResponse.fromJson(json),
       data: requestBody.toJson()
   );
 
-  Future<LoginResponse> guestLogin(LoginRequestBody requestBody) => _apiClient.request(
+  Future<LoginResponse?> guestLogin(LoginRequestBody requestBody) => _apiClient.request(
       apiRoute: guestLoginRoute,
       fromJson: (json) => LoginResponse.fromJson(json),
       data: requestBody.toJson()
