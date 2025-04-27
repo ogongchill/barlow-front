@@ -16,7 +16,7 @@ void main() {
      committee: Committee.landInfrastructureAndTransport,
      requestParams: BillPostParams.from(
        pagingParam: PagingParam(0, 10),
-       sortKeyParam: SortKeyParam(SortKey.createdAtAsc),
+       sortKeyParam: SortKeyParam(SortKey.createdAtDesc),
        billPostFilterParam: BillPostFilterParam(
          partyName: PartyNameFilter({Party.reform, Party.peoplePower}),
          proposerType: ProposerTypeFilter({BillProposerType.lawmaker}),

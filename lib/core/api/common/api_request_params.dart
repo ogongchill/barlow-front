@@ -48,6 +48,8 @@ class PagingParam {
     'page': page,
     'size': size
   };
+
+  Map<String, dynamic> get pagingParam => _pagingParam;
 }
 
 enum SortKey {

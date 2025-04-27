@@ -24,6 +24,7 @@ class LoggerInterceptor extends Interceptor {
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
+    options.extra['startTime'] = DateTime.now(); // 요청 시작 시간 저장
     print('*** Request ***');
     print('--> ${options.method} ${Uri.decodeFull(options.uri.toString())}');
     print('Headers: ${options.headers}');
@@ -39,11 +40,16 @@ class LoggerInterceptor extends Interceptor {
 
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
-    print('*** Response ***');
-    print('<-- ${response.statusCode} ${Uri.decodeFull(response.requestOptions.uri.toString())}');
-    print('Headers: ${response.headers.map}');
-    print('Data: ${response.data}');
-    print('<-- END HTTP');
+    final startTime = response.requestOptions.extra['startTime'] as DateTime?;
+    final endTime = DateTime.now();
+    if (startTime != null) {
+      final duration = endTime.difference(startTime);
+      print('*** Response ***');
+      print('<-- ${response.statusCode} ${Uri.decodeFull(response.requestOptions.uri.toString())}');
+      print('Time: ${duration.inMilliseconds} ms'); // 걸린 시간 출력
+      print('Data: ${response.data}');
+      print('<-- END HTTP');
+    }
     super.onResponse(response, handler);
   }
 
