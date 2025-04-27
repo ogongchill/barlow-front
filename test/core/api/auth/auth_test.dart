@@ -14,9 +14,9 @@ void main() {
       deviceId: TestUserInfo.deviceId,
       deviceToken: TestUserInfo.deviceToken,
     );
+    AuthRouter apiService = AuthRouter(mockClient);
     final expectedResponse = LoginResponse(accessToken: TestUserInfo.accessToken);
-    AuthRouter authRouter = AuthRouter(dioClientWithoutBearer: noBearerClient, dioClient: bearerClient);
-    final actual = await authRouter.guestLogin.send(LoginRequest(request));
+    final actual = await apiService.guestLogin(request);
     expect(actual.accessToken, expectedResponse.accessToken);
   });
 }

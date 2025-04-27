@@ -1,6 +1,6 @@
-import 'package:front/core/api/dio/dio.dart';
+import 'package:front/core/api/api_router.dart';
+import 'package:front/core/api/common/api_client.dart';
 import 'package:front/core/api/dio/dio_configs.dart';
-import 'package:front/core/api/dio/interceptors.dart';
 import 'package:front/core/database/notification/notification_read_status_repository_adapter.dart';
 import 'package:front/core/database/secure-storage/token_repository.dart';
 import 'package:front/core/utils/device_info_manager.dart';
@@ -138,15 +138,15 @@ void setupLocator() {
       () => MarkAsReadNotificationUseCase(repository: getIt<ReadStatusRepository>()));
   getIt.registerLazySingleton<CheckIsReadNotificationUseCase> (
           () => CheckIsReadNotificationUseCase(repository: getIt<ReadStatusRepository>()));
-  
-  //dio
-  getIt.registerLazySingleton<DioClient>(
-      () => DioClient(
-          dioConfig: testServerConfig,
-          interceptors: [
-            TokenInterceptor(tokenRepository: SecureStorageTokenRepository()),
-            DeviceInfoInterceptor(deviceInfo: DeviceInfoManager())
-          ]
+
+  // for barlow-api
+  getIt.registerLazySingleton<ApiRouter>(
+      () => ApiRouter(
+            apiClient: ApiClient(
+              dioConfig: testServerConfig,
+              deviceInfo: DeviceInfoManager(),
+              tokenRepository: SecureStorageTokenRepository()
+            )
       )
   );
 }

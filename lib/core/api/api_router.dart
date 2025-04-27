@@ -1,43 +1,17 @@
-import 'package:front/core/api/auth/auth_router.dart';
-import 'package:front/core/api/common/api_request.dart';
-import 'package:front/core/api/dio/dio.dart';
-import 'package:front/core/api/home/home_router.dart';
+import 'package:front/core/api/common/api_client.dart';
+import 'package:front/core/api/legislation-account/legislation_account_router.dart';
 
-enum Method {
-  get,
-  post,
-  put,
-  delete,
-  patch,
-  ;
-}
-
-abstract class ApiRequestEndpoint<TReq extends ApiRequest, TRes> {
-
-  final String _endpointPath;
-  final Method _method;
-  final DioClient _dioClient;
-
-  ApiRequestEndpoint({required String endpointPath, required Method method, required DioClient dioClient})
-  : _endpointPath = endpointPath,
-    _method = method,
-    _dioClient = dioClient;
-
-  Future<TRes> send(TReq request);
-
-  String get endpointPath => _endpointPath;
-
-  DioClient get dioClient => _dioClient;
-
-  Method get method => _method;
-}
+import 'auth/auth_router.dart';
+import 'home/home_router.dart';
 
 class ApiRouter {
 
-  final AuthRouter auth;
-  final HomeRouter home;
+  final AuthRouter authRouter;
+  final HomeRouter homeRouter;
+  final LegislationAccountRouter legislationAccountRouter;
 
-  ApiRouter({required DioClient dioClientWithBearer, required DioClient dioClient})
-  : auth = AuthRouter(dioClientWithoutBearer: dioClientWithBearer, dioClient: dioClient),
-    home = HomeRouter(dioClient: dioClient);
+  ApiRouter({required ApiClient apiClient})
+    : authRouter = AuthRouter(apiClient),
+      homeRouter = HomeRouter(apiClient),
+      legislationAccountRouter = LegislationAccountRouter(apiClient);
 }

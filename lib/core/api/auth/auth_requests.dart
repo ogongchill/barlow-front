@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:front/core/api/common/api_request.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'auth_requests.g.dart';
@@ -15,11 +14,6 @@ enum DeviceOs {
   ;
 }
 
-class SignupRequest extends BodyRequest {
-  SignupRequest(SignupRequestBody body)
-  : super(body.toJson());
-}
-
 @JsonSerializable()
 class SignupRequestBody {
 
@@ -30,13 +24,8 @@ class SignupRequestBody {
 
   SignupRequestBody({required this.deviceOs, required this.deviceId, required this.deviceToken, required this.nickName});
 
-  Map<String, dynamic> toJson() => _$SignupRequestToJson(this);
-  String toJsonString() =>  jsonEncode(_$SignupRequestToJson(this));
-}
-
-class LoginRequest extends BodyRequest {
-  LoginRequest(LoginRequestBody body)
-      : super(body.toJson());
+  Map<String, dynamic> toJson() => _$SignupRequestBodyToJson(this);
+  String toJsonString() =>  jsonEncode(_$SignupRequestBodyToJson(this));
 }
 
 @JsonSerializable()
@@ -52,6 +41,6 @@ class LoginRequestBody {
     required this.deviceToken
   });
 
-  Map<String, dynamic> toJson() => _$LoginRequestToJson(this);
-  String toJsonString() => jsonEncode(_$LoginRequestToJson(this));
+  Map<String, dynamic> toJson() => _$LoginRequestBodyToJson(this);
+  String toJsonString() => jsonEncode(_$LoginRequestBodyToJson(this));
 }

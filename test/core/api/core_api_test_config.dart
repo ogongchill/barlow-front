@@ -1,7 +1,7 @@
+import 'package:dio/dio.dart';
 import 'package:front/core/api/auth/auth_requests.dart';
-import 'package:front/core/api/dio/dio.dart';
+import 'package:front/core/api/common/api_client.dart';
 import 'package:front/core/api/dio/dio_configs.dart';
-import 'package:front/core/api/dio/interceptors.dart';
 import 'package:front/core/database/secure-storage/token_repository.dart';
 import 'package:front/core/utils/device_info_manager.dart';
 
@@ -13,26 +13,58 @@ class TestUserInfo {
   static const accessToken = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJiYXJsb3ctY29yZS1hdXRoIiwibWVtYmVyTm8iOjgsInJvbGUiOiJHVUVTVCJ9.mBAfmIS9mB_ua5_zdj-EqWPzsgMfd0BRfDLACBzVWgumBJmSty3Mzp0wazNMO8lghC4Se6qvDFsSChd9ZLu71goyqWFuOUUyKkHL2aVCPkGviac9YCDlAxeYeb8TTie8J4Dyn5cWkhBhalm3VnQybcPyhIgtn-dHDHi1DbrEAxBnFrzIx1ZsW7Gr5HZ9YibHSx-Vgg3lYz8N1edSbhZ9RNdQZVe426o7QRxiXfBjNcozvzZ3mitOucTxgy4JTXMrfsHDisUKk85Q7P8rjxwPvNxv5mbslr319aMCnwsUw_UfUqmRFqe1MByHL7eLYe37o7ZIObu2p8YtSElS6L7Fsw";
 }
 
-final DioClient bearerClient = DioClient(
+final ApiClient mockClient = ApiClient(
     dioConfig: testServerConfig,
-    interceptors: [
-      tokenInterceptor,
-      deviceInfoInterceptor
-    ]
+    deviceInfo: MockAndroidDeviceInfo(),
+    tokenRepository: MockTokenRepository(),
+    interceptors: [LoggerInterceptor()]
 );
-final DioClient noBearerClient = DioClient(
-    dioConfig: testServerConfig,
-    interceptors: [deviceInfoInterceptor]
-);
+
+class LoggerInterceptor extends Interceptor {
+
+  @override
+  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
+    print('*** Request ***');
+    print('--> ${options.method} ${Uri.decodeFull(options.uri.toString())}');
+    print('Headers: ${options.headers}');
+    if (options.data != null) {
+      print('Body: ${options.data}');
+    }
+    if (options.queryParameters.isNotEmpty) {
+      print('Query: ${options.queryParameters}');
+    }
+    print('--> END ${options.method}');
+    super.onRequest(options, handler);
+  }
+
+  @override
+  void onResponse(Response response, ResponseInterceptorHandler handler) {
+    print('*** Response ***');
+    print('<-- ${response.statusCode} ${Uri.decodeFull(response.requestOptions.uri.toString())}');
+    print('Headers: ${response.headers.map}');
+    print('Data: ${response.data}');
+    print('<-- END HTTP');
+    super.onResponse(response, handler);
+  }
+
+  @override
+  void onError(DioError err, ErrorInterceptorHandler handler) {
+    print('*** Error ***');
+    print('<-- ${err.response?.statusCode} ${Uri.decodeFull(err.requestOptions.uri.toString())}');
+    print('Error: ${err.error}');
+    if (err.response != null) {
+      print('Data: ${err.response?.data}');
+    }
+    print('<-- End error');
+    super.onError(err, handler);
+  }
+}
 
 final DioConfig testServerConfig = DioConfig(
     hostUrl: 'http://43.201.132.160:8080/',
     connectionTimeOut: const Duration(seconds: 10),
     receiveTimeOut: const Duration(seconds: 10)
 );
-
-final TokenInterceptor tokenInterceptor = TokenInterceptor(tokenRepository: MockTokenRepository());
-final DeviceInfoInterceptor deviceInfoInterceptor = DeviceInfoInterceptor(deviceInfo: MockAndroidDeviceInfo());
 
 class MockAndroidDeviceInfo implements DeviceInfo {
   @override

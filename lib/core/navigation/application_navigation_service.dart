@@ -34,7 +34,7 @@ class ApplicationNavigatorService {
     final context = _context;
     if (context == null) return;
 
-    final result = await GoRouter.of(context).push<bool>('/committee/profile/${committee.name}');
+    final result = await GoRouter.of(context).push<bool>('/committee/profile/${committee.value}');
 
     if (result is bool && result) {
       ref.invalidate(committeeSubscriptionFutureProvider);

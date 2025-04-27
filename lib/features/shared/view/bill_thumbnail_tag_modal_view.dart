@@ -269,8 +269,8 @@ class BillThumbnailTagModalView extends ConsumerWidget {
                       padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
                       labelPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 5),
                       label: isSelected
-                          ? Text(tag.value.name, style: _selectedCommittee)
-                          : Text(tag.value.name, style: _unselectedCommittee),
+                          ? Text(tag.value.value, style: _selectedCommittee)
+                          : Text(tag.value.value, style: _unselectedCommittee),
                       backgroundColor: ColorPalette.innerContent,
                       selectedColor: ColorPalette.bluePrimary,
                       selected: isSelected,

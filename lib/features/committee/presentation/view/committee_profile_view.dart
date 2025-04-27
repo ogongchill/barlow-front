@@ -38,7 +38,7 @@ class _CommitteeProfileViewState extends ConsumerState<CommitteeProfileView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: TextAppBar(
-        title: widget._committee.name,
+        title: widget._committee.value,
         onPressedBack: () => ApplicationNavigatorService.popWithResult(context),
       ),
       backgroundColor: ColorPalette.innerContent,

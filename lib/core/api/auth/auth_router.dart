@@ -1,61 +1,34 @@
-import 'package:front/core/api/api_router.dart';
-import 'package:front/core/api/common/api_response.dart';
-import 'package:front/core/api/dio/dio.dart';
+import 'package:front/core/api/common/api_client.dart';
 
 import 'auth_requests.dart';
 import 'auth_response.dart';
 
 class AuthRouter {
 
-  final _GuestSignUp _guestSignUp;
-  final _GuestLogin _guestLogin;
-
-  AuthRouter({required DioClient dioClientWithoutBearer, required DioClient dioClient})
-      : _guestSignUp = _GuestSignUp(dioClientWithoutBearer),
-        _guestLogin = _GuestLogin(dioClient);
-
-  ApiRequestEndpoint<SignupRequest, LoginResponse> get guestSignUp => _guestSignUp;
-  ApiRequestEndpoint<LoginRequest, LoginResponse> get guestLogin => _guestLogin;
-}
-
-
-
-class _GuestSignUp extends ApiRequestEndpoint<SignupRequest, LoginResponse>{
-
-  _GuestSignUp(DioClient client): super(
-      endpointPath: 'api/v1/auth/guest/signup',
-      method: Method.post,
-      dioClient: client
+  static const ApiRoute guestLoginRoute = ApiRoute(
+      path: 'api/v1/auth/guest/login',
+      method: HttpMethod.post,
+      requiresAuth: false
+  );
+  static const ApiRoute guestSignUpRoute = ApiRoute(
+      path: 'api/v1/auth/guest/signup',
+      method: HttpMethod.post,
+      requiresAuth: false
   );
 
-  @override
-  Future<LoginResponse> send(SignupRequest request) async {
-    final response = await dioClient.dio.post(endpointPath, data: request.body);
-    Map<String, dynamic> responseBody = response.data;
-    ApiResponse<LoginResponse> apiResponse = ApiResponse<LoginResponse>.fromJson(
-      responseBody,
-          (json) => LoginResponse.fromJson(json as Map<String, dynamic>),
-    );
-    return apiResponse.data!;
-  }
-}
+  final ApiClient _apiClient;
 
-class _GuestLogin extends ApiRequestEndpoint<LoginRequest, LoginResponse>{
+  AuthRouter(this._apiClient);
 
-  _GuestLogin(DioClient client): super(
-      endpointPath: 'api/v1/auth/guest/login',
-      method: Method.post,
-      dioClient: client
+  Future<LoginResponse> guestSingUp(SignupRequestBody requestBody) => _apiClient.request(
+      apiRoute: guestSignUpRoute,
+      fromJson: (json) => LoginResponse.fromJson(json),
+      data: requestBody.toJson()
   );
 
-  @override
-  Future<LoginResponse> send(request) async {
-    final response = await dioClient.dio.post(endpointPath, data: request.body);
-    Map<String, dynamic> responseBody = response.data;
-    ApiResponse<LoginResponse> apiResponse = ApiResponse<LoginResponse>.fromJson(
-      responseBody,
-          (json) => LoginResponse.fromJson(json as Map<String, dynamic>),
-    );
-    return apiResponse.data!;
-  }
+  Future<LoginResponse> guestLogin(LoginRequestBody requestBody) => _apiClient.request(
+      apiRoute: guestLoginRoute,
+      fromJson: (json) => LoginResponse.fromJson(json),
+      data: requestBody.toJson()
+  );
 }

@@ -9,7 +9,7 @@ sealed class NotificationType {
 
 class CommitteeNotificationType extends NotificationType {
 
-  CommitteeNotificationType._(Committee committee) : super(committee.name);
+  CommitteeNotificationType._(Committee committee) : super(committee.value);
 
   static CommitteeNotificationType houseSteering = CommitteeNotificationType._(Committee.houseSteering);
   static CommitteeNotificationType legislationAndJudiciary = CommitteeNotificationType._(Committee.legislationAndJudiciary);

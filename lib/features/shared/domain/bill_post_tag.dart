@@ -189,6 +189,6 @@ class CommitteeTag extends BillPostTag<Committee> {
 
   @override
   String getValueAsString() {
-    return super._value.name;
+    return super._value.value;
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:json_annotation/json_annotation.dart';
 
 part 'api_response.g.dart';
@@ -49,4 +51,6 @@ class ApiResponse<T> {
 
   Map<String, dynamic> toJson(Object? Function(T value) toJsonT) =>
       _$ApiResponseToJson(this, toJsonT);
+
+  String toJsonString(Object? Function(T value) toJsonT) => jsonEncode(toJson(toJsonT));
 }
