@@ -6,8 +6,6 @@ import 'package:front/core/database/notification/notification_read_status_reposi
 import 'package:front/core/utils/device_info_manager.dart';
 import 'package:front/dev/dummy-repository/dummy_cache.dart';
 import 'package:front/dev/dummy-repository/dummy_notification_repository.dart';
-import 'package:front/dev/dummy-repository/dummy_preannounce_bill_detail_repository.dart';
-import 'package:front/dev/dummy-repository/dummy_preannounce_bill_thumbnail_repository.dart';
 import 'package:front/dev/dummy-repository/dummy_received_notification_repository.dart';
 import 'package:front/dev/dummy-repository/dummy_token_repository.dart';
 import 'package:front/dev/dummy-repository/dummy_user_repository.dart';
@@ -31,10 +29,10 @@ import 'package:front/features/notification/domain/repositories/read_status_repo
 import 'package:front/features/notification/domain/repositories/received_notification_repository.dart';
 import 'package:front/features/notification/domain/usecases/fetch_received_notification_usecase.dart';
 import 'package:front/features/notification/domain/usecases/notification_read_status_usecase.dart';
-import 'package:front/features/pre_announce/domain/repositories/preannounce_bill_detail_respository.dart';
-import 'package:front/features/pre_announce/domain/repositories/preannounce_bill_thumbnail_repository.dart';
 import 'package:front/features/pre_announce/domain/usecases/fetch_preannounce_bill_detail_usecase.dart';
 import 'package:front/features/pre_announce/domain/usecases/fetch_preannounce_thumbnail_usecase.dart';
+import 'package:front/features/pre_announce/infra/preannounce_bill_detail_repository_adapter.dart';
+import 'package:front/features/pre_announce/infra/preannounce_bill_thumbnail_respository_adapter.dart';
 import 'package:front/features/settings/domain/repositories/notification_repository.dart';
 import 'package:front/features/settings/domain/repositories/user_repository.dart';
 import 'package:front/features/settings/domain/usecases/load_user_info_usecase.dart';
@@ -115,15 +113,19 @@ void setupLocator() {
   getIt.registerLazySingleton<CommitteeNotificationCache>(() => CommitteeNotificationCache());
   getIt.registerLazySingleton<CommitteeSubscriptionCache>(() => CommitteeSubscriptionCache());
 
-  // pre-announce
-  getIt.registerLazySingleton<PreAnnounceBillThumbnailRepository>(
-      () => DummyPreAnnounceBillThumbnailRepository());
+  /// pre-announce
+  // getIt.registerLazySingleton<PreAnnounceBillThumbnailRepository>(
+  //     () => DummyPreAnnounceBillThumbnailRepository());
+  // getIt.registerLazySingleton<FetchPreAnnounceThumbnailUseCase>(
+  //     () => FetchPreAnnounceThumbnailUseCase(repository: getIt<PreAnnounceBillThumbnailRepository>()));
   getIt.registerLazySingleton<FetchPreAnnounceThumbnailUseCase>(
-      () => FetchPreAnnounceThumbnailUseCase(repository: getIt<PreAnnounceBillThumbnailRepository>()));
-  getIt.registerLazySingleton<PreAnnounceBillDetailRepository>(
-      () => DummyPreAnnounceBillDetailRepository());
+      () => FetchPreAnnounceThumbnailUseCase(repository: PreAnnounceBillThumbnailRepositoryAdapter(getIt<ApiRouter>())));
+  // getIt.registerLazySingleton<PreAnnounceBillDetailRepository>(
+  //     () => DummyPreAnnounceBillDetailRepository());
+  // getIt.registerLazySingleton<FetchPreAnnounceBillDetailUseCase>(
+  //     () => FetchPreAnnounceBillDetailUseCase(repository: getIt<PreAnnounceBillDetailRepository>()));
   getIt.registerLazySingleton<FetchPreAnnounceBillDetailUseCase>(
-      () => FetchPreAnnounceBillDetailUseCase(repository: getIt<PreAnnounceBillDetailRepository>()));
+          () => FetchPreAnnounceBillDetailUseCase(repository: PreAnnounceBillDetailRepositoryAdapter(getIt<ApiRouter>())));
 
   //setting
   getIt.registerLazySingleton<UserRepository>(

@@ -11,7 +11,7 @@ class FetchPreAnnounceThumbnailUseCase {
   FetchPreAnnounceThumbnailUseCase({required PreAnnounceBillThumbnailRepository repository})
     : _repository = repository;
 
-  Future<List<PreAnnounceBillThumbnail>> execute({Page? page, List<BillPostTag>? tags, SortKey? sortKey}) {
+  Future<List<PreAnnounceBillThumbnail>> execute({Page? page, List<BillPostTag>? tags, PreAnnounceBillPostSortKey? sortKey}) {
     return _repository.retrieve(page: page, tags: tags, sortKey: sortKey);
   }
 }

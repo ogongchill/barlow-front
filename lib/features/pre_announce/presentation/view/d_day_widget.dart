@@ -36,16 +36,16 @@ class DdayWidget extends StatelessWidget {
 
 class _DdayFactory {
   static _Dday dDayOf(int dDay) {
+    if(dDay < 0) {
+      return _Dday(context: "마감됨", color: ColorPalette.greyDark);
+    }
     if(dDay == 0) {
       return _Dday(context: "오늘\n마감", color: ColorPalette.orangeDeep);
     }
     if(dDay < 4) {
       return _Dday(context: "D-$dDay", color: ColorPalette.orangePrimary);
     }
-    if(dDay < 8) {
-      return _Dday(context: "D-$dDay", color: ColorPalette.orangeLight);
-    }
-    return _Dday(context: "D-$dDay", color: ColorPalette.orangeVeryLight);
+    return _Dday(context: "D-$dDay", color: ColorPalette.orangeLight);
   }
 }
 

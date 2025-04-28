@@ -235,7 +235,7 @@ class PreAnnounceView extends ConsumerWidget {
                     child: InkWell(
                       onTap: () {
                         ref.read(preAnnounceSortKeyProvider.notifier).toDsc();
-                        ref.read(preAnnounceThumbnailProvider.notifier).changeSortKey(SortKey.dsc);
+                        ref.read(preAnnounceThumbnailProvider.notifier).changeSortKey(PreAnnounceBillPostSortKey.dsc);
                         Navigator.pop(context);
                       },
                       child: Container(
@@ -260,7 +260,7 @@ class PreAnnounceView extends ConsumerWidget {
                     child: InkWell(
                       onTap: () {
                         ref.read(preAnnounceSortKeyProvider.notifier).toAsc();
-                        ref.read(preAnnounceThumbnailProvider.notifier).changeSortKey(SortKey.asc);
+                        ref.read(preAnnounceThumbnailProvider.notifier).changeSortKey(PreAnnounceBillPostSortKey.asc);
                         Navigator.pop(context);
                       },
                       child: Container(
