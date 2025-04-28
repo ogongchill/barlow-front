@@ -4,7 +4,7 @@ import 'package:front/core/api/common/legislation_type.dart';
 import 'package:front/features/shared/domain/bill_post_tag.dart';
 import 'package:front/features/shared/domain/page.dart';
 
-class BillPostTagProcessor {
+class BillPostTagParamProcessor {
 
   static BillPostParams composeFrom(Page page, List<BillPostTag> tags) {
     final grouped = groupByType(tags);

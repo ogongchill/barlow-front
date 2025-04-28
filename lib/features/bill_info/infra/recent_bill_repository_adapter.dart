@@ -62,7 +62,7 @@ class RecentBillRepositoryAdapter implements RecentBillRepository{
   @override
   Future<List<BillThumbnail>> retrieve(Page page, List<BillPostTag> tags) async {
     final response = await _router.recentBillRouter.retrieveRecentBillThumbnail(
-      params: BillPostTagProcessor.composeFrom(page, tags)
+      params: BillPostTagParamProcessor.composeFrom(page, tags)
     );
     List<BillThumbnail> todayThumbnail = response!.today
         .map((thumbnail) => BillThumbnail(billId: thumbnail.billId, billName: thumbnail.billName, proposers: thumbnail.proposers))

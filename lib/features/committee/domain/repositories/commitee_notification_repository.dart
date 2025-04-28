@@ -1,9 +1,6 @@
-import 'package:front/features/committee/domain/entities/committe_notification.dart';
 import 'package:front/features/shared/domain/committee.dart';
 
-abstract class CommitteeNotificationRepository {
-
-  Future<CommitteeNotification> retrieveByCommittee(Committee committee);
+abstract interface class CommitteeNotificationRepository {
 
   Future<void> activateNotification(Committee committee);
 

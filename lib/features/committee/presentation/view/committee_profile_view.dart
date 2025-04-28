@@ -7,6 +7,7 @@ import 'package:front/features/committee/presentation/view/committee_bill_post_t
 import 'package:front/features/committee/presentation/view/committee_profile_widget.dart';
 import 'package:front/features/committee/presentation/viewmodel/committe_bill_post_tag_viewmodel.dart';
 import 'package:front/features/committee/presentation/viewmodel/committee_bill_post_viewmodel.dart';
+import 'package:front/features/committee/presentation/viewmodel/committee_subscription_viewmodel.dart';
 import 'package:front/features/shared/domain/bill_post_tag.dart';
 import 'package:front/features/shared/domain/committee.dart';
 import 'package:front/features/shared/domain/party.dart';
@@ -36,47 +37,54 @@ class _CommitteeProfileViewState extends ConsumerState<CommitteeProfileView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: TextAppBar(
-        title: widget._committee.value,
-        onPressedBack: () => ApplicationNavigatorService.popWithResult(context),
-      ),
-      backgroundColor: ColorPalette.innerContent,
-      body: NestedScrollView(
-        headerSliverBuilder: (context, innerBoxIsScrolled) {
-          return [
-            SliverToBoxAdapter(
-              child: CommitteeProfileWidget(widget._committee),
-            ),
-            SliverPersistentHeader(
-              pinned: true, // ✅ 스크롤해도 고정됨
-              delegate: _SliverCustomHeaderDelegate(
-                minHeight: 60, // ✅ 최소 크기 (축소될 때 남는 부분)
-                maxHeight: 60, // ✅ 최대 크기 (펼쳐졌을 때 크기)
-                child: Container(
-                  decoration: const BoxDecoration(
-                    color: ColorPalette.innerContent,
-                  ),
-                  child: _buildPreferredTags(ref, context)
-                )
-              )
-            ),
-          ];
-        },
-        body: NotificationListener<ScrollNotification>(
-          onNotification: (ScrollNotification notification) {
-            if (notification is ScrollEndNotification &&
-                notification.metrics.extentAfter == 0) {
-                ref.read(committeeBillPostProvider(widget._committee))
-                  .fetchingBills.when(
-                  data: (data) => ref.read(committeeBillPostProvider(widget._committee).notifier).nextPage(),
-                  error: (error, stack) => {print("err")},
-                  loading: () => {print("loading")}
-              );
-            }
-            return false;
+    return PopScope(
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) {
+          ref.invalidate(committeeSubscriptionFutureProvider); // ✅ true 넘기면 새로고침
+        }
+      },
+      child: Scaffold(
+        appBar: TextAppBar(
+          title: widget._committee.value,
+          onPressedBack: () => ApplicationNavigatorService.popWithResult(context),
+        ),
+        backgroundColor: ColorPalette.innerContent,
+        body: NestedScrollView(
+          headerSliverBuilder: (context, innerBoxIsScrolled) {
+            return [
+              SliverToBoxAdapter(
+                child: CommitteeProfileWidget(widget._committee),
+              ),
+              SliverPersistentHeader(
+                  pinned: true, // ✅ 스크롤해도 고정됨
+                  delegate: _SliverCustomHeaderDelegate(
+                      minHeight: 60, // ✅ 최소 크기 (축소될 때 남는 부분)
+                      maxHeight: 60, // ✅ 최대 크기 (펼쳐졌을 때 크기)
+                      child: Container(
+                          decoration: const BoxDecoration(
+                            color: ColorPalette.innerContent,
+                          ),
+                          child: _buildPreferredTags(ref, context)
+                      )
+                  )
+              ),
+            ];
           },
-          child: CommitteeBillPostThumbnailWidget(widget._committee),
+          body: NotificationListener<ScrollNotification>(
+            onNotification: (ScrollNotification notification) {
+              if (notification is ScrollEndNotification &&
+                  notification.metrics.extentAfter == 0) {
+                ref.read(committeeBillPostProvider(widget._committee))
+                    .fetchingBills.when(
+                    data: (data) => ref.read(committeeBillPostProvider(widget._committee).notifier).nextPage(),
+                    error: (error, stack) => {print("err")},
+                    loading: () => {print("loading")}
+                );
+              }
+              return false;
+            },
+            child: CommitteeBillPostThumbnailWidget(widget._committee),
+          ),
         ),
       ),
     );
@@ -93,8 +101,8 @@ class _CommitteeProfileViewState extends ConsumerState<CommitteeProfileView> {
             margin: const EdgeInsets.only(right: 20),
             child: IconButton(onPressed: () => {_showPersistentBottomSheet(context)}, icon: const Icon(Icons.filter_list)),
           ),
-          _createTagBox(ProgressStatusTag.promulgated, const Text("공포", style: TextStylePreset.tagStyle,), ref),
-          _createTagBox(ProgressStatusTag.plenaryDecided, const Text("본회의의결", style: TextStylePreset.tagStyle), ref),
+          _createTagBox(ProgressStatusTag.committeeReceived, const Text("접수됨", style: TextStylePreset.tagStyle,), ref),
+          _createTagBox(ProgressStatusTag.committeeReview, const Text("심사 진행중", style: TextStylePreset.tagStyle), ref),
           _createTagBox(PartyTag.democratic, Party.democratic.toSvgPicture(24), ref),
           _createTagBox(PartyTag.peoplePower, Party.peoplePower.toSvgPicture(24), ref)
         ]

@@ -6,12 +6,13 @@ enum ProgressStatus {
   replacedAndDiscarded("대안반영폐기", "REPLACED_AND_DISCARDED"),
   systematicWordingReview("체계자구심사", "SYSTEMATIC_WORDING_REVIEW"),
   plenarySubmitted("본회의부의안건", "PLENARY_SUBMITTED"),
-  plenaryDecided("본회의의결", "PLENARY_DECIDED"), // 이거랑
-  withdrawn("철회", "WITHDRAWN"), // 이거랑
-  governmentTransferred("정부이송", "GOVERNMENT_TRANSFERRED"), // 이거랑
-  redemandRequested("재의요구", "REDEMAND_REQUESTED"), // 이거랑
+  plenaryDecided("본회의의결", "PLENARY_DECIDED"),
+  withdrawn("철회", "WITHDRAWN"),
+  governmentTransferred("정부이송", "GOVERNMENT_TRANSFERRED"),
+  redemandRequested("재의요구", "REDEMAND_REQUESTED"),
   rejected("재의(부결)", "REJECTED"),
-  promulgated("공포", "PROMULGATED"); // 이거랑
+  promulgated("공포", "PROMULGATED"),
+  abrogate("폐기", "ABROGATE");
 
   final String _value;
   final String _upperCaseWithUnderscore;
