@@ -20,6 +20,7 @@ import 'package:front/dev/dummy-repository/dummy_user_repository.dart';
 import 'package:front/features/bill_info/domain/repositories/bill_repository.dart';
 import 'package:front/features/bill_info/domain/usecases/fetch_recent_bill_thumbail_usecase.dart';
 import 'package:front/features/bill_info/domain/usecases/get_bill_detail_usecase.dart';
+import 'package:front/features/bill_info/infra/recent_bill_repository_adapter.dart';
 import 'package:front/features/committee/domain/repositories/commitee_notification_repository.dart';
 import 'package:front/features/committee/domain/repositories/committee_bill_post_repository.dart';
 import 'package:front/features/committee/domain/repositories/committee_profile_repository.dart';
@@ -54,10 +55,24 @@ void setupLocator() {
   );
 
   // for fetching bill detail
-  getIt.registerLazySingleton<BillDetailRepository>(
-           () => DummyBillDetailRepositoryFactory.withSamples());
+  // getIt.registerLazySingleton<BillDetailRepository>(
+  //          () => DummyBillDetailRepositoryFactory.withSamples());
+  // getIt.registerLazySingleton<GetBillDetailUseCase>(
+  //          () => GetBillDetailUseCase(billDetailRepository: getIt<BillDetailRepository>()));
   getIt.registerLazySingleton<GetBillDetailUseCase>(
-           () => GetBillDetailUseCase(billDetailRepository: getIt<BillDetailRepository>()));
+      () => GetBillDetailUseCase(billDetailRepository: BillDetailRepositoryAdapter(getIt<ApiRouter>()))
+  );
+
+  // recent bill thumbnails
+  // getIt.registerLazySingleton<RecentBillRepository>(
+  //     () => DummyRecentBillThumbnailRepository());
+  // getIt.registerLazySingleton<FetchRecentBillThumbnailUseCase>(
+  //     () => FetchRecentBillThumbnailUseCase(repository: getIt<RecentBillRepository>()));
+  getIt.registerLazySingleton<FetchRecentBillThumbnailUseCase>(
+          () => FetchRecentBillThumbnailUseCase(repository: RecentBillRepositoryAdapter(getIt<ApiRouter>()))
+  );
+
+
 
   // for fetching subscribe committee info with all committees
   getIt.registerLazySingleton<CommitteeSubscriptionRepository>(
@@ -89,12 +104,6 @@ void setupLocator() {
   getIt.registerLazySingleton<CommitteeBillPostRepository>(() => DummyCommitteeBillPostThumbnailRepository());
   getIt.registerLazySingleton<FetchCommitteeBillPostThumbnailsUseCase> (
       () => FetchCommitteeBillPostThumbnailsUseCase(repository: getIt<CommitteeBillPostRepository>()));
-
-  // recent bill thumbnails
-  getIt.registerLazySingleton<RecentBillRepository>(
-      () => DummyRecentBillThumbnailRepository());
-  getIt.registerLazySingleton<FetchRecentBillThumbnailUseCase>(
-      () => FetchRecentBillThumbnailUseCase(repository: getIt<RecentBillRepository>()));
 
   // pre-announce
   getIt.registerLazySingleton<PreAnnounceBillThumbnailRepository>(

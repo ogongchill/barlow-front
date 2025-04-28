@@ -18,8 +18,8 @@ class BillDetail {
     required String legislativeBody,
     required DateTime createdAt,
     required String detail,
-    required summarySection,
-    required proposerSection})
+    required BillAiSummary?summarySection,
+    required BillProposerSection? proposerSection})
       : _title = title,
         _proposerSummary = proposerSummary,
         _proposerType = proposerType,

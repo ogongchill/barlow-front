@@ -25,7 +25,7 @@ class RecentBillDetailResponseBody {
   final String proposerType;
   final String legislativeBody;
   final DateTime createdAt;
-  final String detail;
+  final String? detail;
   final SummarySection summarySection;
   final ProposerSection? proposerSection;
 

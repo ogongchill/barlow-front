@@ -1,10 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:front/dependency/service_locator.dart';
-import 'package:front/features/committee/domain/repositories/committee_bill_post_repository.dart';
 import 'package:front/features/committee/domain/usecases/committee_bill_post_usecases.dart';
 import 'package:front/features/shared/domain/bill_post_tag.dart';
 import 'package:front/features/shared/domain/bill_thumbnail.dart';
 import 'package:front/features/shared/domain/committee.dart';
+import 'package:front/features/shared/domain/page.dart';
 
 class CommitteeBillPostState {
   final AsyncValue<List<BillThumbnail>> fetchingBills;

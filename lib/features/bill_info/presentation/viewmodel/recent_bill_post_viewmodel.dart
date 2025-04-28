@@ -6,42 +6,6 @@ import 'package:front/features/shared/domain/bill_thumbnail.dart';
 import 'package:front/features/shared/domain/page.dart';
 import 'package:front/features/shared/viewmodel/infinte_scroll_viewmodel.dart';
 
-// class RecentBillPostState {
-//   final AsyncValue<List<BillThumbnail>> fetchingBills;
-//   final List<BillThumbnail> previousBills;
-//   final List<BillPostTag> selectedTags;
-//   final Page currentPage;
-//
-//   RecentBillPostState({
-//     required this.fetchingBills,
-//     required this.previousBills,
-//     required this.selectedTags,
-//     required this.currentPage,
-//   });
-//
-//   RecentBillPostState copyWith({
-//     AsyncValue<List<BillThumbnail>>? fetchingBills,
-//     List<BillThumbnail>? previousBills,
-//     List<BillPostTag>? selectedTags,
-//     Page? currentPage,
-//   }) {
-//     return RecentBillPostState(
-//       fetchingBills: fetchingBills ?? this.fetchingBills,
-//       previousBills: previousBills ?? this.previousBills,
-//       selectedTags: selectedTags ?? this.selectedTags,
-//       currentPage: currentPage ?? this.currentPage,
-//     );
-//   }
-//
-//   List<BillThumbnail> getFetchedBill() {
-//     return fetchingBills.when(
-//         data: (billThumbnails) => [...previousBills, ...billThumbnails],
-//         error: (error, stack) => previousBills,
-//         loading: () => previousBills
-//     );
-//   }
-// }
-
 class RecentBillPostViewModel extends StateNotifier<InfiniteScrollBillPostState> implements InfiniteScrollBillPostViewModel {
 
   RecentBillPostViewModel()
@@ -49,7 +13,7 @@ class RecentBillPostViewModel extends StateNotifier<InfiniteScrollBillPostState>
       fetchingBills: const AsyncValue.loading(),
       previousBills: [],
       selectedTags: [],
-      currentPage: Page()));
+      currentPage: Page(index: 0, size: 10)));
 
   @override
   void changeTags(List<BillPostTag> tags) {
@@ -91,7 +55,7 @@ class RecentBillPostViewModel extends StateNotifier<InfiniteScrollBillPostState>
       fetchingBills: const AsyncValue.loading(),
       previousBills: [],
       selectedTags: [],
-      currentPage: Page(),
+      currentPage: Page(index: 0, size: 10),
     ));
     _fetchBills();
   }

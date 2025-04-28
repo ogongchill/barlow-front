@@ -27,8 +27,15 @@ class BillProposerCardWidget extends StatelessWidget {
                 margin: EdgeInsets.only(top: constraints.maxHeight * 0.05),
                 child: Image.network(
                   alignment: Alignment.centerRight,
-                  "https://brfree.s3.ap-northeast-2.amazonaws.com/22대_개혁신당_이주영.png",
+                  billProposer.profileImage,
                   fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Image.asset(
+                        'assets/pictures/default_proposer_profile.png', // 기본 이미지 경로
+                        alignment: Alignment.centerRight,
+                        fit: BoxFit.cover,
+                      );
+                    }
                 ),
               ),
             ),

@@ -16,7 +16,7 @@ void main() {
           // legislationType: LegislationFilterTag({CommitteeLegislationType.of(Committee.legislationAndJudiciary)}),
           partyName: PartyNameFilter({Party.democratic, Party.peoplePower}),
           proposerType: ProposerTypeFilter({BillProposerType.lawmaker, BillProposerType.speaker}),
-          progressStatus: ProgressStatusFilter({ProgressStatus.received, ProgressStatus.promulgated})
+          progressStatus: ProgressStatusFilter({ProgressStatus.withdrawn})
         ),
         sortKeyParam: SortKeyParam(SortKey.createdAtAsc),
         pagingParam: PagingParam(0, 10)
@@ -25,6 +25,6 @@ void main() {
   });
 
   test('api/v1/recent-bill/:billId', () async {
-    final response = await router.retrieveRecentBillDetail("PRC_X2X4W0S6R0P2O2Z2H0F3E5D7D0Z7Y4");
+    final response = await router.retrieveRecentBillDetail("PRC_K2I5K0D3Q0S7I1J0Q0M1N3N4G7U7Z4");
   });
 }

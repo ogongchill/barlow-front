@@ -7,7 +7,7 @@ enum ProgressStatus {
   systematicWordingReview("체계자구심사", "SYSTEMATIC_WORDING_REVIEW"),
   plenarySubmitted("본회의부의안건", "PLENARY_SUBMITTED"),
   plenaryDecided("본회의의결", "PLENARY_DECIDED"), // 이거랑
-  withdrawn("철회", "WITH_DRAWN"), // 이거랑
+  withdrawn("철회", "WITHDRAWN"), // 이거랑
   governmentTransferred("정부이송", "GOVERNMENT_TRANSFERRED"), // 이거랑
   redemandRequested("재의요구", "REDEMAND_REQUESTED"), // 이거랑
   rejected("재의(부결)", "REJECTED"),
