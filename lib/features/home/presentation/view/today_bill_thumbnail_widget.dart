@@ -1,37 +1,35 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:front/core/navigation/application_navigation_service.dart';
 import 'package:front/core/theme/color_palette.dart';
 import 'package:front/core/theme/test_style_preset.dart';
-import 'package:front/features/home/presentation/viewmodel/home_view_provider.dart';
-
 import 'package:front/features/shared/domain/bill_thumbnail.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-class TodayBillThumbnailWidget extends ConsumerWidget{
+class TodayBillThumbnailWidget extends StatelessWidget{
 
   static final PageController pageController = PageController(viewportFraction: 1.0);
 
-  const TodayBillThumbnailWidget({super.key});
+  final List<BillThumbnail> thumbnails;
+
+  const TodayBillThumbnailWidget(this.thumbnails, {super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final asyncValue = ref.watch(todayBillThumbnailsProvider);
-    return asyncValue.when(
-        data: (thumbnails) => _buildWidgetWIth(_buildInnerContent(thumbnails)),
-        error: (err, stack) =>_buildWidgetWIth(const Text("something went wrong,,,,")) ,
-        loading: () => _buildWidgetWIth(_buildShimmerLoading())
-    );
-  }
-
-  Widget _buildWidgetWIth(Widget innerContent) {
-    return Column(
-      children: [
-        _buildTitle(),
-        innerContent,
-      ],
-    );
+  Widget build(BuildContext context) {
+   if(thumbnails.isEmpty) {
+      return Container(
+        width: double.infinity,
+        height: 100,
+        decoration: const BoxDecoration(
+            color: ColorPalette.innerContent,
+            borderRadius:  BorderRadius.only(bottomLeft: Radius.circular(12), bottomRight: Radius.circular(12))
+        ),
+        child: const Align(
+          alignment: Alignment.center,
+            child:Text("오늘 접수된 법안들이 \n아직 등록되지 않았어요", style: TextStylePreset.innerContentSubtitle, textAlign: TextAlign.center,)
+        ),
+      );
+   }
+   return _buildInnerContent(thumbnails);
   }
 
   Column _buildInnerContent(List<BillThumbnail> thumbnails) {
@@ -46,34 +44,6 @@ class TodayBillThumbnailWidget extends ConsumerWidget{
             child: _buildPageIndicator(thumbnails.length ~/ 4 + 1),
           )
         ]
-    );
-  }
-
-  Widget _buildTitle() {
-    return Container(
-        padding: const EdgeInsets.only(top: 15, left: 10, right: 10),
-        decoration: const BoxDecoration(
-            borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
-            color: ColorPalette.innerContent
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween, // ✅ 좌우 끝 정렬
-          children: [
-            Container(
-              margin: const EdgeInsets.only(left: 10),
-              child: const Text("오늘 접수된 법안", style: TextStylePreset.sectionTitle),
-            ),
-            TextButton(
-                style: TextButton.styleFrom(
-                  foregroundColor: Colors.black, // 기본 텍스트 색상
-                  overlayColor: Colors.grey.withOpacity(0.2), // ✅ 클릭 효과 색상을 회색으로 설정
-                ),
-                onPressed: ()  => ApplicationNavigatorService.pushToRecentBill() ,
-                child: const Text("더보기",style: TextStylePreset.thumbnailSubtitle,
-                )
-            ),
-          ],
-        )
     );
   }
 
@@ -180,36 +150,6 @@ class TodayBillThumbnailWidget extends ConsumerWidget{
               ),
             ],
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildShimmerLoading() {
-    return Column(
-      children: [
-        _buildShimmerCard(), // 🔥 로딩용 카드
-        Container(
-          decoration: const BoxDecoration(
-              color: ColorPalette.innerContent,
-              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(12), bottomRight: Radius.circular(12))),
-          child: _buildPageIndicator(1), // Skeleton 로딩 중에도 페이지 인디케이터 유지
-        ),
-      ],
-    );
-  }
-
-  Widget _buildShimmerCard() {
-    return Shimmer.fromColors(
-      baseColor: Colors.grey[300]!,
-      highlightColor: Colors.grey[100]!,
-      child: Container(
-        height: 465,
-        margin: EdgeInsets.zero,
-        decoration: BoxDecoration(
-          color: Colors.white, // Shimmer가 덮어씌우므로 중요하지 않음
-          borderRadius: BorderRadius.zero,
-          border: Border.all(color: ColorPalette.borderLight, width: 1),
         ),
       ),
     );

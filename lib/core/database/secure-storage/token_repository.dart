@@ -5,9 +5,9 @@ abstract interface class TokenRepository {
   Future<void> writeAccessToken(String token);
   Future<String?> readAccessToken();
   Future<void> deleteAccessToken();
-  Future<void> writeRefreshToken(String token);
-  Future<String?> readRefreshToken();
-  Future<void> deleteRefreshToken();
+  // Future<void> writeRefreshToken(String token);
+  // Future<String?> readRefreshToken();
+  // Future<void> deleteRefreshToken();
   Future<void> clearAll();
 }
 
@@ -17,6 +17,8 @@ class SecureStorageTokenRepository implements TokenRepository{
   static const _refreshTokenKey = "refreshToken";
   static const _storage = FlutterSecureStorage();
 
+  String? accessTokenCache;
+
   @override
   Future<void> writeAccessToken(String value) async {
     await _storage.write(key: _accessTokenKey, value: value);
@@ -24,28 +26,33 @@ class SecureStorageTokenRepository implements TokenRepository{
 
   @override
   Future<String?> readAccessToken() async {
-    return await _storage.read(key: _accessTokenKey);
+    if(accessTokenCache == null) {
+      String? accessToken = await _storage.read(key: _accessTokenKey);
+      accessTokenCache = accessToken;
+      return accessToken;
+    }
+    return accessTokenCache;
   }
 
   @override
   Future<void> deleteAccessToken() async {
     await _storage.delete(key: _accessTokenKey);
   }
-
-  @override
-  Future<void> writeRefreshToken(String value) async {
-    await _storage.write(key: _refreshTokenKey, value: value);
-  }
-
-  @override
-  Future<String?> readRefreshToken() async {
-    return await _storage.read(key: _refreshTokenKey);
-  }
-
-  @override
-  Future<void> deleteRefreshToken() async {
-    await _storage.delete(key: _refreshTokenKey);
-  }
+  //
+  // @override
+  // Future<void> writeRefreshToken(String value) async {
+  //   await _storage.write(key: _refreshTokenKey, value: value);
+  // }
+  //
+  // @override
+  // Future<String?> readRefreshToken() async {
+  //   return await _storage.read(key: _refreshTokenKey);
+  // }
+  //
+  // @override
+  // Future<void> deleteRefreshToken() async {
+  //   await _storage.delete(key: _refreshTokenKey);
+  // }
 
   @override
   Future<void> clearAll() async {

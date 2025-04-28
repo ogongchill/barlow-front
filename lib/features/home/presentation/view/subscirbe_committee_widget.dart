@@ -15,15 +15,19 @@ class SubscribeCommitteeWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final asyncValue = ref.watch(subscribeCommitteeAccountFutureProvider);
+    final asyncValue = ref.watch(getHomeInfoFutureProvider);
     return asyncValue.when(
         data: (subscribeAccounts) {
           if(asyncValue.isLoading) {
             _buildWith(_buildSkeletonLoader(),ref);
           }
-          return _buildWith(_buildInnerContainer(subscribeAccounts),ref);
+          // return _buildWith(_buildInnerContainer(subscribeAccounts),ref);
+          return _buildWith(_buildInnerContainer(subscribeAccounts.subscriptions),ref);
         },
-        error: (err, stack) => _buildWith(_buildFetchFail(),ref),
+        error: (err, stack) {
+          print(err);
+         return _buildWith(_buildFetchFail(), ref);
+        },
         loading: () => _buildWith(_buildSkeletonLoader(),ref)
     );
   }

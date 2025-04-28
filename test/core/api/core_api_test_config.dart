@@ -114,31 +114,13 @@ class MockTokenRepository implements TokenRepository {
   }
 
   @override
-  Future<void> deleteRefreshToken() {
-    // TODO: implement deleteRefreshToken
-    throw UnimplementedError();
-  }
-
-  @override
   Future<String?> readAccessToken() async {
     return TestUserInfo.accessToken;
   }
 
   @override
-  Future<String?> readRefreshToken() {
-    // TODO: implement readRefreshToken
-    throw UnimplementedError();
-  }
-
-  @override
   Future<void> writeAccessToken(String token) {
     // TODO: implement writeAccessToken
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> writeRefreshToken(String token) {
-    // TODO: implement writeRefreshToken
     throw UnimplementedError();
   }
 }

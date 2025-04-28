@@ -1,36 +1,21 @@
+import 'package:front/features/shared/domain/bill_thumbnail.dart';
+
 class SubscribeCommitteeInfo {
-  final String _name;
-  final String _description;
-  final int _legislationAccountNo;
-  final bool _isSubscribed;
-  final bool _isNotifiable;
-  final String _iconUrl;
+  final String name;
+  final int legislationAccountNo;
+  final String iconUrl;
 
-  SubscribeCommitteeInfo(this._name,
-      this._description,
-      this._legislationAccountNo,
-      this._isSubscribed,
-      this._isNotifiable,
-      this._iconUrl
-      );
+  SubscribeCommitteeInfo({
+    required this.name,
+    required this.legislationAccountNo,
+    required this.iconUrl
+  });
+}
 
-  SubscribeCommitteeInfo.fromJson(Map<String, dynamic> json)
-      : _name = json['name'],
-        _description = json['description'],
-        _legislationAccountNo = json['year'],
-        _isNotifiable = json['isNotifiable'] == 'true',
-        _isSubscribed = json['isSubscribed'] == 'true',
-        _iconUrl = json['iconUrl'];
+class HomeInfo {
 
-  int get legislationAccountNo => _legislationAccountNo;
+  final List<SubscribeCommitteeInfo> subscriptions;
+  final List<BillThumbnail> thumbnails;
 
-  String get description => _description;
-
-  String get iconUrl => _iconUrl;
-
-  String get name => _name;
-
-  bool get isNotifiable => _isNotifiable;
-
-  bool get isSubscribed => _isSubscribed;
+  HomeInfo({required this.subscriptions, required this.thumbnails});
 }

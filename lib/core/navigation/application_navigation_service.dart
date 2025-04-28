@@ -24,7 +24,7 @@ class ApplicationNavigatorService {
     final result = await GoRouter.of(context).push<bool>('/committee');
 
     if (result is bool && result) {
-      ref.invalidate(subscribeCommitteeAccountFutureProvider);
+      ref.invalidate(getHomeInfoFutureProvider);
     }
   }
 

@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:front/core/api/common/api_request_params.dart';
 import 'package:front/core/api/common/legislation_type.dart';
@@ -16,7 +17,7 @@ void main() {
      committee: Committee.landInfrastructureAndTransport,
      requestParams: BillPostParams.from(
        pagingParam: PagingParam(0, 10),
-       sortKeyParam: SortKeyParam(SortKey.createdAtDesc),
+       sortKeyParam: SortKeyParam(SortKey.createdAtAsc),
        billPostFilterParam: BillPostFilterParam(
          partyName: PartyNameFilter({Party.reform, Party.peoplePower}),
          proposerType: ProposerTypeFilter({BillProposerType.lawmaker}),
@@ -36,5 +37,29 @@ void main() {
 
   test("legislation profile info 요청", () async {
     final response = await service.retrieveCommitteeAccounts();
+  });
+
+  test("legislation 구독 요청", () async {
+    try {
+      final response = await service.activateSubscription(CommitteeLegislationType.of(Committee.legislationAndJudiciary));
+    } on DioException catch (e) {
+      if(e.response?.statusCode == 409) {
+        print("이미 구독됨");
+      } else {
+        rethrow;
+      }
+    }
+  });
+
+  test("legislation 구독 취소 요청", () async {
+    try {
+      final response = await service.deactivateSubscription(CommitteeLegislationType.of(Committee.legislationAndJudiciary));
+    } on DioException catch (e) {
+      if(e.response?.statusCode == 409) {
+        print("이미 구독취소됨");
+      } else {
+        rethrow;
+      }
+    }
   });
 }

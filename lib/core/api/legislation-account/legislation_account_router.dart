@@ -27,12 +27,22 @@ class LegislationAccountRouter {
     method: HttpMethod.get
   );
 
+  static ApiRoute activateSubscriptionRoute(LegislationType legislationType) => ApiRoute(
+    path: 'api/v1/legislation-accounts/${legislationType.value}/subscribe/activate',
+    method: HttpMethod.post
+  );
+
+  static ApiRoute deactivateSubscriptionRoute(LegislationType legislationType) => ApiRoute(
+      path: 'api/v1/legislation-accounts/${legislationType.value}/subscribe/deactivate',
+      method: HttpMethod.post
+  );
+
   final ApiClient _apiClient;
 
   LegislationAccountRouter(this._apiClient);
 
-  Future<LegislationAccountBillPostThumbnailsResponseBody?> retrieveLegislationAccountBillPostThumbnails({required Committee committee, BillPostParams? requestParams}) =>
-      _apiClient.request(
+  Future<LegislationAccountBillPostThumbnailsResponseBody?> retrieveLegislationAccountBillPostThumbnails({
+    required Committee committee, BillPostParams? requestParams}) => _apiClient.request(
           apiRoute: retrieveLegislationAccountBillPostThumbnailsRoute(committee),
           params: requestParams != null
               ? requestParams.params
@@ -40,21 +50,28 @@ class LegislationAccountRouter {
           fromJson: (json) => LegislationAccountBillPostThumbnailsResponseBody.fromJson(json)
   );
   
-  Future<LegislationAccountBillPostDetailResponseBody?> retrieveLegislationAccountBillPostDetail({required String billId}) =>
-      _apiClient.request(
+  Future<LegislationAccountBillPostDetailResponseBody?> retrieveLegislationAccountBillPostDetail({required String billId}) => _apiClient.request(
           apiRoute: retrieveLegislationAccountBillDetailRoute(billId),
           fromJson: (json) => LegislationAccountBillPostDetailResponseBody.fromJson(json)
   );
 
-  Future<LegislationAccountProfileResponseBody?> retrieveProfile(LegislationType legislationType) =>
-      _apiClient.request(
+  Future<LegislationAccountProfileResponseBody?> retrieveProfile(LegislationType legislationType) => _apiClient.request(
           apiRoute: retrieveProfileRoute(legislationType),
           fromJson: (json) => LegislationAccountProfileResponseBody.fromJson(json)
   );
 
-  Future<CommitteeAccountResponseBody?> retrieveCommitteeAccounts() =>
-      _apiClient.request(
+  Future<CommitteeAccountResponseBody?> retrieveCommitteeAccounts() => _apiClient.request(
           apiRoute: retrieveCommitteeAccountsRoute(),
           fromJson: (json) => CommitteeAccountResponseBody.fromJson(json)
+  );
+
+  Future<void> activateSubscription(LegislationType legislationType) => _apiClient.request(
+      apiRoute: activateSubscriptionRoute(legislationType),
+      fromJson: (json) {}
+  );
+
+  Future<void> deactivateSubscription(LegislationType legislationType) => _apiClient.request(
+      apiRoute: deactivateSubscriptionRoute(legislationType),
+      fromJson: (json) {}
   );
 }

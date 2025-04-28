@@ -24,7 +24,7 @@ void main() async {
   ).initialize();
   String? fcmToken = await FirebaseMessaging.instance.getToken();
   print("TOKEN : $fcmToken");
-  DeviceInfoManager().init();
+  await DeviceInfoManager().init();
   runApp(
     const ProviderScope(
       child: MyApp(),

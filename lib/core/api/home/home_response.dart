@@ -24,7 +24,7 @@ class HomeResponse {
 @JsonSerializable()
 class TodayBillPostSection {
 
-  final String display;
+  final String? display;
   final List<BillPostThumbnail> postThumbnails;
 
   TodayBillPostSection({
@@ -58,7 +58,7 @@ class BillPostThumbnail {
 @JsonSerializable()
 class SubscribeSection {
 
-  final String display;
+  final String? display;
   final List<SubscribeLegislationBody> subscribeLegislationBodies;
 
   SubscribeSection({

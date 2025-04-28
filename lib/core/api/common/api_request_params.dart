@@ -54,8 +54,8 @@ class PagingParam {
 
 enum SortKey {
 
-  createdAtDesc("SORT_CREATED_AT_DESC"),
-  createdAtAsc("SORT_CREATED_AT_ASC"),
+  createdAtDesc("createdAt#DESC"),
+  createdAtAsc("createdAt#ASC"),
   ;
 
   final String value;
