@@ -6,6 +6,7 @@ abstract interface class AppSettingsRepository {
   Future<void> setFirstLaunchChecked();
   Future<bool> isLoggedIn();
   Future<void> setLoginStatus(bool value);
+  Future<void> clear();
 }
 
 class SharedPrefsAppSettingRepository implements AppSettingsRepository{
@@ -41,5 +42,14 @@ class SharedPrefsAppSettingRepository implements AppSettingsRepository{
   Future<void> setLoginStatus(bool value) async {
     await SharedPreferences.getInstance()
         .then((pref) => pref.setBool(_isLoggedInKey, value));
+  }
+
+  @override
+  Future<void> clear() async {
+    await SharedPreferences.getInstance()
+        .then((pref) {
+          pref.setBool(_isFirstLaunchKey, true);
+          pref.setBool(_isLoggedInKey, false);
+    });
   }
 }

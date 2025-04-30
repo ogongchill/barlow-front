@@ -9,18 +9,25 @@ import 'package:front/features/shared/view/error.dart';
 
 class SettingView extends ConsumerWidget {
 
-  static const TextStyle _headerStyle = TextStyle(
-    fontSize: 16,
+  static const TextStyle _roleStyle = TextStyle(
+    fontSize: 12,
     fontFamily: "gmarketSans",
     fontWeight: FontWeight.w500,
     color: ColorPalette.borderBlack
   );
 
-  static const TextStyle _idStyle = TextStyle(
+  static const TextStyle _nicknameStyle = TextStyle(
       fontSize: 18,
       fontFamily: "gmarketSans",
       fontWeight: FontWeight.w500,
       color: ColorPalette.borderBlack
+  );
+
+  static const TextStyle _idStyle = TextStyle(
+      fontSize: 8,
+      fontFamily: "gmarketSans",
+      fontWeight: FontWeight.w500,
+      color: ColorPalette.greyDark
   );
 
   const SettingView({super.key});
@@ -52,7 +59,7 @@ class SettingView extends ConsumerWidget {
         Container(
           alignment: Alignment.centerLeft,
           padding: EdgeInsets.only(left: 10, bottom: 10),
-          child: Text("내 정보", style: _headerStyle,)
+          child: Text("내 정보", style: _roleStyle,)
         ),
         Container(
           padding : const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
@@ -81,10 +88,8 @@ class SettingView extends ConsumerWidget {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Container(
-                          alignment: Alignment.centerLeft,
-                          child:Text(userInfo.role.name, style: _headerStyle,),
-                        ),
+                        Text(userInfo.role.name, style: _roleStyle,),
+                        Text(userInfo.userName, style: _nicknameStyle,),
                         Text(userInfo.userId, style: _idStyle,)
                       ],
                     );

@@ -1,14 +1,14 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:front/core/api/api_router.dart';
 import 'package:front/core/api/common/api_client.dart';
 import 'package:front/core/api/dio/dio_configs.dart';
 import 'package:front/core/api/logger_interceptor.dart';
 import 'package:front/core/database/notification/notification_read_status_repository_adapter.dart';
+import 'package:front/core/database/secure-storage/token_repository.dart';
+import 'package:front/core/database/shared-preferences/shared_prefs_application_setting_repository.dart';
+import 'package:front/core/database/user/user_info_hive_repository.dart';
 import 'package:front/core/utils/device_info_manager.dart';
 import 'package:front/dev/dummy-repository/dummy_cache.dart';
-import 'package:front/dev/dummy-repository/dummy_notification_repository.dart';
-import 'package:front/dev/dummy-repository/dummy_received_notification_repository.dart';
-import 'package:front/dev/dummy-repository/dummy_token_repository.dart';
-import 'package:front/dev/dummy-repository/dummy_user_repository.dart';
 import 'package:front/features/bill_info/domain/usecases/fetch_recent_bill_thumbail_usecase.dart';
 import 'package:front/features/bill_info/domain/usecases/get_bill_detail_usecase.dart';
 import 'package:front/features/bill_info/infra/recent_bill_repository_adapter.dart';
@@ -26,7 +26,6 @@ import 'package:front/features/committee/infra/committee_subscription_repository
 import 'package:front/features/home/domain/usecases/get_home_usecase.dart';
 import 'package:front/features/home/infra/home_repository_adapters.dart';
 import 'package:front/features/notification/domain/repositories/read_status_repository.dart';
-import 'package:front/features/notification/domain/repositories/received_notification_repository.dart';
 import 'package:front/features/notification/domain/usecases/fetch_received_notification_usecase.dart';
 import 'package:front/features/notification/domain/usecases/notification_read_status_usecase.dart';
 import 'package:front/features/notification/infra/received_notification_respository_adapter.dart';
@@ -39,6 +38,12 @@ import 'package:front/features/settings/domain/repositories/user_repository.dart
 import 'package:front/features/settings/domain/usecases/load_user_info_usecase.dart';
 import 'package:front/features/settings/domain/usecases/notification_usecase.dart';
 import 'package:front/features/settings/infra/notification_repository_adapter.dart';
+import 'package:front/features/splash/domain/repositories/auth_repository.dart';
+import 'package:front/features/splash/domain/usecases/login_usecase.dart';
+import 'package:front/features/splash/domain/usecases/retrieve_app_initialize_info_usecase.dart';
+import 'package:front/features/splash/domain/usecases/sign_up_usecase.dart';
+import 'package:front/features/splash/infra/app_anitialize_info_repository_adapter.dart';
+import 'package:front/features/splash/infra/auth_repository_adapter.dart';
 import 'package:get_it/get_it.dart';
 
 final GetIt getIt = GetIt.instance;
@@ -130,10 +135,10 @@ void setupLocator() {
           () => FetchPreAnnounceBillDetailUseCase(repository: PreAnnounceBillDetailRepositoryAdapter(getIt<ApiRouter>())));
 
   ///setting
-  getIt.registerLazySingleton<UserRepository>(
-      () => DummyUserInfoRepository());
+  // getIt.registerLazySingleton<UserInfoRepository>(
+  //     () => DummyUserInfoRepository());
   getIt.registerLazySingleton<LoadUserInfoUseCase>(
-      () => LoadUserInfoUseCase(repository: getIt<UserRepository>()));
+      () => LoadUserInfoUseCase(repository: getIt<UserInfoRepository>()));
   // getIt.registerLazySingleton<NotificationRepository> (
   //     () => DummyNotificationRepository());
   getIt.registerLazySingleton<NotificationRepository> (
@@ -157,16 +162,45 @@ void setupLocator() {
   getIt.registerLazySingleton<CheckIsReadNotificationUseCase> (
           () => CheckIsReadNotificationUseCase(repository: getIt<ReadStatusRepository>()));
 
-  // for barlow-api
+  /// for splash : app 초기 진입
+  getIt.registerLazySingleton<AuthRepository> (
+      () => AuthRepositoryAdapter(
+          router: getIt<ApiRouter>() ,
+          deviceInfo: getIt<DeviceInfo>(),
+          firebaseMessaging: FirebaseMessaging.instance));
+  getIt.registerLazySingleton<LoginUseCase> (
+      () => LoginUseCase(
+          getIt<AuthRepository>(),
+          getIt<TokenRepository>(),
+          getIt<AppSettingsRepository>(),
+          getIt<UserInfoRepository>()));
+  getIt.registerLazySingleton<SignupUseCase>(
+      () => SignupUseCase(
+          getIt<AuthRepository>(),
+          getIt<TokenRepository>(),
+          getIt<AppSettingsRepository>(),
+          getIt<UserInfoRepository>()
+      ));
+  getIt.registerLazySingleton<RetrieveAppInitializeInfoUseCase>(
+      () => RetrieveAppInitializeInfoUseCase(AppInitializeInfoRepositoryAdapter(getIt<AppSettingsRepository>()))
+  );
+
+  /// for barlow-api
   getIt.registerLazySingleton<ApiRouter>(
       () => ApiRouter(
             apiClient: ApiClient(
               dioConfig: testServerConfig,
-              deviceInfo: DeviceInfoManager(),
-              tokenRepository: DummyTokenRepository(),
+              deviceInfo: getIt<DeviceInfo>(),
+              tokenRepository: getIt<TokenRepository>() ,
               interceptors: [LoggerInterceptor()]
             )
       )
   );
+
+  /// for device info
+  getIt.registerLazySingleton<DeviceInfo> (() => DeviceInfoManager());
+  getIt.registerLazySingleton<TokenRepository> (() => SecureStorageTokenRepository());
+  getIt.registerLazySingleton<AppSettingsRepository> (() => SharedPrefsAppSettingRepository());
+  getIt.registerLazySingleton<UserInfoRepository> (() => UserInfoHiveRepository());
 }
 

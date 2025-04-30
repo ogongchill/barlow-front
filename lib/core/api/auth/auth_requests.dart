@@ -12,6 +12,16 @@ enum DeviceOs {
   @JsonValue('android')
   android,
   ;
+
+  static DeviceOs fromString(String value) {
+    if(value == "ios") {
+      return DeviceOs.ios;
+    }
+    if(value == "android") {
+      return DeviceOs.android;
+    }
+    throw UnimplementedError("ios, android 가 아닌 deviceOs 식별 불가능");
+  }
 }
 
 @JsonSerializable()
@@ -20,9 +30,9 @@ class SignupRequestBody {
   final DeviceOs deviceOs;
   final String deviceId;
   final String deviceToken;
-  final String nickName;
+  final String nickname;
 
-  SignupRequestBody({required this.deviceOs, required this.deviceId, required this.deviceToken, required this.nickName});
+  SignupRequestBody({required this.deviceOs, required this.deviceId, required this.deviceToken, required this.nickname});
 
   Map<String, dynamic> toJson() => _$SignupRequestBodyToJson(this);
   String toJsonString() =>  jsonEncode(_$SignupRequestBodyToJson(this));

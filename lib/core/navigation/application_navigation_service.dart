@@ -55,6 +55,10 @@ class ApplicationNavigatorService {
 
   static void pushToDonation() => GoRouter.of(_context!).push('/donation');
 
+  static void goToSplash() => GoRouter.of(_context!).go('/splash');
+
+  static void goToOnBoarding() => GoRouter.of(_context!).go('/onboarding');
+
   static void popWithResult(BuildContext context) {
     return Navigator.pop(context, true);
   }
