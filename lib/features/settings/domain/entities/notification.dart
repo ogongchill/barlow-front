@@ -5,6 +5,16 @@ sealed class NotificationType {
   final String name;
 
   NotificationType(this.name);
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is NotificationType &&
+          runtimeType == other.runtimeType &&
+          name == other.name;
+
+  @override
+  int get hashCode => name.hashCode;
 }
 
 class CommitteeNotificationType extends NotificationType {
@@ -50,4 +60,6 @@ class CommitteeNotificationType extends NotificationType {
     genderEqualityFamily,
     specialCommitteeOnBudgetAccounts
   ];
+
+  factory CommitteeNotificationType.of(Committee committee) => CommitteeNotificationType._(committee);
 }

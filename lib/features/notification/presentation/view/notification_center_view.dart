@@ -57,6 +57,7 @@ class NotificationCenterView extends ConsumerWidget {
 
         return Container(
           margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+          width: double.infinity,
           child: Material(
             color: isRead ? Colors.transparent : const Color(0xFFE3F2FD),
             clipBehavior: Clip.hardEdge,
@@ -69,21 +70,23 @@ class NotificationCenterView extends ConsumerWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(
-                      spacing: 40,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        const Icon(Icons.account_balance_rounded, color: ColorPalette.bluePrimary,),
-                        Column(
-                          spacing: 10,
-                          mainAxisSize: MainAxisSize.max,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(notification.topic, style: TextStylePreset.thumbnailSubtitle),
-                            Text(notification.title, style: TextStylePreset.thumbnailTitle),
-                          ],
-                        ),
-                      ],
+                    const Icon(Icons.account_balance_rounded, color: ColorPalette.bluePrimary,),
+                    SizedBox(
+                      width: 200,
+                      child: Column(
+                        spacing: 10,
+                        mainAxisSize: MainAxisSize.max,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(notification.title, style: TextStylePreset.thumbnailSubtitle),
+                          Text(
+                              notification.body,
+                              style: TextStylePreset.thumbnailTitle,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2
+                          ),
+                        ],
+                      ),
                     ),
                     SizedBox(
                       width: 24,

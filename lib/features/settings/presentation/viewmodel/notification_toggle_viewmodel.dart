@@ -1,5 +1,6 @@
 import 'dart:collection';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:front/dependency/service_locator.dart';
 import 'package:front/features/settings/domain/entities/notification.dart';
@@ -38,7 +39,8 @@ class NotificationToggleStateNotifier extends StateNotifier<NotificationToggleSt
 
   Future<void> initialize() async {
     final useCase = getIt<FetchNotificationUseCase>();
-    final result = await useCase.execute(); // Map<NotificationType, bool>
+    final result = await useCase.execute();
+    debugPrint("알림 초기화: ${result.length}개 - $result");
     state = state.copyWith(
       notifications: result,
       isToggleEnabled: true,

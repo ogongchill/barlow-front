@@ -29,6 +29,7 @@ import 'package:front/features/notification/domain/repositories/read_status_repo
 import 'package:front/features/notification/domain/repositories/received_notification_repository.dart';
 import 'package:front/features/notification/domain/usecases/fetch_received_notification_usecase.dart';
 import 'package:front/features/notification/domain/usecases/notification_read_status_usecase.dart';
+import 'package:front/features/notification/infra/received_notification_respository_adapter.dart';
 import 'package:front/features/pre_announce/domain/usecases/fetch_preannounce_bill_detail_usecase.dart';
 import 'package:front/features/pre_announce/domain/usecases/fetch_preannounce_thumbnail_usecase.dart';
 import 'package:front/features/pre_announce/infra/preannounce_bill_detail_repository_adapter.dart';
@@ -37,6 +38,7 @@ import 'package:front/features/settings/domain/repositories/notification_reposit
 import 'package:front/features/settings/domain/repositories/user_repository.dart';
 import 'package:front/features/settings/domain/usecases/load_user_info_usecase.dart';
 import 'package:front/features/settings/domain/usecases/notification_usecase.dart';
+import 'package:front/features/settings/infra/notification_repository_adapter.dart';
 import 'package:get_it/get_it.dart';
 
 final GetIt getIt = GetIt.instance;
@@ -127,23 +129,27 @@ void setupLocator() {
   getIt.registerLazySingleton<FetchPreAnnounceBillDetailUseCase>(
           () => FetchPreAnnounceBillDetailUseCase(repository: PreAnnounceBillDetailRepositoryAdapter(getIt<ApiRouter>())));
 
-  //setting
+  ///setting
   getIt.registerLazySingleton<UserRepository>(
       () => DummyUserInfoRepository());
   getIt.registerLazySingleton<LoadUserInfoUseCase>(
       () => LoadUserInfoUseCase(repository: getIt<UserRepository>()));
+  // getIt.registerLazySingleton<NotificationRepository> (
+  //     () => DummyNotificationRepository());
   getIt.registerLazySingleton<NotificationRepository> (
-      () => DummyNotificationRepository());
+      () => NotificationRepositoryAdapter(getIt<ApiRouter>()));
   getIt.registerLazySingleton<ChangeNotificationUseCase>(
       () => ChangeNotificationUseCase(repository: getIt<NotificationRepository>()));
   getIt.registerLazySingleton<FetchNotificationUseCase>(
       () => FetchNotificationUseCase(repository: getIt<NotificationRepository>()));
 
-  //notification
-  getIt.registerLazySingleton<ReceivedNotificationRepository>(
-      () => DummyReceivedNotificationRepository());
+  ///notification
+  // getIt.registerLazySingleton<ReceivedNotificationRepository>(
+  //     () => DummyReceivedNotificationRepository());
+  // getIt.registerLazySingleton<FetchReceivedNotificationUseCase>(
+  //     () => FetchReceivedNotificationUseCase(repository: getIt<ReceivedNotificationRepository>()));
   getIt.registerLazySingleton<FetchReceivedNotificationUseCase>(
-      () => FetchReceivedNotificationUseCase(repository: getIt<ReceivedNotificationRepository>()));
+      () => FetchReceivedNotificationUseCase(repository: ReceivedNotificationRepositoryAdapter(getIt<ApiRouter>())));
   getIt.registerLazySingleton<ReadStatusRepository>(
       () => NotificationReadStatusRepositoryAdapter());
   getIt.registerLazySingleton<MarkAsReadNotificationUseCase> (
