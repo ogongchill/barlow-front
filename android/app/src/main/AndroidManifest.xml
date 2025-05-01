@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" android:maxSdkVersion="29"/>
 
     <application
-        android:label="front"
+        android:label="바로"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

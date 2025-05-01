@@ -32,7 +32,7 @@ class CommitteeHomeView extends ConsumerWidget {
           backgroundColor: ColorPalette.whitePrimary,
           onRefresh: () => _refresh(ref),
           child: ListView(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            padding: const EdgeInsets.only(bottom: 10, left:10, right: 10),
             children: homeInfo.when(
                 data: (data) => [
                   const HomeShortcutWidget(),
