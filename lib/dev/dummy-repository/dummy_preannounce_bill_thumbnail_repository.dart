@@ -4,10 +4,10 @@ import 'package:front/features/pre_announce/domain/repositories/sort_key.dart';
 import 'package:front/features/shared/domain/bill_post_tag.dart';
 import 'package:front/features/shared/domain/page.dart';
 
-class DummyPreAnnounceBillThumbnailRepository extends PreAnnounceBillThumbnailRepository {
+class DummyPreAnnounceBillThumbnailRepository implements PreAnnounceBillThumbnailRepository {
 
   @override
-  Future<List<PreAnnounceBillThumbnail>> retrieve({Page? page, List<BillPostTag>? tags, SortKey? sortKey}) async {
+  Future<List<PreAnnounceBillThumbnail>> retrieve({Page? page, List<BillPostTag>? tags, PreAnnounceBillPostSortKey? sortKey}) async {
     Page currentPage = page ?? Page();
     int startIndexInclusive = currentPage.size * (currentPage.index - 1);
     int endIndexExclusive = startIndexInclusive + currentPage.size;

@@ -58,6 +58,14 @@ dependencies:
   permission_handler: ^12.0.0+1
   screenshot: ^3.0.0
   share_plus: ^10.1.4
+  flutter_secure_storage: ^9.2.4
+  shared_preferences: ^2.5.3
+  json_serializable: ^6.9.0
+  json_annotation: ^4.9.0
+  device_info_plus: ^11.4.0
+  uuid: ^4.5.1
+  flutter_launcher_icons: ^0.14.3
+  flutter_native_splash: ^2.4.6
 
 dev_dependencies:
   flutter_test:
@@ -88,6 +96,7 @@ flutter:
   assets:
     - assets/icons/committee/
     - assets/icons/party/
+    - assets/icons/app/
     - assets/pictures/
     - assets/animations/lottie/
     - assets/cards/
@@ -101,3 +110,7 @@ flutter:
         - asset: assets/fonts/GmarketSansTTFMedium.ttf
           weight: 500
 
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/icons/app/app_icon_logo_바로.png"

@@ -40,7 +40,9 @@ class ProgressStatusTag extends BillPostTag<ProgressStatus> {
   //접수
   static ProgressStatusTag received = ProgressStatusTag._(status: ProgressStatus.received);
   //소관위 접수
-  static ProgressStatusTag committeeReceived = ProgressStatusTag._(status: ProgressStatus.received);
+  static ProgressStatusTag committeeReceived = ProgressStatusTag._(status: ProgressStatus.committeeReceived);
+  //소관위 심사
+  static ProgressStatusTag committeeReview = ProgressStatusTag._(status: ProgressStatus.committeeReview);
   //대안반영폐기
   static ProgressStatusTag replacedAndDiscarded = ProgressStatusTag._(status: ProgressStatus.replacedAndDiscarded);
   //체계자구심사
@@ -55,9 +57,12 @@ class ProgressStatusTag extends BillPostTag<ProgressStatus> {
   static ProgressStatusTag governmentTransferred = ProgressStatusTag._(status: ProgressStatus.governmentTransferred);
   //재의요구
   static ProgressStatusTag redemandRequested = ProgressStatusTag._(status: ProgressStatus.redemandRequested);
+  //재의(부결)
+  static ProgressStatusTag rejected = ProgressStatusTag._(status: ProgressStatus.rejected);
   //공포
   static ProgressStatusTag promulgated = ProgressStatusTag._(status: ProgressStatus.promulgated);
-
+  //폐기
+  static ProgressStatusTag abrogate = ProgressStatusTag._(status: ProgressStatus.abrogate);
   static List<ProgressStatusTag> getTagsAfterPlenarySubmitted() {
     return [
       plenaryDecided,
@@ -189,6 +194,6 @@ class CommitteeTag extends BillPostTag<Committee> {
 
   @override
   String getValueAsString() {
-    return super._value.name;
+    return super._value.value;
   }
 }

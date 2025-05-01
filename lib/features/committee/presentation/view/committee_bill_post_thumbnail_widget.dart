@@ -4,7 +4,6 @@ import 'package:front/core/navigation/application_navigation_service.dart';
 import 'package:front/core/theme/color_palette.dart';
 import 'package:front/core/theme/test_style_preset.dart';
 import 'package:front/features/committee/presentation/viewmodel/committee_bill_post_viewmodel.dart';
-import 'package:front/features/shared/domain/bill_post_tag.dart';
 import 'package:front/features/shared/domain/bill_thumbnail.dart';
 import 'package:front/features/shared/domain/committee.dart';
 import 'package:front/features/shared/view/error.dart';
@@ -31,6 +30,12 @@ class _CommitteeBillPostWidgetState extends ConsumerState<CommitteeBillPostThumb
   Widget build(BuildContext context) {
     final billPostState = ref.watch(committeeBillPostProvider(widget._committee));
     List<BillThumbnail> allFetchedThumbnails = billPostState.getFetchedBill();
+    if(allFetchedThumbnails.isEmpty && !billPostState.fetchingBills.isLoading) {
+      return Container(
+        color: ColorPalette.innerContent,
+        child: const Center(child: Text("조회된 법안이 없어요", style: TextStylePreset.sectionTitle,),),
+      );
+    }
     if(billPostState.fetchingBills.hasError) {
       return const SomethingWentWrongWidget();
     }
@@ -82,7 +87,7 @@ class _CommitteeBillPostWidgetState extends ConsumerState<CommitteeBillPostThumb
       ),
       margin: const EdgeInsets.symmetric(vertical: 0),
       child: InkWell(
-        onTap: () => ApplicationNavigatorService.pushToBillDetail(billId: thumbnail.billId, title: widget._committee.name),
+        onTap: () => ApplicationNavigatorService.pushToBillDetail(billId: thumbnail.billId, title: widget._committee.value),
         child: SizedBox(
           height: 120,
           child: Stack(
@@ -106,67 +111,18 @@ class _CommitteeBillPostWidgetState extends ConsumerState<CommitteeBillPostThumb
                   style: TextStylePreset.thumbnailSubtitle,
                 ),
               ),
+              Positioned(
+                bottom: 10,
+                right: 16,
+                child: Text(
+                  thumbnail.legislativeBody ?? "",
+                  style: TextStylePreset.thumbnailSubtitle,
+                ),
+              ),
             ],
           ),
         ),
       ),
     );
-  }
-
-  Widget _buildTagFilter(WidgetRef ref) {
-    return Container(
-      padding: const EdgeInsets.all(10),
-      color: Colors.white,
-      child: Row(
-        children: ProgressStatusTag.getTagsAfterPlenarySubmitted().map((tag) {
-          final isSelected = ref.watch(committeeBillPostProvider(widget._committee)).selectedTags.contains(tag);
-          return ChoiceChip(
-            label: Text(tag.value.value),
-            selected: isSelected,
-            onSelected: (selected) => ref.read(committeeBillPostProvider(widget._committee).notifier).toggleTag(tag),
-          );
-        }).toList(),
-      ),
-    );
-  }
-
-  Widget _buildPartyTag(WidgetRef ref) {
-    return Container(
-      padding: const EdgeInsets.all(10),
-      color: Colors.white,
-      child: Row(
-        children: PartyTag.getAll().map((tag) {
-          final isSelected = ref.watch(committeeBillPostProvider(widget._committee)).selectedTags.contains(tag);
-          return ChoiceChip(
-            label: SizedBox(width: 40, height: 40, child: tag.value.svgPicture),
-            selected: isSelected,
-            onSelected: (selected) => ref.read(committeeBillPostProvider(widget._committee).notifier).toggleTag(tag),
-          );
-        }).toList(),
-      ),
-    );
-  }
-}
-
-class _SliverHeaderDelegate extends SliverPersistentHeaderDelegate {
-  final Widget child;
-  final double minHeight;
-  final double maxHeight;
-
-  _SliverHeaderDelegate({required this.child, required this.minHeight, required this.maxHeight});
-
-  @override
-  double get minExtent => minHeight;
-  @override
-  double get maxExtent => maxHeight;
-
-  @override
-  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return SizedBox.expand(child: child);
-  }
-
-  @override
-  bool shouldRebuild(_SliverHeaderDelegate oldDelegate) {
-    return oldDelegate.child != child || oldDelegate.minHeight != minHeight || oldDelegate.maxHeight != maxHeight;
   }
 }

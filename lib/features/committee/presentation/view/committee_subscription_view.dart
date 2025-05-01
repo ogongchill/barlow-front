@@ -17,13 +17,13 @@ class CommitteeSubscriptionView extends ConsumerWidget{
   Widget build(BuildContext context, WidgetRef ref) {
     final asyncValue = ref.watch(committeeSubscriptionFutureProvider);
     return asyncValue.when(
-        data: (committeeSubscriptions) => _buildScaffold(committeeSubscriptions, context),
+        data: (committeeSubscriptions) => _buildScaffold(subscriptions: committeeSubscriptions, context: context),
         error: (exception, stack) => ErrorWidget(exception),
-        loading: () => Text("is loading")
+        loading: () => _buildScaffold(context: context)
     );
   }
 
-  Scaffold _buildScaffold(List<CommitteeSubscription> subscriptions, BuildContext context) {
+  Scaffold _buildScaffold({List<CommitteeSubscription>? subscriptions, required BuildContext context}) {
     return Scaffold(
       backgroundColor: ColorPalette.background,
       appBar: TextAppBar(
@@ -31,11 +31,11 @@ class CommitteeSubscriptionView extends ConsumerWidget{
           onPressedBack: () => ApplicationNavigatorService.popWithResult(context)
       ),
       bottomNavigationBar: const ApplicationBottomNavigationBarWidget(),
-      body: _buildBody(subscriptions),
+      body: _buildBody(committeeSubscriptions: subscriptions),
     );
   }
 
-  Widget _buildBody(List<CommitteeSubscription> committeeSubscriptions) {
+  Widget _buildBody({List<CommitteeSubscription>? committeeSubscriptions}) {
     return ListView(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       children: [
@@ -61,7 +61,9 @@ class CommitteeSubscriptionView extends ConsumerWidget{
               color: ColorPalette.innerContent,
               borderRadius: BorderRadius.circular(10)
           ),
-          child: CommitteeSubscriptionWidget(committeeSubscriptions: committeeSubscriptions)
+          child: committeeSubscriptions != null
+              ? CommitteeSubscriptionWidget(committeeSubscriptions: committeeSubscriptions)
+              : const SizedBox.shrink()
         ),
       ],
     );

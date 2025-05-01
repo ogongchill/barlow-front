@@ -22,15 +22,21 @@ enum Committee {
   specialCommitteeOnBudgetAccounts("예산결산특별위원회", CommitteeIcon.specialCommitteeOnBudgetAccounts);
 
   final CommitteeIcon icon;
-  final String name;
+  final String value;
 
-  const  Committee(this.name, this.icon);
+  const  Committee(this.value, this.icon);
 
   static Committee findByName(String targetName) {
     return Committee.values
         .firstWhere((value) =>
-          value.name == targetName,
+          value.value == targetName,
           orElse: () => throw StateError("nu such committee name : $targetName")
     );
+  }
+
+  String camelToUpperUnderscore() {
+    final regex = RegExp(r'(?<=[a-z])[A-Z]');
+    final withUnderscores = name.replaceAllMapped(regex, (match) => '_${match.group(0)}');
+    return withUnderscores.toUpperCase();
   }
 }

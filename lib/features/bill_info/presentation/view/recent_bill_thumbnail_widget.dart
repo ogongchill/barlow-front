@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:front/core/navigation/application_navigation_service.dart';
@@ -42,7 +41,10 @@ class _RecentBillThumbnailState extends ConsumerState<RecentBillThumbnailWidget>
         SliverToBoxAdapter( // 로딩 인디케이터
             child: billPostState.fetchingBills.when(
               data: (data) => const SizedBox(),
-              error: (error, stack) => const SizedBox(),
+              error: (error, stack) {
+                print("ERROR : $error");
+                return const SomethingWentWrongWidget();
+              } ,
               loading: () => Align(
                 alignment: Alignment.center, // ✅ 중앙 정렬
                 child: Container(
@@ -73,7 +75,7 @@ class _RecentBillThumbnailState extends ConsumerState<RecentBillThumbnailWidget>
       ),
       margin: const EdgeInsets.symmetric(vertical: 0),
       child: InkWell(
-        onTap: () => ApplicationNavigatorService.pushToBillDetail(billId: thumbnail.billId, title: "오늘 접수된 법안"),
+        onTap: () => ApplicationNavigatorService.pushToBillDetail(billId: thumbnail.billId, title: "최근 접수 법안"),
         child: SizedBox(
           height: 120,
           child: Stack(

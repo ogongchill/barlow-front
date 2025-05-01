@@ -24,7 +24,7 @@ class ApplicationNavigatorService {
     final result = await GoRouter.of(context).push<bool>('/committee');
 
     if (result is bool && result) {
-      ref.invalidate(subscribeCommitteeAccountFutureProvider);
+      ref.invalidate(getHomeInfoFutureProvider);
     }
   }
 
@@ -34,7 +34,7 @@ class ApplicationNavigatorService {
     final context = _context;
     if (context == null) return;
 
-    final result = await GoRouter.of(context).push<bool>('/committee/profile/${committee.name}');
+    final result = await GoRouter.of(context).push<bool>('/committee/profile/${committee.value}');
 
     if (result is bool && result) {
       ref.invalidate(committeeSubscriptionFutureProvider);
@@ -54,6 +54,10 @@ class ApplicationNavigatorService {
   static void pushToNotificationCenter() => GoRouter.of(_context!).push('/notifications');
 
   static void pushToDonation() => GoRouter.of(_context!).push('/donation');
+
+  static void goToSplash() => GoRouter.of(_context!).go('/splash');
+
+  static void goToOnBoarding() => GoRouter.of(_context!).go('/onboarding');
 
   static void popWithResult(BuildContext context) {
     return Navigator.pop(context, true);

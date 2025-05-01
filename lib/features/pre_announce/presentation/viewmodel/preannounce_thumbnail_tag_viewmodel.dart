@@ -4,28 +4,28 @@ import 'package:front/features/pre_announce/domain/repositories/sort_key.dart';
 import 'package:front/features/shared/viewmodel/bill_thumbnail_tag_notifier.dart';
 import 'package:front/features/shared/domain/bill_post_tag.dart';
 
-class SortKeyNotifier extends StateNotifier<SortKey> {
+class SortKeyNotifier extends StateNotifier<PreAnnounceBillPostSortKey> {
 
-  SortKeyNotifier() : super(SortKey.asc);
+  SortKeyNotifier() : super(PreAnnounceBillPostSortKey.asc);
 
   void toAsc() {
     if(state.isDescending) {
-      state = SortKey.asc;
+      state = PreAnnounceBillPostSortKey.asc;
     }
   }
 
   void toDsc() {
     if(state.isAscending) {
-      state = SortKey.dsc;
+      state = PreAnnounceBillPostSortKey.dsc;
     }
   }
 
   void reset() {
-    state = SortKey.asc;
+    state = PreAnnounceBillPostSortKey.asc;
   }
 }
 
-final preAnnounceSortKeyProvider = StateNotifierProvider.autoDispose<SortKeyNotifier, SortKey> (
+final preAnnounceSortKeyProvider = StateNotifierProvider.autoDispose<SortKeyNotifier, PreAnnounceBillPostSortKey> (
     (ref) => SortKeyNotifier()
 );
 

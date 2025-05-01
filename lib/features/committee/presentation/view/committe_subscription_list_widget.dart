@@ -35,7 +35,7 @@ class CommitteeSubscriptionWidget extends ConsumerWidget {
             shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
             child: ListTile(
               title: Text(
-                committeeSubscription.committee.name,
+                committeeSubscription.committee.value,
                 style: TextStylePreset.listElement,
               ),
               // trailing: _createSubscribeButton(committeeSubscription, ref),

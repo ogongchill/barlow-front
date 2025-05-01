@@ -7,14 +7,14 @@ import 'package:front/core/theme/color_palette.dart';
 
 class Party {
 
-  static const Party reform = Party._("개혁신당", ColorPalette.reformOrange ,PartyIcon.reformParty);
-  static const Party peoplePower = Party._("국민의힘", ColorPalette.peoplePowerRed , PartyIcon.peoplePowerParty);
-  static const Party basicIncome = Party._("기본소득당", ColorPalette.basicIncomeMint, PartyIcon.basicIncomeParty);
-  static const Party democratic = Party._("더불어민주당", ColorPalette.democraticBlue , PartyIcon.democraticParty);
-  static const Party socialDemocratic = Party._("사회민주당", ColorPalette.socialDemocraticOrange , PartyIcon.socialDemocraticParty);
-  static const Party progressive = Party._("진보당", ColorPalette.progressivePurple ,PartyIcon.progressiveParty);
-  static const Party rebuildingKorea = Party._("조국혁신당", ColorPalette.rebuildingKoreaBlue ,PartyIcon.rebuildingKoreaParty);
-  static const Party independent = Party._("개혁신당", ColorPalette.independent ,PartyIcon.independent);
+  static const Party reform = Party._("개혁신당", "NEW_REFORM" ,ColorPalette.reformOrange ,PartyIcon.reformParty);
+  static const Party peoplePower = Party._("국민의힘", "PEOPLE_POWER",ColorPalette.peoplePowerRed , PartyIcon.peoplePowerParty);
+  static const Party basicIncome = Party._("기본소득당", "BASIC_INCOME", ColorPalette.basicIncomeMint, PartyIcon.basicIncomeParty);
+  static const Party democratic = Party._("더불어민주당", "MINJOO", ColorPalette.democraticBlue , PartyIcon.democraticParty);
+  static const Party socialDemocratic = Party._("사회민주당", "SOCIAL_DEMOCRATIC" , ColorPalette.socialDemocraticOrange , PartyIcon.socialDemocraticParty);
+  static const Party progressive = Party._("진보당", "PROGRESSIVE" , ColorPalette.progressivePurple ,PartyIcon.progressiveParty);
+  static const Party rebuildingKorea = Party._("조국혁신당", "REBUILDING", ColorPalette.rebuildingKoreaBlue ,PartyIcon.rebuildingKoreaParty);
+  static const Party independent = Party._("무소속", "INDEPENDENT", ColorPalette.independent ,PartyIcon.independent);
 
   static final Map<String, Party> _partyMap = {
     "개혁신당" : reform,
@@ -28,13 +28,15 @@ class Party {
   };
 
   final String _name;
+  final String _uppercaseWithUnderscore;
   final Color _color;
 
   final PartyIcon _icon;
 
-  const Party._(this._name, this._color, this._icon);
+  const Party._(this._name, this._uppercaseWithUnderscore, this._color, this._icon);
 
   String get name => _name;
+  String get uppercaseWithUnderscore => _uppercaseWithUnderscore;
   Color get color => _color;
   SvgPicture get svgPicture => _icon.toSvgPicture();
   SvgPicture toSvgPicture(double? size) => _icon.toSvgPicture(size: size);

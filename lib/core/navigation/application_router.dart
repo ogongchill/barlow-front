@@ -12,6 +12,8 @@ import 'package:front/features/pre_announce/presentation/view/preannounce_view.d
 import 'package:front/features/settings/presentation/view/setting_view.dart';
 import 'package:front/features/shared/domain/committee.dart';
 import 'package:front/features/shared/view/donation/donation_view.dart';
+import 'package:front/features/splash/presentation/view/on_boarding_view.dart';
+import 'package:front/features/splash/presentation/view/splash_view.dart';
 import 'package:go_router/go_router.dart';
 
 final applicationRouterProvider = Provider<GoRouter> ((ref) {
@@ -20,7 +22,7 @@ final applicationRouterProvider = Provider<GoRouter> ((ref) {
 
 final GoRouter applicationRouter = GoRouter(
   navigatorKey: ApplicationNavigatorService.navigatorKey,
-  initialLocation: '/',
+  initialLocation: '/splash',
   routes: <RouteBase>[
     _homeRouter,
     _billRouter,
@@ -28,7 +30,9 @@ final GoRouter applicationRouter = GoRouter(
     _preAnnounceRouter,
     _settingRouter,
     _notificationRouter,
-    _donationRouter
+    _donationRouter,
+    _splashRouter,
+    _onBoardingRouter
   ],
 );
 
@@ -97,4 +101,14 @@ final GoRoute _notificationRouter = GoRoute(
 final GoRoute _donationRouter = GoRoute(
     path: '/donation',
     builder: (context, state) => const DonationView()
+);
+
+final GoRoute _splashRouter = GoRoute(
+    path: '/splash',
+    builder: (context, state) => SplashView()
+);
+
+final GoRoute _onBoardingRouter = GoRoute(
+  path: '/onboarding',
+  builder: (context, state) => const OnboardingView()
 );

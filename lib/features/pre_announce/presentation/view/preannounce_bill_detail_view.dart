@@ -6,6 +6,7 @@ import 'package:front/core/theme/test_style_preset.dart';
 import 'package:front/features/pre_announce/domain/entities/preannounce_bill_detail.dart';
 import 'package:front/features/pre_announce/presentation/view/d_day_widget.dart';
 import 'package:front/features/pre_announce/presentation/viewmodel/preannounce_bill_detail_viewmodel.dart';
+import 'package:front/features/shared/domain/committee.dart';
 import 'package:front/features/shared/view/appbar.dart';
 import 'package:front/features/shared/view/bill_detail_paragraph_widget.dart';
 import 'package:front/features/shared/view/bill_proposer_section_widget.dart';
@@ -71,7 +72,9 @@ class PreAnnounceBillDetailView extends ConsumerWidget {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 20),
       child: Column(
+        spacing: 10,
         mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             spacing: 10,
@@ -85,14 +88,28 @@ class PreAnnounceBillDetailView extends ConsumerWidget {
             child: Text(detail.title, style: TextStylePreset.billDetailHead),
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            spacing: 5,
             children: [
-              Text("${detail.legislativeBody}", style: TextStylePreset.innerContentSubtitle),
-              Text("${DateFormat('yyyy-MM-dd').format(detail.preAnnouncementSection.deadline)}까지", style: TextStylePreset.innerContentSubtitle)
+              _buildIconOrFallback(detail.legislativeBody),
+              Text(detail.legislativeBody, style: TextStylePreset.innerContentSubtitle,)
             ],
-          )
+          ),
+          const SizedBox(height: 20),
+          Align(
+            alignment: Alignment.topRight,
+            child: Text("${DateFormat('yyyy-MM-dd').format(detail.preAnnouncementSection.deadline)}까지", style: TextStylePreset.innerContentSubtitle),
+          ),
+          const SizedBox(height: 20),
         ],
       ),
     );
+  }
+
+  Widget _buildIconOrFallback(String legislativeBody) {
+    try {
+      return Committee.findByName(legislativeBody).icon.toSvgPicture();
+    } catch (e) {
+      return const SizedBox.shrink(); // 아이콘 대신 빈 박스
+    }
   }
 }

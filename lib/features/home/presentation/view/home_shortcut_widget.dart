@@ -14,7 +14,7 @@ class HomeShortcutWidget extends StatelessWidget {
   Column _createColumn() {
     return Column(
       children: [
-        _createCard("상임위원회 더 알아보기", () => print("clicked 상임위원회 더 알아보기")),
+        _createCard("최근 접수 법안 보러가기", () => ApplicationNavigatorService.pushToRecentBill()),
         _createCard("진행중인 입법예고 보러가기", () => ApplicationNavigatorService.pushToPreAnnounce()),
       ],
     );

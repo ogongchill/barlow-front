@@ -2,7 +2,7 @@ import 'package:front/features/bill_info/domain/entities/bill_detail.dart';
 import 'package:front/features/bill_info/domain/repositories/bill_repository.dart';
 import 'package:front/features/shared/domain/bil_detail.dart';
 
-class DummyBillDetailRepository extends BillDetailRepository {
+class DummyBillDetailRepository implements BillDetailRepository {
 
   final Map<String, BillDetail>_billDetailMap;
 
@@ -19,7 +19,7 @@ class DummyBillDetailRepository extends BillDetailRepository {
   }
 }
 
-class DummyBillDetailErrorRepository extends BillDetailRepository {
+class DummyBillDetailErrorRepository implements BillDetailRepository {
 
   @override
   Future<BillDetail> getBillDetail(String billId) async {

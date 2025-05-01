@@ -2,6 +2,7 @@ import 'package:front/features/committee/domain/repositories/committee_bill_post
 import 'package:front/features/shared/domain/bill_post_tag.dart';
 import 'package:front/features/shared/domain/bill_thumbnail.dart';
 import 'package:front/features/shared/domain/committee.dart';
+import 'package:front/features/shared/domain/page.dart';
 
 class DummyCommitteeBillPostThumbnailRepository implements CommitteeBillPostRepository {
 

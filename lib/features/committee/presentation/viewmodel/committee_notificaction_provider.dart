@@ -16,11 +16,11 @@ class ToggleCommitteeNotificationViewModel extends StateNotifier<AsyncValue<void
       : _useCase = useCase, super(const AsyncValue.data(null));
 
   Future<void> execute(CommitteeNotification committeeNotification) async {
-    state = const AsyncValue.loading(); // ✅ 로딩 상태 반영
+    state = const AsyncValue.loading();
     try {
       await _useCase.execute(committeeNotification);
     } catch (e) {
-      state = AsyncValue.error(e, StackTrace.current); // ✅ 에러 상태 반영
+      state = AsyncValue.error(e, StackTrace.current);
     }
   }
 }

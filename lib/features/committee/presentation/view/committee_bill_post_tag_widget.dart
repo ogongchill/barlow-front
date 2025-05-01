@@ -67,7 +67,12 @@ class CommitteeBillPostTagModalView extends ConsumerWidget {
   }
 
   Widget _buildProgressStatusTag(WidgetRef ref) {
-    final List<ProgressStatusTag> availableTags = ProgressStatusTag.getTagsAfterPlenarySubmitted();
+    final List<ProgressStatusTag> availableTags = [
+      ProgressStatusTag.committeeReceived,
+      ProgressStatusTag.committeeReview,
+      ProgressStatusTag.promulgated,
+      ProgressStatusTag.replacedAndDiscarded,
+    ];
     final billPostTagState = ref.watch(billPostTagProvider(committee));
     final billPostTagNotifier = ref.read(billPostTagProvider(committee).notifier);
 

@@ -15,7 +15,7 @@ class PreAnnounceThumbnailViewModel extends StateNotifier<InfiniteScrollBillPost
       previousBills: [],
       selectedTags: [],
       currentPage: Page(),
-      sortKey: SortKey.asc));
+      sortKey: PreAnnounceBillPostSortKey.asc));
 
   @override
   void changeTags(List<BillPostTag> tags) {
@@ -58,12 +58,12 @@ class PreAnnounceThumbnailViewModel extends StateNotifier<InfiniteScrollBillPost
       previousBills: [],
       selectedTags: [],
       currentPage: Page(),
-      sortKey: SortKey.asc
+      sortKey: PreAnnounceBillPostSortKey.asc
     ));
     _fetch();
   }
 
-  Future<void> changeSortKey(SortKey sortKey) async {
+  Future<void> changeSortKey(PreAnnounceBillPostSortKey sortKey) async {
     _updateStateTo(state.copyWith(
         fetchingBills: const AsyncValue.loading(),
         previousBills: [],

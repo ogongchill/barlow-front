@@ -120,7 +120,7 @@ class PreAnnounceView extends ConsumerWidget {
             margin: const EdgeInsets.only(right: 20),
             child: IconButton(onPressed: () => {_showPersistentBottomSheet(context)}, icon: const Icon(Icons.filter_list)),
           ),
-          _createTagBox(CommitteeTag.legislationAndJudiciary,  Text(Committee.legislationAndJudiciary.name, style: _tagStyle,), ref),
+          _createTagBox(CommitteeTag.legislationAndJudiciary,  Text(Committee.legislationAndJudiciary.value, style: _tagStyle,), ref),
           _createTagBox(PartyTag.democratic, Party.democratic.toSvgPicture(24), ref),
           _createTagBox(PartyTag.peoplePower, Party.peoplePower.toSvgPicture(24), ref),
           _createSortFilter(context, ref)
@@ -235,7 +235,7 @@ class PreAnnounceView extends ConsumerWidget {
                     child: InkWell(
                       onTap: () {
                         ref.read(preAnnounceSortKeyProvider.notifier).toDsc();
-                        ref.read(preAnnounceThumbnailProvider.notifier).changeSortKey(SortKey.dsc);
+                        ref.read(preAnnounceThumbnailProvider.notifier).changeSortKey(PreAnnounceBillPostSortKey.dsc);
                         Navigator.pop(context);
                       },
                       child: Container(
@@ -260,7 +260,7 @@ class PreAnnounceView extends ConsumerWidget {
                     child: InkWell(
                       onTap: () {
                         ref.read(preAnnounceSortKeyProvider.notifier).toAsc();
-                        ref.read(preAnnounceThumbnailProvider.notifier).changeSortKey(SortKey.asc);
+                        ref.read(preAnnounceThumbnailProvider.notifier).changeSortKey(PreAnnounceBillPostSortKey.asc);
                         Navigator.pop(context);
                       },
                       child: Container(

@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:front/core/theme/color_palette.dart';
 import 'package:front/core/theme/test_style_preset.dart';
-import 'package:front/dependency/service_locator.dart';
 import 'package:front/features/bill_info/domain/entities/bill_detail.dart';
-import 'package:front/features/bill_info/domain/repositories/bill_repository.dart';
 import 'package:front/features/shared/view/bill_detail_paragraph_widget.dart';
 import 'package:front/features/shared/view/bill_proposer_section_widget.dart';
 import 'package:front/features/bill_info/presentation/viewmodel/bill_detail_provider.dart';
@@ -18,10 +16,9 @@ class BillDetailView extends ConsumerWidget {
 
   final String _title;
   final String? _subtitle;
-  final BillDetailRepository repository = getIt<BillDetailRepository>();
   final String _billId;
 
-  BillDetailView({super.key, required String billId, required String title, String? subtitle})
+  const BillDetailView({super.key, required String billId, required String title, String? subtitle})
       : _billId = billId,
         _title = title,
         _subtitle = subtitle;
@@ -31,7 +28,10 @@ class BillDetailView extends ConsumerWidget {
     final asyncValue = ref.watch(getBillDetailFutureProvider(_billId));
     return asyncValue.when(
         data: (billDetail) => _buildScaffold(_createInnerContent(billDetail)),
-        error: (err, stack) => _buildError(),
+        error: (err, stack)  {
+            print("ERROR: ${err}");
+            return _buildError();
+          },
         loading: () => _buildSkeletonLoader(context)
     );
   }
@@ -97,7 +97,10 @@ class BillDetailView extends ConsumerWidget {
           children: [
             _createBillThumbnailInfo(billDetail),
             BillDetailParagraphWidget(text: billDetail.detail),
-            _createBillProposerSection(billDetail)
+            if(billDetail.proposerSection == null)
+              const SizedBox.shrink(),
+            if(billDetail.proposerSection != null)
+              _createBillProposerSection(billDetail),
           ]
       ),
     );

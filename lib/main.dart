@@ -2,19 +2,23 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:front/core/database/hive_configs.dart';
+import 'package:front/core/database/shared-preferences/shared_prefs_application_setting_repository.dart';
 import 'package:front/core/navigation/application_router.dart';
+import 'package:front/core/utils/device_info_manager.dart';
 import 'package:front/dependency/service_locator.dart';
 
 import 'core/notification/fcm_config.dart';
 
 void main() async {
   setupLocator();
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await Firebase.initializeApp();
   await HiveInitializer.initializeApp();
-  await HiveInitializer.clearBox();
+  // await HiveInitializer.clearBox();
   FcmInitializer(
     plugin: FlutterLocalNotificationsPlugin(),
     onMessageForegroundHandler: (RemoteMessage message) {},
@@ -22,7 +26,10 @@ void main() async {
     onMessageTerminatedHandler: (RemoteMessage message) {},
   ).initialize();
   String? fcmToken = await FirebaseMessaging.instance.getToken();
+  // await getIt<AppSettingsRepository>().clear();
   print("TOKEN : $fcmToken");
+  await DeviceInfoManager().init();
+  FlutterNativeSplash.remove();
   runApp(
     const ProviderScope(
       child: MyApp(),

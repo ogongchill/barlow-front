@@ -5,11 +5,21 @@ sealed class NotificationType {
   final String name;
 
   NotificationType(this.name);
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is NotificationType &&
+          runtimeType == other.runtimeType &&
+          name == other.name;
+
+  @override
+  int get hashCode => name.hashCode;
 }
 
 class CommitteeNotificationType extends NotificationType {
 
-  CommitteeNotificationType._(Committee committee) : super(committee.name);
+  CommitteeNotificationType._(Committee committee) : super(committee.value);
 
   static CommitteeNotificationType houseSteering = CommitteeNotificationType._(Committee.houseSteering);
   static CommitteeNotificationType legislationAndJudiciary = CommitteeNotificationType._(Committee.legislationAndJudiciary);
@@ -50,4 +60,6 @@ class CommitteeNotificationType extends NotificationType {
     genderEqualityFamily,
     specialCommitteeOnBudgetAccounts
   ];
+
+  factory CommitteeNotificationType.of(Committee committee) => CommitteeNotificationType._(committee);
 }

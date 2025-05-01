@@ -11,5 +11,6 @@ enum UserRole {
 
   guest,
   realNameVerified,
+  unknown
   ;
 }

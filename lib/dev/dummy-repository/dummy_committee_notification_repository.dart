@@ -5,7 +5,7 @@ import 'package:front/features/committee/domain/entities/committe_notification.d
 import 'package:front/features/committee/domain/repositories/commitee_notification_repository.dart';
 import 'package:front/features/shared/domain/committee.dart';
 
-class DummyCommitteeNotificationRepository extends CommitteeNotificationRepository {
+class DummyCommitteeNotificationRepository implements CommitteeNotificationRepository {
 
   final CommitteeNotificationCache _cache;
   final Map<Committee, bool> _notifications;

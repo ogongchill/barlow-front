@@ -31,9 +31,9 @@ class DummyCommitteeSubscriptionRepository implements CommitteeSubscriptionRepos
 
   @override
   Future<void> subscribe(CommitteeSubscription subscribe) async {
-    print("구독 요청 :  ${subscribe.committee.name}");
+    print("구독 요청 :  ${subscribe.committee.value}");
     _subscriptionCache.add(subscribe.committee, true);
-    print("POST : subscribe ${subscribe.committee.name}");
+    print("POST : subscribe ${subscribe.committee.value}");
     _committeeSubscriptions.firstWhere((committeeSubscription) => committeeSubscription.committee == subscribe.committee)
         .subscribe();
     _sendDummyPostRequest();
@@ -41,9 +41,9 @@ class DummyCommitteeSubscriptionRepository implements CommitteeSubscriptionRepos
 
   @override
   Future<void> unsubscribe(CommitteeSubscription unsubscribe) async {
-    print("구독 취시 요청 :  ${unsubscribe.committee.name}");
+    print("구독 취시 요청 :  ${unsubscribe.committee.value}");
     _subscriptionCache.add(unsubscribe.committee, false);
-    print("POST : unsubscribe  ${unsubscribe.committee.name}");
+    print("POST : unsubscribe  ${unsubscribe.committee.value}");
     _committeeSubscriptions.firstWhere((committeeSubscription) => committeeSubscription.committee == unsubscribe.committee)
         .unSubscribe();
     _sendDummyPostRequest();
