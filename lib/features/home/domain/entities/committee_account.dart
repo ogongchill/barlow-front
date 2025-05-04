@@ -16,6 +16,7 @@ class HomeInfo {
 
   final List<SubscribeCommitteeInfo> subscriptions;
   final List<BillThumbnail> thumbnails;
+  final bool isNotificationArrived;
 
-  HomeInfo({required this.subscriptions, required this.thumbnails});
+  HomeInfo({required this.subscriptions, required this.thumbnails, required this.isNotificationArrived});
 }

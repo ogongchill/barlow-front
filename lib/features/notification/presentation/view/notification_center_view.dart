@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:front/core/navigation/application_navigation_service.dart';
@@ -7,8 +8,16 @@ import 'package:front/features/notification/domain/entities/received_notificaton
 import 'package:front/features/shared/view/appbar.dart';
 import 'package:front/features/shared/view/error.dart';
 import 'package:front/features/notification/presentation/viewmodel/notification_viewmodel.dart';
+import 'package:intl/intl.dart';
 
 class NotificationCenterView extends ConsumerWidget {
+
+  static const TextStyle _notificationNewStyle = TextStyle(
+    fontFamily: 'gmarketSans',
+    fontWeight: FontWeight.w800,
+    fontSize: 12,
+    color: ColorPalette.orangeLight
+  );
 
   const NotificationCenterView({super.key});
 
@@ -25,7 +34,12 @@ class NotificationCenterView extends ConsumerWidget {
     final receivedNotifications = ref.watch(receivedNotificationFutureProvider);
     return Container(
       child: receivedNotifications.when(
-          data: (data) => _createItems(data, ref),
+          data: (data) {
+            if(data.isEmpty) {
+              return const Center(child: Text("받은 알림이 없어요", style: TextStylePreset.sectionTitle,));
+            }
+            return _createItems(data, ref);
+          },
           error: (error, stack) => const SomethingWentWrongWidget(),
           loading: () => const Center(child: CircularProgressIndicator(color: ColorPalette.bluePrimary,),)
       )
@@ -36,13 +50,8 @@ class NotificationCenterView extends ConsumerWidget {
     final readMap = ref.watch(notificationReadStatusProvider);
     final notifier = ref.read(notificationReadStatusProvider.notifier);
 
-    final sorted = [...notifications]..sort((a, b) {
-      final aIsRead = readMap[a.billId] ?? false;
-      final bIsRead = readMap[b.billId] ?? false;
-
-      if (aIsRead != bIsRead) return aIsRead ? 1 : -1;
-      return b.receivedAt.compareTo(a.receivedAt);
-    });
+    // List<ReceivedNotification> sorted = _sortNotificationItems(notifications, readMap);
+    List<ReceivedNotification> sorted = _removeReadNotifications(notifications, readMap);
 
     return ListView.builder(
       itemCount: sorted.length,
@@ -50,7 +59,6 @@ class NotificationCenterView extends ConsumerWidget {
         final notification = sorted[index];
         final isRead = readMap[notification.billId] ?? false;
 
-        // 읽음 여부 로딩 트리거 (1회)
         WidgetsBinding.instance.addPostFrameCallback((_) {
           notifier.load(notification.billId);
         });
@@ -59,20 +67,19 @@ class NotificationCenterView extends ConsumerWidget {
           margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
           width: double.infinity,
           child: Material(
-            color: isRead ? Colors.transparent : const Color(0xFFE3F2FD),
+            color: isRead ? Colors.transparent : const Color(0x88E3F2FD),
             clipBehavior: Clip.hardEdge,
-            shape: RoundedRectangleBorder( // ✅ Material도 모양 지정
+            shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
             ),
             child: InkWell(
               child: Container(
-                padding: const EdgeInsets.all(10),
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Icon(Icons.account_balance_rounded, color: ColorPalette.bluePrimary,),
                     SizedBox(
-                      width: 200,
+                      width: 250,
                       child: Column(
                         spacing: 10,
                         mainAxisSize: MainAxisSize.max,
@@ -85,17 +92,16 @@ class NotificationCenterView extends ConsumerWidget {
                               overflow: TextOverflow.ellipsis,
                               maxLines: 2
                           ),
+                          Text(DateFormat('yy-MM-dd HH:mm').format(notification.receivedAt), style: TextStylePreset.thumbnailSubtitle,),
                         ],
                       ),
                     ),
-                    SizedBox(
-                      width: 24,
-                      child: isRead
-                        ? Text("읽음", style: TextStylePreset.thumbnailSubtitle,)
-                        : Icon(Icons.fiber_new_outlined, color: ColorPalette.orangePrimary,)
-                    )
+                    isRead
+                        ? const Text("읽음", style: TextStylePreset.thumbnailSubtitle,)
+                        : const Icon(Icons.markunread_rounded, color: ColorPalette.orangeLight,),
+                    // : Text("신규", style: _notificationNewStyle )
                   ],
-                ),
+                )
               ),
               onTap: () {
                 notifier.markAsRead(notification.billId);
@@ -109,5 +115,20 @@ class NotificationCenterView extends ConsumerWidget {
         );
       },
     );
+  }
+
+  List<ReceivedNotification> _removeReadNotifications(List<ReceivedNotification> notifications, UnmodifiableMapView<String, bool> readMap) {
+    return notifications.where((notification) => !(readMap[notification.billId] ?? false)).toList();
+  }
+
+  List<ReceivedNotification> _sortNotificationItems(List<ReceivedNotification> notifications, UnmodifiableMapView<String, bool> readMap) {
+    final sorted = [...notifications]..sort((a, b) {
+      final aIsRead = readMap[a.billId] ?? false;
+      final bIsRead = readMap[b.billId] ?? false;
+
+      if (aIsRead != bIsRead) return aIsRead ? 1 : -1;
+      return b.receivedAt.compareTo(a.receivedAt);
+    });
+    return sorted;
   }
 }
