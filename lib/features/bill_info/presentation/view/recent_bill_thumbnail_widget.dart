@@ -21,6 +21,9 @@ class _RecentBillThumbnailState extends ConsumerState<RecentBillThumbnailWidget>
   Widget build(BuildContext context) {
     final billPostState = ref.watch(recentBillProvider);
     List<BillThumbnail> allFetchedThumbnails = billPostState.getFetchedBill();
+    if(allFetchedThumbnails.isEmpty && !billPostState.fetchingBills.isLoading) {
+      return const Center(child: Text("조회되는 법안이 없어요", style: TextStylePreset.sectionTitle,));
+    }
     if(billPostState.fetchingBills.hasError) {
       return const SomethingWentWrongWidget();
     }
@@ -28,7 +31,7 @@ class _RecentBillThumbnailState extends ConsumerState<RecentBillThumbnailWidget>
       slivers: [
         SliverList(
           delegate: SliverChildBuilderDelegate(
-                (context, index) {
+              (context, index) {
               final bill = allFetchedThumbnails[index];
               return Container(
                 margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
