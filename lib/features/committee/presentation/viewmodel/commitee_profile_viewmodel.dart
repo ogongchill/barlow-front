@@ -8,3 +8,11 @@ final committeeProfileFutureProvider = FutureProvider.family.autoDispose<Committ
   final useCase = getIt<FetchCommitteeProfileUseCase>();
   return useCase.execute(committee);
 });
+
+final profileFireworkAnimationProvider = StateProvider.family.autoDispose<bool, Committee>((ref, committee) => false);
+
+final profileSubscribeButtonDisabledProvider = StateProvider.family<bool, Committee>((ref, committeeId) => false);
+
+final profileNotificationToggleAnimationProvider = StateProvider.family.autoDispose<bool, Committee>((ref, committee) => false);
+
+final profileNotificationButtonDisabledProvider = StateProvider.family<bool, Committee>((ref, committee) => false);

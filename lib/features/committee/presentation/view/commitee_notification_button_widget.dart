@@ -5,7 +5,6 @@ import 'package:front/features/committee/domain/entities/committe_notification.d
 import 'package:front/features/committee/presentation/viewmodel/committee_subscription_viewmodel.dart';
 import 'package:lottie/lottie.dart';
 
-
 class CommitteeNotificationButtonWidget extends ConsumerWidget {
 
   final CommitteeNotification _notification;
