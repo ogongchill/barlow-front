@@ -51,7 +51,7 @@ class NotificationCenterView extends ConsumerWidget {
     final notifier = ref.read(notificationReadStatusProvider.notifier);
 
     // List<ReceivedNotification> sorted = _sortNotificationItems(notifications, readMap);
-    List<ReceivedNotification> sorted = _removeReadNotifications(notifications, readMap);
+    List<ReceivedNotification> sorted = _getUnreadNotifications(notifications, readMap);
 
     return ListView.builder(
       itemCount: sorted.length,
@@ -117,8 +117,16 @@ class NotificationCenterView extends ConsumerWidget {
     );
   }
 
-  List<ReceivedNotification> _removeReadNotifications(List<ReceivedNotification> notifications, UnmodifiableMapView<String, bool> readMap) {
-    return notifications.where((notification) => !(readMap[notification.billId] ?? false)).toList();
+  List<ReceivedNotification> _getUnreadNotifications(List<ReceivedNotification> notifications, UnmodifiableMapView<String, bool> readMap) {
+    return notifications.where((notification) => !(readMap[notification.billId] ?? false))
+        .toList()
+        ..sort((a, b) => b.receivedAt.compareTo(a.receivedAt)); // 최신순 정렬
+  }
+
+  List<ReceivedNotification> _getReadNotifications(List<ReceivedNotification> notifications, UnmodifiableMapView<String, bool> readMap) {
+    return notifications.where((notification) => readMap[notification.billId] ?? false)
+        .toList()
+      ..sort((a, b) => b.receivedAt.compareTo(a.receivedAt)); // 최신순 정렬
   }
 
   List<ReceivedNotification> _sortNotificationItems(List<ReceivedNotification> notifications, UnmodifiableMapView<String, bool> readMap) {
