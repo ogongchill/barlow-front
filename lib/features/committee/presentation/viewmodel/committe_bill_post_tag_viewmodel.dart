@@ -3,12 +3,6 @@ import 'dart:collection';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:front/features/shared/domain/bill_post_tag.dart';
 import 'package:front/features/shared/domain/committee.dart';
-//
-// class CommitteeBillPostTagState extends UnmodifiableSetView<BillPostTag> {
-//
-//   CommitteeBillPostTagState(super.source);
-//
-// }
 
 class CommitteeBillPostTagNotifier extends StateNotifier<UnmodifiableSetView<BillPostTag>> {
 

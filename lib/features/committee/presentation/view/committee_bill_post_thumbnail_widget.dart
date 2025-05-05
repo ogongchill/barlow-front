@@ -9,10 +9,10 @@ import 'package:front/features/shared/domain/committee.dart';
 import 'package:front/features/shared/view/error.dart';
 
 class CommitteeBillPostThumbnailWidget extends ConsumerStatefulWidget {
+
   final Committee _committee;
 
   const CommitteeBillPostThumbnailWidget(this._committee, {super.key});
-
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _CommitteeBillPostWidgetState();

@@ -41,7 +41,7 @@ class ToggleCommitteeSubscriptionViewModel extends StateNotifier<AsyncValue<void
   }
 }
 
-final fireworkAnimationProvider = StateProvider.family<bool, Committee>((ref, committee) => false);
+final fireworkAnimationProvider = StateProvider.family.autoDispose<bool, Committee>((ref, committee) => false);
 
 final subscribeButtonDisabledProvider = StateProvider.family<bool, Committee>((ref, committeeId) => false);
 
