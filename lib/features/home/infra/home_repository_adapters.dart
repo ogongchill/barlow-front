@@ -26,7 +26,8 @@ class HomeRepositoryAdapter implements HomeRepository {
               billId: thumbnail.billId,
               billName: thumbnail.billName,
               proposers: thumbnail.proposers)
-        ).toList()
+        ).toList(),
+        isNotificationArrived: response.isNotificationArrived
     );
   }
 }

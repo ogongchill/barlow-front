@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:front/core/theme/color_palette.dart';
 import 'package:front/core/utils/icon_utils.dart';
@@ -25,17 +26,16 @@ class BillProposerCardWidget extends StatelessWidget {
               heightFactor: 0.8,
               child: Container(
                 margin: EdgeInsets.only(top: constraints.maxHeight * 0.05),
-                child: Image.network(
-                  alignment: Alignment.centerRight,
-                  billProposer.profileImage,
+                child: CachedNetworkImage(
+                  imageUrl: billProposer.profileImage,
                   fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      return Image.asset(
-                        'assets/pictures/default_proposer_profile.png', // 기본 이미지 경로
-                        alignment: Alignment.centerRight,
-                        fit: BoxFit.cover,
-                      );
-                    }
+                  alignment: Alignment.centerRight,
+                  placeholder: (context, url) => const Center(child: CircularProgressIndicator(strokeWidth: 1.5)),
+                  errorWidget: (context, url, error) => Image.asset(
+                    'assets/pictures/default_proposer_profile.png',
+                    alignment: Alignment.centerRight,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),
