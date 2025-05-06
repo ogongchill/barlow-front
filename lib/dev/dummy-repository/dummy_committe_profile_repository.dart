@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:front/dev/dummy-repository/dummy_cache.dart';
+import 'package:front/core/database/cache.dart';
 import 'package:front/features/committee/domain/entities/committee_profile.dart';
 import 'package:front/features/committee/domain/repositories/committee_profile_repository.dart';
 import 'package:front/features/shared/domain/committee.dart';

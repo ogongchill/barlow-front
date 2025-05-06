@@ -1,7 +1,7 @@
 import 'dart:collection';
 import 'dart:math';
 
-import 'package:front/dev/dummy-repository/dummy_cache.dart';
+import 'package:front/core/database/cache.dart';
 import 'package:front/features/committee/domain/entities/committee_subscription.dart';
 import 'package:front/features/committee/domain/repositories/committee_subscription_repository.dart';
 import 'package:front/features/shared/domain/committee.dart';
