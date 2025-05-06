@@ -1,6 +1,6 @@
 import 'package:front/core/api/api_router.dart';
 import 'package:front/core/api/common/legislation_type.dart';
-import 'package:front/dev/dummy-repository/dummy_cache.dart';
+import 'package:front/core/database/cache.dart';
 import 'package:front/features/committee/domain/repositories/commitee_notification_repository.dart';
 import 'package:front/features/shared/domain/committee.dart';
 

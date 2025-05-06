@@ -5,29 +5,37 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:front/core/database/hive_configs.dart';
-import 'package:front/core/database/shared-preferences/shared_prefs_application_setting_repository.dart';
 import 'package:front/core/navigation/application_router.dart';
 import 'package:front/core/utils/device_info_manager.dart';
-import 'package:front/dependency/service_locator.dart';
-
 import 'core/notification/fcm_config.dart';
+import 'dependency/locator_dev.dart' as dev;
+import 'dependency/locator_prod.dart' as prod;
+
+const _flavor = String.fromEnvironment('FLAVOR');
 
 void main() async {
-  setupLocator();
+  _assertFlavor();
+  bool clearHive = false;
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  if (_flavor == 'prod') {
+    await prod.setUpProdLocator();
+  } else if(_flavor == 'prod:clearHive') {
+    clearHive = true;
+  }else {
+    await dev.setUpDevLocator();
+  }
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await Firebase.initializeApp();
   await HiveInitializer.initializeApp();
-  // await HiveInitializer.clearBox();
+  if(clearHive) {
+    HiveInitializer.clearBox();
+  }
   FcmInitializer(
     plugin: FlutterLocalNotificationsPlugin(),
     onMessageForegroundHandler: (RemoteMessage message) {},
     onMessageBackgroundHandler: (RemoteMessage message) {},
     onMessageTerminatedHandler: (RemoteMessage message) {},
   ).initialize();
-  String? fcmToken = await FirebaseMessaging.instance.getToken();
-  // await getIt<AppSettingsRepository>().clear();
-  print("TOKEN : $fcmToken");
   await DeviceInfoManager().init();
   FlutterNativeSplash.remove();
   runApp(
@@ -35,6 +43,17 @@ void main() async {
       child: MyApp(),
       )
   );
+}
+
+void _assertFlavor() {
+  assert(() {
+    if (const bool.fromEnvironment('dart.vm.product')) {
+      if (_flavor != 'prod') {
+        throw Exception('❌ 릴리즈 빌드는 반드시 FLAVOR=prod 이어야 합니다.');
+      }
+    }
+    return true;
+  }());
 }
 
 class MyApp extends ConsumerWidget {
