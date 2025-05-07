@@ -2,7 +2,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:front/core/api/api_router.dart';
 import 'package:front/core/api/common/api_client.dart';
 import 'package:front/core/api/dio/dio_configs.dart';
-import 'package:front/core/api/logger_interceptor.dart';
 import 'package:front/core/database/notification/notification_read_status_repository_adapter.dart';
 import 'package:front/core/database/secure-storage/token_repository.dart';
 import 'package:front/core/database/shared-preferences/shared_prefs_application_setting_repository.dart';

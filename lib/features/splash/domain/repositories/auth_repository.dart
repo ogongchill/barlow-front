@@ -1,4 +1,3 @@
-
 abstract interface class AuthRepository {
 
   Future<String> guestLogin();

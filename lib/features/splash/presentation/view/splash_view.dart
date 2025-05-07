@@ -44,5 +44,4 @@ class SplashView extends ConsumerWidget {
       ),
     );
   }
-
 }
