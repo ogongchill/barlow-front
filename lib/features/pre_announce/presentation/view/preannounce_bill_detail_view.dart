@@ -61,6 +61,7 @@ class PreAnnounceBillDetailView extends ConsumerWidget {
     return SingleChildScrollView(
       child: CaptureAndShareWidget(
           body: Container(
+            color: ColorPalette.innerContent,
             padding: const EdgeInsets.all(20),
             child: Column(
               children: [
