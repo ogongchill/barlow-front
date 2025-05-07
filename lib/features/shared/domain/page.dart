@@ -5,7 +5,7 @@ class Page {
 
   Page({int? size, int? index})
       : _size = size ?? 10,
-        _index = index ?? 1;
+        _index = index ?? 0;
 
   Page next() {
     return Page(size : _size, index : _index + 1);

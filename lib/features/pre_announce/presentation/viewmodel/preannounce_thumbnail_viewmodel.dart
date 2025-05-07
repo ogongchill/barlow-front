@@ -23,7 +23,7 @@ class PreAnnounceThumbnailViewModel extends StateNotifier<InfiniteScrollBillPost
         selectedTags: tags,
         currentPage: Page(),
         previousBills: [],
-        fetchingBills: const AsyncValue.loading()
+        fetchingBills: const AsyncValue.loading(),
     ));
     _fetch();
   }
@@ -58,7 +58,6 @@ class PreAnnounceThumbnailViewModel extends StateNotifier<InfiniteScrollBillPost
       previousBills: [],
       selectedTags: [],
       currentPage: Page(),
-      sortKey: PreAnnounceBillPostSortKey.asc
     ));
     _fetch();
   }
@@ -67,8 +66,8 @@ class PreAnnounceThumbnailViewModel extends StateNotifier<InfiniteScrollBillPost
     _updateStateTo(state.copyWith(
         fetchingBills: const AsyncValue.loading(),
         previousBills: [],
-        selectedTags: [],
-        currentPage: Page(),      sortKey: sortKey
+        currentPage: Page(),
+        sortKey: sortKey
     ));
     _fetch();
   }
