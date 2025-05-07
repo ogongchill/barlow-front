@@ -14,9 +14,16 @@ import 'package:front/features/shared/view/capturable_widget.dart';
 import 'package:front/features/shared/view/error.dart';
 import 'package:intl/intl.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PreAnnounceBillDetailView extends ConsumerWidget {
 
+  static const TextStyle _externalLinkTextStyle = TextStyle(
+    color: ColorPalette.greyDark,
+    fontSize: 16,
+    fontWeight: FontWeight.w500,
+    fontFamily: 'gmarketSans'
+  );
   final String billId;
 
   const PreAnnounceBillDetailView({super.key, required this.billId});
@@ -54,23 +61,55 @@ class PreAnnounceBillDetailView extends ConsumerWidget {
     return SingleChildScrollView(
       child: CaptureAndShareWidget(
           body: Container(
+            color: ColorPalette.innerContent,
             padding: const EdgeInsets.all(20),
             child: Column(
               children: [
                 _buildPreAnnouncementSectionWidget(billDetail),
                 BillDetailParagraphWidget(text: billDetail.detail),
+                if(billDetail.preAnnouncementSection.linkUrl != null)
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.transparent,
+                      shadowColor: Colors.transparent,
+                      overlayColor: Colors.black26,
+                      elevation: 0
+                    ),
+                    onPressed: () => _openExternalBrowser(billDetail.preAnnouncementSection.linkUrl!),
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      spacing: 10,
+                      children: [
+                        Text("국회에 의견 등록하러 가기", style: _externalLinkTextStyle,),
+                        Icon(Icons.link_rounded, color: ColorPalette.greyDark,)
+                      ],
+                    )
+                  ),
                 if(billDetail.proposerSection != null)
                   BillProposerSectionWidget(billProposerSection: billDetail.proposerSection!)
               ],
             ),
-          )
+        )
       ),
     );
   }
 
+  void _openExternalBrowser(String url) async {
+    final uri = Uri.parse(url);
+
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(
+        uri,
+        mode: LaunchMode.platformDefault,
+      );
+    } else {
+      throw 'URL 실행 불가: $url';
+    }
+  }
+
   Widget _buildPreAnnouncementSectionWidget(PreAnnounceBillDetail detail) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 20),
+      margin: const EdgeInsets.symmetric(vertical: 20),
       child: Column(
         spacing: 10,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -80,8 +119,14 @@ class PreAnnounceBillDetailView extends ConsumerWidget {
             spacing: 10,
             children: [
               DdayWidget(dDay: detail.preAnnouncementSection.dDAy),
-              Text(detail.proposerSummary, style: TextStylePreset.billDetailText),
-            ],
+              Expanded(
+                child: Text(
+                  detail.proposerSummary,
+                  style: TextStylePreset.billDetailText,
+                  softWrap: true,
+                  overflow: TextOverflow.visible,
+                ),
+              ),            ],
           ),
           Align(
             alignment: Alignment.centerLeft,

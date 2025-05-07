@@ -22,7 +22,9 @@ class PreAnnounceBillDetailRepositoryAdapter implements PreAnnounceBillDetailRep
         proposerSummary: response.proposerSummary,
         preAnnouncementSection: PreAnnouncementSection(
             deadline: response.preAnnouncementSection.deadline,
-            dDAy: response.preAnnouncementSection.dDay),
+            dDAy: response.preAnnouncementSection.dDay,
+            linkUrl: response.preAnnouncementSection.linkUrl
+        ),
         proposerSection: toBillProposerSection(response.proposerSection),
         summarySection: BillAiSummary(title: response.summarySection.summaryTitle, detail: response.summarySection.summaryDetail ?? "")
     );

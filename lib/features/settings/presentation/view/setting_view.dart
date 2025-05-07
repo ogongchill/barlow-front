@@ -10,7 +10,7 @@ import 'package:front/features/shared/view/error.dart';
 class SettingView extends ConsumerWidget {
 
   static const TextStyle _roleStyle = TextStyle(
-    fontSize: 12,
+    fontSize: 16,
     fontFamily: "gmarketSans",
     fontWeight: FontWeight.w500,
     color: ColorPalette.borderBlack
@@ -58,8 +58,8 @@ class SettingView extends ConsumerWidget {
       children: [
         Container(
           alignment: Alignment.centerLeft,
-          padding: EdgeInsets.only(left: 10, bottom: 10),
-          child: Text("내 정보", style: _roleStyle,)
+          padding: const EdgeInsets.only(left: 10, bottom: 10),
+          child: const Text("내 정보", style: _roleStyle,)
         ),
         Container(
           padding : const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
