@@ -24,9 +24,9 @@ class RecentBillThumbnailView extends ConsumerWidget {
             return [
               SliverToBoxAdapter(
                 child: Container(
-                  margin: const EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 70),
+                  margin: const EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
                   child: Container(
-                    padding: const EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       color: ColorPalette.innerContent
