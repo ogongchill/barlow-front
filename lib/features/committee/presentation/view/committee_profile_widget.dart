@@ -60,7 +60,7 @@ class CommitteeProfileWidget extends ConsumerWidget {
         color: Colors.white,
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         spacing: 12,
         children: [
           Row(
@@ -93,36 +93,30 @@ class CommitteeProfileWidget extends ConsumerWidget {
                   ],
                 ),
               ),
-              Container(
-                margin: const EdgeInsets.only(right: 10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Stack(
-                      children: [
-                        const SizedBox( height: 30),
-                        Text("${profile.subscriberCount}", style: _profileCountStyle, textAlign: TextAlign.center),
-                      ],
-                    ),
-                    const SizedBox(
-                      width: 60,
-                      child: Text("구독", style: _profileCountDescriptionStyle, textAlign: TextAlign.center,),
-                    ),
-                  ],
-                ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Stack(
+                    children: [
+                      const SizedBox( height: 30),
+                      Text("${profile.subscriberCount}", style: _profileCountStyle, textAlign: TextAlign.center),
+                    ],
+                  ),
+                  const SizedBox(
+                    width: 60,
+                    child: Text("구독", style: _profileCountDescriptionStyle, textAlign: TextAlign.center,),
+                  ),
+                ],
               ),
             ],
           ),
           Container(
             padding: const EdgeInsets.all(20),
-            child: SizedBox(
-              height: 160,
-              child: Text(
+            child: Text(
                 profile.description,
                 textAlign: TextAlign.start,
                 style: _profileDescriptionStyle,
               ),
-            )
           ),
           SizedBox(
             height: 50,
@@ -130,7 +124,7 @@ class CommitteeProfileWidget extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 _CommitteeSubscriptionButtonWidget(
-                  width: 120,
+                  width: 140,
                   subscription: subscription,
                   then: () async {
                     await ref.read(toggleCommitteeSubscriptionViewModelProvider).execute(subscription);
@@ -139,7 +133,7 @@ class CommitteeProfileWidget extends ConsumerWidget {
                 ),
                 const SizedBox(width: 16),
                 _CommitteeNotificationButtonWidget(
-                  width: 120,
+                  width: 140,
                   notification: notification,
                   then: () async {
                     await ref.read(toggleCommitteeNotificationViewModelProvider).execute(notification);
