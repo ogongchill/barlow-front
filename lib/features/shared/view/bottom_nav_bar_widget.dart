@@ -19,7 +19,7 @@ class ApplicationBottomNavigationBarWidget extends StatelessWidget {
       height: 80,
       color: ColorPalette.background,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           _navigationIcon(
               icon: const Icon(Icons.home_filled), 
@@ -36,11 +36,11 @@ class ApplicationBottomNavigationBarWidget extends StatelessWidget {
               text: "입법예고",
               onTapFunction: () => ApplicationNavigatorService.pushToPreAnnounce()
           ),
-          _navigationIcon(
-              icon: const Icon(Icons.people),
-              text: "국회의원",
-              onTapFunction: () => ApplicationNavigatorService.pushToDonation()
-          ),
+          // _navigationIcon(
+          //     icon: const Icon(Icons.people),
+          //     text: "국회의원",
+          //     onTapFunction: () => ApplicationNavigatorService.pushToDonation()
+          // ),
           _navigationIcon(
               icon: const Icon(Icons.settings),
               text: "설정",
