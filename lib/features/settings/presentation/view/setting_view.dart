@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:front/core/navigation/application_navigation_service.dart';
 import 'package:front/core/theme/color_palette.dart';
 import 'package:front/core/theme/test_style_preset.dart';
+import 'package:front/features/settings/presentation/viewmodel/delete_guest_user_provider.dart';
 import 'package:front/features/settings/presentation/viewmodel/user_info_viewmodel.dart';
 import 'package:front/features/shared/view/appbar.dart';
 import 'package:front/features/shared/view/bottom_nav_bar_widget.dart';
@@ -31,6 +32,12 @@ class SettingView extends ConsumerWidget {
       fontWeight: FontWeight.w500,
       color: ColorPalette.greyDark
   );
+  static const TextStyle _delete = TextStyle(
+      fontFamily: "gmarketSans",
+      fontWeight: FontWeight.w500,
+      fontSize: 16,
+      color: Colors.redAccent
+  );
 
   const SettingView({super.key});
 
@@ -46,7 +53,7 @@ class SettingView extends ConsumerWidget {
           child: Column(
             children: [
               _buildUserInfo(ref),
-              _settingContents(context)
+              _settingContents(context, ref)
             ],
           ),
         ),
@@ -54,7 +61,7 @@ class SettingView extends ConsumerWidget {
     );
   }
 
-  Widget _settingContents(BuildContext context) {
+  Widget _settingContents(BuildContext context, WidgetRef ref) {
     return Column(
       children: [
         Container(
@@ -117,7 +124,7 @@ class SettingView extends ConsumerWidget {
                       child: Text("계정 삭제", style: TextStylePreset.thumbnailTitle,),
                     ),
                     IconButton(
-                        onPressed: (){},
+                        onPressed: () => _confirmDeleteAccount(context, ref),
                         icon: const Icon(Icons.delete_forever_outlined, color: Colors.redAccent,)
                     )
                   ]
@@ -191,6 +198,32 @@ class SettingView extends ConsumerWidget {
         )
       ],
     );
+  }
+
+  Future<void> _confirmDeleteAccount(BuildContext context, WidgetRef ref) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        backgroundColor: Colors.white,
+        title: const Text('계정 삭제 확인', style: TextStylePreset.appBarTitle, textAlign: TextAlign.center,),
+        content: const Text('정말로 계정을 삭제할까요?\n이 작업은 되돌릴 수 없어요.', style: TextStylePreset.innerContentSubtitle,textAlign: TextAlign.center,),
+        actions: [
+          TextButton(
+            child: const Text('취소', style: TextStylePreset.thumbnailTitle,),
+            onPressed: () => Navigator.of(context).pop(false),
+          ),
+          TextButton(
+            child: const Text('삭제', style: _delete),
+            onPressed: () => Navigator.of(context).pop(true),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed != true) return;
+    final asyncDelete = await ref.read(deleteGuestUserFutureProvider.future);
+    ApplicationNavigatorService.goToSplash();
   }
 
 

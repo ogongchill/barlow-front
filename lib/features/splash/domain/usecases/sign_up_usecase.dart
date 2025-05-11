@@ -23,6 +23,6 @@ class SignupUseCase {
       userName: nickname,
       role: UserRole.guest
     ));
-    await _appSettingsRepository.setFirstLaunchChecked();
+    await _appSettingsRepository.setFirstLaunch(false);
   }
 }

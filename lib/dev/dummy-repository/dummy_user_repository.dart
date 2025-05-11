@@ -13,4 +13,10 @@ class DummyUserInfoRepository implements UserInfoRepository {
     // TODO: implement setUserInfo
     throw UnimplementedError();
   }
+
+  @override
+  Future<void> deleteUserInfo() {
+    // TODO: implement deleteUserInfo
+    throw UnimplementedError();
+  }
 }

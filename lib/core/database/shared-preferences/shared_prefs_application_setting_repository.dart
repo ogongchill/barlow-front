@@ -3,7 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 abstract interface class AppSettingsRepository {
 
   Future<bool> isFirstLaunch();
-  Future<void> setFirstLaunchChecked();
+  Future<void> setFirstLaunch(bool value);
   Future<bool> isLoggedIn();
   Future<void> setLoginStatus(bool value);
   Future<void> clear();
@@ -33,9 +33,9 @@ class SharedPrefsAppSettingRepository implements AppSettingsRepository{
   }
 
   @override
-  Future<void> setFirstLaunchChecked() async {
+  Future<void> setFirstLaunch(bool value) async {
     await SharedPreferences.getInstance()
-        .then((pref) => pref.setBool(_isFirstLaunchKey, false));
+        .then((pref) => pref.setBool(_isFirstLaunchKey, value));
   }
 
   @override
