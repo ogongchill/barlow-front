@@ -14,15 +14,14 @@ class SplashView extends ConsumerWidget {
     return asyncValue.when(
         data: (info) {
           Future.microtask(() {
-            // if (info.isFirstLaunch) {
-            //   ApplicationNavigatorService.goToOnBoarding();
-            // } else if (!info.isLoggedIn) {
-            //   ref.read(loginUseCaseProvider);
-            //   ApplicationNavigatorService.goToHome();
-            // } else {
-            //   ApplicationNavigatorService.goToHome();
-            // }
-            ApplicationNavigatorService.goToOnBoarding();
+            if (info.isFirstLaunch) {
+              ApplicationNavigatorService.goToOnBoarding();
+            } else if (!info.isLoggedIn) {
+              ref.read(loginUseCaseProvider);
+              ApplicationNavigatorService.goToHome();
+            } else {
+              ApplicationNavigatorService.goToHome();
+            }
           });
           return _getSplashView();
         },
