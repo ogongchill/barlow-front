@@ -5,7 +5,7 @@ import 'package:front/features/splash/domain/usecases/login_usecase.dart';
 import 'package:front/features/splash/domain/usecases/retrieve_app_initialize_info_usecase.dart';
 import 'package:front/features/splash/domain/usecases/sign_up_usecase.dart';
 
-final appInitializeInfoProvider = FutureProvider<AppInitializeInfo>((ref) async {
+final appInitializeInfoProvider = FutureProvider.autoDispose<AppInitializeInfo>((ref) async {
   return getIt<RetrieveAppInitializeInfoUseCase>().execute();
 });
 
