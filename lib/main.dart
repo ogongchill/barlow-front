@@ -69,7 +69,17 @@ class MyApp extends ConsumerWidget {
       ),
     ),
       debugShowCheckedModeBanner: true,
-      routerConfig: applicationRouter, // ✅ GoRouter 적용
+      routerConfig: applicationRouter,
+      builder: (context, child) {
+        final mediaQuery = MediaQuery.of(context);
+        return MediaQuery(
+          data: mediaQuery.copyWith(
+              textScaler: const TextScaler.linear(1.0), // os 설정에서 글자 크기 무시
+              boldText: false // os 설정에서 글자 굵기 무시
+            ),
+          child: child!,
+        );
+      },
     );
   }
 }
