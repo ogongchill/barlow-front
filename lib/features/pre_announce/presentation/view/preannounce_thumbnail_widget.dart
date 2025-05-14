@@ -85,7 +85,7 @@ class PreAnnounceThumbnailWidgetState extends ConsumerState<PreAnnounceThumbnail
                   children: [
                     DdayWidget(dDay: thumbnail.dDay),
                     const SizedBox(width: 10),
-                    Expanded( // ✅ 핵심! 가용 공간 안에서 줄바꿈 가능하게 함
+                    Expanded(
                       child: Text(
                         thumbnail.billName,
                         style: TextStylePreset.thumbnailTitle,
@@ -99,15 +99,23 @@ class PreAnnounceThumbnailWidgetState extends ConsumerState<PreAnnounceThumbnail
               Row(
                 mainAxisAlignment : MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    thumbnail.proposers,
-                    style: TextStylePreset.thumbnailSubtitle,
-                  ),
-                  if(thumbnail.legislativeBody != null)
-                    Text(
-                      thumbnail.legislativeBody!,
+                  Expanded(
+                    child: Text(
+                      thumbnail.proposers,
                       style: TextStylePreset.thumbnailSubtitle,
-                    )
+                    ),
+                  ),
+                  const SizedBox(width: 30,),
+                  if(thumbnail.legislativeBody != null)
+                    Expanded(
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          thumbnail.legislativeBody!,
+                          style: TextStylePreset.thumbnailSubtitle,
+                        ),
+                      ),
+                  )
                 ],
               )
             ],

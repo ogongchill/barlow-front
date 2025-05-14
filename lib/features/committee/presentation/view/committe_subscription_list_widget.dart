@@ -100,7 +100,7 @@ class _CommitteeSubscriptionButtonWidget extends ConsumerWidget {
               backgroundColor: isButtonDisabled
                   ? ColorPalette.blueLight //  애니메이션이 진행 중이면 버튼 색을 변경
                   : (_subscription.isSubscribed ? ColorPalette.greyLight : ColorPalette.bluePrimary),
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
             ),
             child: Text(
               _subscription.isSubscribed ? "구독중" : "구독",

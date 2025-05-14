@@ -167,7 +167,7 @@ class PreAnnounceView extends ConsumerWidget {
         borderRadius: BorderRadius.circular(10),
         onTap: () => _showSortKeyModal(context, ref),
         child: SizedBox(
-          width: 80,
+          width: MediaQuery.of(context).size.width * 0.3,
           height: 34, // choicechip 24 sized box + 5 x 2 의 padding
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 8),
