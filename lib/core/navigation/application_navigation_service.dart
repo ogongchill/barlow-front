@@ -51,6 +51,8 @@ class ApplicationNavigatorService {
 
   static void goToSettings() => GoRouter.of(_context!).go('/settings');
 
+  static void pushToNotificationSettings() => GoRouter.of(_context!).push('/settings/notifications');
+
   static void pushToNotificationCenter() => GoRouter.of(_context!).push('/notifications');
 
   static void pushToDonation() => GoRouter.of(_context!).push('/donation');

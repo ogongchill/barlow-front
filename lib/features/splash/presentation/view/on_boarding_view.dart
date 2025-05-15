@@ -3,9 +3,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:front/core/navigation/application_navigation_service.dart';
 import 'package:front/core/theme/color_palette.dart';
+import 'package:front/core/theme/test_style_preset.dart';
 import 'package:front/features/shared/view/error.dart';
 import 'package:front/features/splash/presentation/viewmodel/nickname_provider.dart';
 import 'package:front/features/splash/presentation/viewmodel/splash_viewmodel.dart';
+import 'package:front/features/splash/presentation/viewmodel/terms_and_policies_vewmodel.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class OnboardingView extends ConsumerStatefulWidget {
 
@@ -29,6 +32,11 @@ class _OnboardingScreenState extends ConsumerState<OnboardingView> {
     color: ColorPalette.greyDark
   );
   static const _inputStyle = TextStyle(
+      fontFamily: 'gmarketSans',
+      fontWeight: FontWeight.w500,
+      color: ColorPalette.borderBlack
+  );
+  static const _agreementStyle = TextStyle(
       fontFamily: 'gmarketSans',
       fontWeight: FontWeight.w500,
       color: ColorPalette.borderBlack
@@ -101,8 +109,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingView> {
                                           ? randomNickname
                                           : _textEditingController.text;
                                       try {
-                                        await ref.read(signupUseCaseProvider(nickname).future);
-                                        ApplicationNavigatorService.goToHome();
+                                        showTermsAgreementDialog(context, ref, nickname);
+                                        // await ref.read(signupUseCaseProvider(nickname).future);
+                                        // ApplicationNavigatorService.goToHome();
                                       } catch (_) {
                                         showDialog(
                                           context: context,
@@ -196,6 +205,270 @@ class _OnboardingScreenState extends ConsumerState<OnboardingView> {
       ),
     );
   }
+
+  Future<void> showTermsAgreementDialog(BuildContext context, WidgetRef ref, String nickname) async {
+    bool termsChecked = false;
+    bool privacyChecked = false;
+    bool allChecked = false;
+
+    await showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        final termsAgreementViewModel = ref.read(termsAgreementViewModelProvider.notifier);
+
+        return StatefulBuilder(builder: (context, setState) {
+          void updateAllChecked() {
+            allChecked = termsChecked && privacyChecked;
+          }
+
+          Future<void> showWebDialog(BuildContext context, String title, String url) async {
+            final controller = WebViewController()..loadRequest(Uri.parse(url));
+
+            await showDialog(
+              context: context,
+              barrierDismissible: true,
+              builder: (context) {
+                return Dialog(
+                  insetPadding: EdgeInsets.zero,
+                  backgroundColor: Colors.white,
+                  child: Column(
+                    children: [
+                      AppBar(
+                        backgroundColor: Colors.white,
+                        title: Text(title, style: TextStylePreset.appBarTitle,),
+                        automaticallyImplyLeading: false,
+                        actions: [
+                          IconButton(
+                            icon: const Icon(Icons.close),
+                            onPressed: () => Navigator.of(context).pop(),
+                          ),
+                        ],
+                      ),
+                      Expanded(
+                        child: WebViewWidget(controller: controller),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            );
+          }
+
+          return Dialog(
+          insetPadding: const EdgeInsets.all(10),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16), // 모서리 둥글게
+            ),
+          backgroundColor: Colors.white,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 20, right: 5),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children :[
+                        const Center(child: Text("약관 동의", style: TextStylePreset.appBarTitle)),
+                        IconButton(
+                          icon: const Icon(Icons.close),
+                          onPressed: () => Navigator.of(context).pop(),
+                        )
+                      ]
+                  ),
+                ),
+                Column(
+                  children: [
+                    // ✅ 서비스 이용약관 동의
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Checkbox(
+                            value: termsChecked,
+                            activeColor: Colors.green,
+                            onChanged: (value) {
+                              setState(() {
+                                termsChecked = value ?? false;
+                                updateAllChecked();
+                              });
+                            },
+                          ),
+                          Expanded(
+                            child: Row(
+                              children: [
+                                const Expanded(
+                                  child: Text(
+                                    "서비스 이용약관 동의",
+                                    style: _agreementStyle,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 2,
+                                  ),
+                                ),
+                                TextButton(
+                                  onPressed: () => showWebDialog(
+                                    context,
+                                    "서비스 약관",
+                                    'https://ogongchill.github.io/barlow/terms-of-service.html',
+                                  ),
+                                  child: const Text("보기", style: TextStyle(color: Colors.grey)),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    // ✅ 개인정보 처리방침 동의
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Checkbox(
+                            value: privacyChecked,
+                            activeColor: Colors.green,
+                            onChanged: (value) {
+                              setState(() {
+                                privacyChecked = value ?? false;
+                                updateAllChecked();
+                              });
+                            },
+                          ),
+                          Expanded(
+                            child: Row(
+                              children: [
+                                const Expanded(
+                                  child: Text(
+                                    "개인정보 처리방침 동의",
+                                    style: _agreementStyle,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 2,
+                                  ),
+                                ),
+                                TextButton(
+                                  onPressed: () => showWebDialog(
+                                    context,
+                                    "개인정보 처리방침",
+                                    'https://ogongchill.github.io/barlow/privacy-policy.html',
+                                  ),
+                                  child: const Text("보기", style: TextStyle(color: Colors.grey)),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    // ✅ 모두 동의
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Row(
+                        children: [
+                          Checkbox(
+                            value: allChecked,
+                            activeColor: Colors.green,
+                            onChanged: (value) {
+                              setState(() {
+                                allChecked = value ?? false;
+                                termsChecked = value ?? false;
+                                privacyChecked = value ?? false;
+                              });
+                            },
+                          ),
+                          const Expanded(
+                            child: Text(
+                              "모두 동의",
+                              style: _agreementStyle,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+
+                // CheckboxListTile(
+                //   activeColor: Colors.green,
+                //   title: Row(
+                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //     children: [
+                //       const Text("서비스 이용약관 동의", style: _agreementStyle),
+                //       TextButton(
+                //         onPressed: () => showWebDialog(context, "서비스 약관", 'https://ogongchill.github.io/barlow/terms-of-service.html'),
+                //         child: const Text("보기", style: TextStyle(color: Colors.grey),),
+                //       ),
+                //     ],
+                //   ),
+                //   value: termsChecked,
+                //   onChanged: (value) {
+                //     setState(() {
+                //       termsChecked = value ?? false;
+                //       updateAllChecked();
+                //     });
+                //   },
+                // ),
+                // CheckboxListTile(
+                //   activeColor: Colors.green,
+                //   title: Row(
+                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //     children: [
+                //       const Text("개인정보 처리방침 동의", style: _agreementStyle),
+                //       TextButton(
+                //         onPressed: () => showWebDialog(context, "개인정보 처리방침", 'https://ogongchill.github.io/barlow/privacy-policy.html'),
+                //         child: const Text("보기", style: TextStyle(color: Colors.grey)),
+                //       ),
+                //     ],
+                //   ),
+                //   value: privacyChecked,
+                //   onChanged: (value) {
+                //     setState(() {
+                //       privacyChecked = value ?? false;
+                //       updateAllChecked();
+                //     });
+                //   },
+                // ),
+                // CheckboxListTile(
+                //   activeColor: Colors.green,
+                //   title: const Text("모두 동의", style: _agreementStyle),
+                //   value: allChecked,
+                //   onChanged: (value) {
+                //     setState(() {
+                //       allChecked = value ?? false;
+                //       termsChecked = value ?? false;
+                //       privacyChecked = value ?? false;
+                //     });
+                //   },
+                // ),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(backgroundColor: ColorPalette.bluePrimary),
+                    onPressed: termsChecked && privacyChecked
+                        ? () async {
+                      await termsAgreementViewModel.agree();
+                      await ref.read(signupUseCaseProvider(nickname).future);
+                      if (context.mounted) Navigator.of(context).pop();
+                      ApplicationNavigatorService.goToHome();
+                    }
+                        : null,
+                    child: const Text("동의하고 시작하기", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18)),
+                  ),
+                )
+              ],
+            ),
+          );
+        });
+      },
+    );
+  }
+
+
 }
 
 class _OnboardingData {
@@ -207,3 +480,4 @@ class _OnboardingData {
     this.isLast = false,
   });
 }
+

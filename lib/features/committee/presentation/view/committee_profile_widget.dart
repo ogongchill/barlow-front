@@ -42,14 +42,14 @@ class CommitteeProfileWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final committeeProfile = ref.watch(committeeProfileFutureProvider(_committee));
     return committeeProfile.when(
-      data: (profile) => _buildProfileUI(profile, ref),
+      data: (profile) => _buildProfileUI(profile, ref, context),
       error: (err, stack) => const SomethingWentWrongWidget(),
       loading: () => _buildLoading(ref),
     );
   }
 
 
-  Widget _buildProfileUI(CommitteeProfile profile, WidgetRef ref) {
+  Widget _buildProfileUI(CommitteeProfile profile, WidgetRef ref, BuildContext context) {
     final subscription = CommitteeSubscription(committee: profile.committee, isSubscribed: profile.isSubscribed);
     final notification = CommitteeNotification(committee: profile.committee, isActive: profile.isNotificationActive);
 
@@ -121,19 +121,18 @@ class CommitteeProfileWidget extends ConsumerWidget {
           SizedBox(
             height: 50,
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 _CommitteeSubscriptionButtonWidget(
-                  width: 140,
+                  width: MediaQuery.of(context).size.width * 0.4,
                   subscription: subscription,
                   then: () async {
                     await ref.read(toggleCommitteeSubscriptionViewModelProvider).execute(subscription);
                     ref.invalidate(committeeProfileFutureProvider);
                   },
                 ),
-                const SizedBox(width: 16),
                 _CommitteeNotificationButtonWidget(
-                  width: 140,
+                  width: MediaQuery.of(context).size.width * 0.4,
                   notification: notification,
                   then: () async {
                     await ref.read(toggleCommitteeNotificationViewModelProvider).execute(notification);

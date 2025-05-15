@@ -5,4 +5,6 @@ abstract interface class UserInfoRepository {
   Future<UserInfo> retrieve();
 
   Future<void> setUserInfo(UserInfo userInfo);
+
+  Future<void> deleteUserInfo();
 }

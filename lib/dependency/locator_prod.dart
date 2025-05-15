@@ -4,8 +4,10 @@ import 'package:front/core/api/common/api_client.dart';
 import 'package:front/core/api/dio/dio_configs.dart';
 import 'package:front/core/database/notification/notification_read_status_repository_adapter.dart';
 import 'package:front/core/database/secure-storage/token_repository.dart';
+import 'package:front/core/database/shared-preferences/share_prefs_terms_agreement_repository.dart';
 import 'package:front/core/database/shared-preferences/shared_prefs_application_setting_repository.dart';
 import 'package:front/core/database/user/user_info_hive_repository.dart';
+import 'package:front/core/utils/application_version_info.dart';
 import 'package:front/core/utils/device_info_manager.dart';
 import 'package:front/core/database/cache.dart';
 import 'package:front/features/bill_info/domain/usecases/fetch_recent_bill_thumbail_usecase.dart';
@@ -34,10 +36,12 @@ import 'package:front/features/pre_announce/infra/preannounce_bill_detail_reposi
 import 'package:front/features/pre_announce/infra/preannounce_bill_thumbnail_respository_adapter.dart';
 import 'package:front/features/settings/domain/repositories/notification_repository.dart';
 import 'package:front/features/settings/domain/repositories/user_repository.dart';
+import 'package:front/features/settings/domain/usecases/delete_guest_user_usecase.dart';
 import 'package:front/features/settings/domain/usecases/load_user_info_usecase.dart';
 import 'package:front/features/settings/domain/usecases/notification_usecase.dart';
 import 'package:front/features/settings/infra/notification_repository_adapter.dart';
 import 'package:front/features/splash/domain/repositories/auth_repository.dart';
+import 'package:front/features/splash/domain/usecases/agree_terms_and_policies_usecase.dart';
 import 'package:front/features/splash/domain/usecases/login_usecase.dart';
 import 'package:front/features/splash/domain/usecases/retrieve_app_initialize_info_usecase.dart';
 import 'package:front/features/splash/domain/usecases/sign_up_usecase.dart';
@@ -147,6 +151,20 @@ Future<void> setUpProdLocator() async {
               interceptors: []
           )
       )
+  );
+
+  /// for service terms and policices
+  final applicationInfoManager = await ApplicationVersionInfoManager.init();
+  getIt.registerLazySingleton<TermsAgreementRepository>(() => TermsAgreementRepositoryAdapter());
+  getIt.registerLazySingleton<CheckTermsAndPoliciesUseCase>(() => CheckTermsAndPoliciesUseCase(getIt<TermsAgreementRepository>()));
+  getIt.registerLazySingleton<AgreeTermsAndPoliciesUseCase>(() => AgreeTermsAndPoliciesUseCase(getIt<TermsAgreementRepository>(), applicationInfoManager));
+
+  /// for deleting userInfo
+  getIt.registerLazySingleton<DeleteGuestUserUseCase>(() => DeleteGuestUserUseCase(
+      getIt<UserInfoRepository>(),
+      FirebaseMessaging.instance,
+      getIt<AppSettingsRepository>(),
+      getIt<TokenRepository>())
   );
 
   /// for device info

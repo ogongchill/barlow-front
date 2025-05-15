@@ -40,13 +40,15 @@ class _CommitteeProfileViewState extends ConsumerState<CommitteeProfileView> {
     return PopScope(
       onPopInvokedWithResult: (didPop, result) {
         if (didPop) {
-          ref.invalidate(committeeSubscriptionFutureProvider); // ✅ true 넘기면 새로고침
+          ref.invalidate(
+              committeeSubscriptionFutureProvider); // ✅ true 넘기면 새로고침
         }
       },
       child: Scaffold(
         appBar: TextAppBar(
           title: widget._committee.value,
-          onPressedBack: () => ApplicationNavigatorService.popWithResult(context),
+          onPressedBack: () =>
+              ApplicationNavigatorService.popWithResult(context),
         ),
         backgroundColor: ColorPalette.innerContent,
         body: NestedScrollView(
@@ -74,9 +76,13 @@ class _CommitteeProfileViewState extends ConsumerState<CommitteeProfileView> {
             onNotification: (ScrollNotification notification) {
               if (notification is ScrollEndNotification &&
                   notification.metrics.extentAfter == 0) {
-                ref.read(committeeBillPostProvider(widget._committee))
-                    .fetchingBills.when(
-                    data: (data) => ref.read(committeeBillPostProvider(widget._committee).notifier).nextPage(),
+                ref
+                    .read(committeeBillPostProvider(widget._committee))
+                    .fetchingBills
+                    .when(
+                    data: (data) =>
+                        ref.read(committeeBillPostProvider(widget._committee)
+                            .notifier).nextPage(),
                     error: (error, stack) => {print("err")},
                     loading: () => {print("loading")}
                 );
@@ -95,25 +101,33 @@ class _CommitteeProfileViewState extends ConsumerState<CommitteeProfileView> {
       scrollDirection: Axis.horizontal,
       padding: const EdgeInsets.all(0),
       child: Row(
-        spacing: 10,
-        children: [
-          Container(
-            margin: const EdgeInsets.only(right: 20),
-            child: IconButton(onPressed: () => {_showPersistentBottomSheet(context)}, icon: const Icon(Icons.filter_list)),
-          ),
-          _createTagBox(ProgressStatusTag.committeeReceived, const Text("접수됨", style: TextStylePreset.tagStyle,), ref),
-          _createTagBox(ProgressStatusTag.committeeReview, const Text("심사 진행중", style: TextStylePreset.tagStyle), ref),
-          _createTagBox(PartyTag.democratic, Party.democratic.toSvgPicture(24), ref),
-          _createTagBox(PartyTag.peoplePower, Party.peoplePower.toSvgPicture(24), ref)
-        ]
+          spacing: 10,
+          children: [
+            Container(
+              margin: const EdgeInsets.only(right: 20),
+              child: IconButton(
+                  onPressed: () => {_showPersistentBottomSheet(context)},
+                  icon: const Icon(Icons.filter_list)),
+            ),
+            _createTagBox(ProgressStatusTag.committeeReceived,
+                const Text("접수됨", style: TextStylePreset.tagStyle,), ref),
+            _createTagBox(ProgressStatusTag.committeeReview,
+                const Text("심사 진행중", style: TextStylePreset.tagStyle), ref),
+            _createTagBox(
+                PartyTag.democratic, Party.democratic.toSvgPicture(24), ref),
+            _createTagBox(
+                PartyTag.peoplePower, Party.peoplePower.toSvgPicture(24), ref)
+          ]
       ),
     );
   }
 
   Widget _createTagBox(BillPostTag tag, Widget label, WidgetRef ref) {
-    final state =  ref.watch(billPostTagProvider(widget._committee));
-    final stateNotifier = ref.read(billPostTagProvider(widget._committee).notifier);
-    final billFetchNotifier = ref.read(committeeBillPostProvider(widget._committee).notifier);
+    final state = ref.watch(billPostTagProvider(widget._committee));
+    final stateNotifier = ref.read(
+        billPostTagProvider(widget._committee).notifier);
+    final billFetchNotifier = ref.read(
+        committeeBillPostProvider(widget._committee).notifier);
     bool isSelected = state.contains(tag);
     return Material(
       color: isSelected ? ColorPalette.greyLight : ColorPalette.innerContent,
@@ -122,7 +136,8 @@ class _CommitteeProfileViewState extends ConsumerState<CommitteeProfileView> {
         borderRadius: BorderRadius.circular(10),
         onTap: () {
           stateNotifier.toggleTag(tag);
-          billFetchNotifier.changeTags(ref.read(billPostTagProvider(widget._committee)).toList());
+          billFetchNotifier.changeTags(
+              ref.read(billPostTagProvider(widget._committee)).toList());
         },
         child: SizedBox(
           height: 34,
@@ -139,28 +154,86 @@ class _CommitteeProfileViewState extends ConsumerState<CommitteeProfileView> {
     );
   }
 
+  // void _showPersistentBottomSheet(BuildContext context) {
+  //   showModalBottomSheet(
+  //     context: context,
+  //     isScrollControlled: true,
+  //     barrierColor: Colors.black54,
+  //     builder: (context) {
+  //       return FractionallySizedBox(
+  //         heightFactor: 0.7,
+  //         child: Container(
+  //           decoration: const BoxDecoration(
+  //             borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+  //             color: ColorPalette.whitePrimary,
+  //           ),
+  //           child: CommitteeBillPostTagModalView(widget._committee),
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
+//   void _showPersistentBottomSheet(BuildContext context) {
+//     showModalBottomSheet(
+//       context: context,
+//       isScrollControlled: true,
+//       barrierColor: Colors.black54,
+//       backgroundColor: Colors.transparent,
+//       builder: (context) {
+//         return DraggableScrollableSheet(
+//           initialChildSize: 0.85,
+//           minChildSize: 0.3,
+//           maxChildSize: 0.95,
+//           expand: true, // 이게 중요!
+//           builder: (context, scrollController) {
+//             return Container(
+//               decoration: const BoxDecoration(
+//                 color: ColorPalette.whitePrimary,
+//                 borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+//               ),
+//               child: CommitteeBillPostTagModalView(
+//                 committee: widget._committee,
+//                 scrollController: scrollController,
+//               ),
+//             );
+//           },
+//         );
+//       },
+//     );
+//   }
+// }
+
+
   void _showPersistentBottomSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      barrierColor: Colors.black54,
+      backgroundColor: Colors.transparent,
       builder: (context) {
-        return FractionallySizedBox(
-          heightFactor: 0.7, // ✅ 화면의 60% 차지 (0.5로 설정하면 50%만 올라옴)
-          child: Container(
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
-              color: ColorPalette.whitePrimary,
-            ),
-            child: CommitteeBillPostTagModalView(widget._committee),
-          ),
+        return DraggableScrollableSheet(
+          initialChildSize: 0.85,
+          minChildSize: 0.3,
+          maxChildSize: 0.95,
+          expand: true,
+          // ✅ 반드시 true
+          builder: (context, scrollController) {
+            return Container(
+              decoration: const BoxDecoration(
+                color: ColorPalette.whitePrimary,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+              ),
+              child: CommitteeBillPostTagModalView(
+                committee: widget._committee,
+              ),
+            );
+          },
         );
       },
     );
   }
 }
 
-class _SliverCustomHeaderDelegate extends SliverPersistentHeaderDelegate {
+  class _SliverCustomHeaderDelegate extends SliverPersistentHeaderDelegate {
   final double minHeight;
   final double maxHeight;
   final Widget child;

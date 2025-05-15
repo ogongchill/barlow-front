@@ -9,6 +9,7 @@ import 'package:front/features/home/presentation/view/committee_home_view.dart';
 import 'package:front/features/notification/presentation/view/notification_center_view.dart';
 import 'package:front/features/pre_announce/presentation/view/preannounce_bill_detail_view.dart';
 import 'package:front/features/pre_announce/presentation/view/preannounce_view.dart';
+import 'package:front/features/settings/presentation/view/notification_setting_view.dart';
 import 'package:front/features/settings/presentation/view/setting_view.dart';
 import 'package:front/features/shared/domain/committee.dart';
 import 'package:front/features/shared/view/donation/donation_view.dart';
@@ -90,7 +91,13 @@ final GoRoute _preAnnounceRouter = GoRoute(
 
 final GoRoute _settingRouter = GoRoute(
   path: '/settings',
-  builder: (context, state) => const SettingView()
+  builder: (context, state) => const SettingView(),
+  routes: [
+    GoRoute(
+      path: '/notifications',
+      builder: (context, state) => const NotificationSettingView()
+    )
+  ]
 );
 
 final GoRoute _notificationRouter = GoRoute(

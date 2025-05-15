@@ -76,13 +76,20 @@ class PreAnnounceBillDetailView extends ConsumerWidget {
                       elevation: 0
                     ),
                     onPressed: () => _openExternalBrowser(billDetail.preAnnouncementSection.linkUrl!),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      spacing: 10,
-                      children: [
-                        Text("국회에 의견 등록하러 가기", style: _externalLinkTextStyle,),
-                        Icon(Icons.link_rounded, color: ColorPalette.greyDark,)
-                      ],
+                    child: const Text.rich(
+                      TextSpan(
+                        children: [
+                          TextSpan(
+                            text: '국회에 의견 등록하러 가기 ',
+                            style: _externalLinkTextStyle,
+                          ),
+                          WidgetSpan(
+                            alignment: PlaceholderAlignment.middle,
+                            child: Icon(Icons.link_rounded, size: 16, color: ColorPalette.greyDark),
+                          ),
+                        ],
+                      ),
+                      textAlign: TextAlign.center,
                     )
                   ),
                 if(billDetail.proposerSection != null)

@@ -21,4 +21,10 @@ class UserInfoHiveRepository implements UserInfoRepository {
   Future<void> setUserInfo(UserInfo userInfo) async {
     await _box.put(_key, UserInfoHiveEntity(userName: userInfo.userName, userId: userInfo.userId, role: userInfo.role.name));
   }
+
+  @override
+  Future<void> deleteUserInfo() async{
+    print("deleteUserINfo");
+    await _box.clear();
+  }
 }

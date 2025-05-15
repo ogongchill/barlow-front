@@ -12,7 +12,7 @@ class WidgetImageSaver {
 
   static Future<void> captureAndShareScreenshot() async {
     try {
-      final image = await _screenshotController.capture();
+      final image = await _screenshotController.capture(pixelRatio: 3.0);
       if (image == null) return;
 
       // 임시 저장 디렉토리 경로
