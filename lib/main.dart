@@ -72,9 +72,13 @@ class MyApp extends ConsumerWidget {
       routerConfig: applicationRouter,
       builder: (context, child) {
         final mediaQuery = MediaQuery.of(context);
+        final clampedScale = mediaQuery.textScaler.clamp(
+          minScaleFactor: 1.0,
+          maxScaleFactor: 1.2,
+        );
         return MediaQuery(
           data: mediaQuery.copyWith(
-              textScaler: const TextScaler.linear(1.0), // os 설정에서 글자 크기 무시
+              textScaler: clampedScale, // os 설정에서 글자 크기 무시
               boldText: false // os 설정에서 글자 굵기 무시
             ),
           child: child!,

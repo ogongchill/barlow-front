@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:front/core/theme/color_palette.dart';
@@ -37,7 +36,18 @@ class NotificationWidgetState extends ConsumerState {
   @override
   Widget build(BuildContext context) {
     final notificationState = ref.watch(notificationToggleProvider);
-
+    if (!notificationState.isInitialized) {
+      return SizedBox(
+        width: double.infinity,
+        height: MediaQuery.of(context).size.height,
+        child: Container(
+          color: ColorPalette.greyLight,
+          child: const Center(
+            child: CircularProgressIndicator(color: ColorPalette.bluePrimary),
+          ),
+        ),
+      );
+    }
     final entries = notificationState.notifications.entries.toList();
 
     return Column(
