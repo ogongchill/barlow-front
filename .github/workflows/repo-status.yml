@@ -1,3 +1,155 @@
+#name: GitHub 상태 요약 및 변경 알림
+#
+#on:
+#  schedule:
+#    - cron: '0 0 * * *'  # 매일 오전 9시 (KST)
+#  issues:
+#    types: [opened, closed, edited]
+#  pull_request:
+#    types: [opened, closed, reopened]
+#  milestone:
+#    types: [created, closed, edited]
+#  push:
+#  workflow_dispatch:
+#
+#jobs:
+#  report-status:
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - name: 이벤트 추출
+#        run: |
+#          echo "TITLE=${{ github.event.issue.title || github.event.pull_request.title || '스케줄 실행' }}" >> $GITHUB_ENV
+#          echo "URL=${{ github.event.issue.html_url || github.event.pull_request.html_url || github.event.compare || '' }}" >> $GITHUB_ENV
+#          echo "USER=${{ github.actor }}" >> $GITHUB_ENV
+#
+#      - name: GraphQL 조회
+#        run: |
+#          curl -s -H "Authorization: bearer ${{ secrets.GITHUB_TOKEN }}" -X POST -d '{
+#            "query": "query { repository(owner: \"ogongchill\", name: \"barlow-front\") { openIssues: issues(states: OPEN) { totalCount } openPRs: pullRequests(states: OPEN) { totalCount } milestones(first: 10, states: [OPEN]) { nodes { title dueOn issues { totalCount } closedIssues: issues(states: CLOSED) { totalCount } } } } }"
+#          }' https://api.github.com/graphql > result.json
+#
+#      - name: Debug GraphQL 응답
+#        run: cat result.json
+#
+#      - name: Slack 메시지 전송
+#        env:
+#          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+#        run: |
+#          TIME=$(date '+%Y-%m-%d %H:%M')
+#          TITLE="$TITLE"
+#          URL="$URL"
+#          USER="$USER"
+#
+#          OPEN_ISSUES=$(jq '.data.repository.openIssues.totalCount' result.json)
+#          OPEN_PRS=$(jq '.data.repository.openPRs.totalCount' result.json)
+#
+#          MILESTONES=$(jq -c '.data.repository.milestones.nodes[]' result.json)
+#
+#          FIELDS=()
+#          while read -r item; do
+#            TITLE_FIELD=$(echo "$item" | jq -r '.title')
+#            DUE=$(echo "$item" | jq -r '.dueOn // "없음"')
+#            TOTAL=$(echo "$item" | jq '.issues.totalCount // 0')
+#            CLOSED=$(echo "$item" | jq '.closedIssues.totalCount // 0')
+#            REMAIN=$((TOTAL - CLOSED))
+#            PERCENT=$(awk -v total="$TOTAL" -v closed="$CLOSED" 'BEGIN { if (total == 0) print 0; else print int((closed / total) * 100) }')
+#
+#            FIELD=$(jq -n --arg t "📌 *$TITLE_FIELD*" \
+#                           --arg p "*완료율:* ${PERCENT}%" \
+#                           --arg r "*남은 이슈:* ${REMAIN}" \
+#                           --arg d "*마감일:* ${DUE}" \
+#            '{
+#              type: "section",
+#              fields: [
+#                { type: "mrkdwn", text: $t },
+#                { type: "mrkdwn", text: "\($p)\n\($r)\n\($d)" }
+#              ]
+#            }')
+#            FIELDS+=("$FIELD")
+#          done <<< "$MILESTONES"
+#
+#          FIELDS_JSON=$(printf "%s\n" "${FIELDS[@]}" | jq -s '.')
+#
+#          PAYLOAD=$(jq -n --arg time "$TIME" \
+#                 --arg trigger "${{ github.event_name }}" \
+#                 --arg user "$USER" \
+#                 --arg url "$URL" \
+#                 --arg title "$TITLE" \
+#                 --arg open_issues "$OPEN_ISSUES" \
+#                 --arg open_prs "$OPEN_PRS" \
+#                 --argjson fields "$FIELDS_JSON" '
+#          {
+#            blocks: (
+#              [
+#                { type: "header", text: { type: "plain_text", text: "📊 GitHub 저장소 상태 보고" } },
+#                { type: "section", text: { type: "mrkdwn", text: "📅 *시간:* \($time)\n🔧 *트리거:* \($trigger) by `\($user)`" } },
+#                { type: "section", text: { type: "mrkdwn", text: "*📌 변경 내용:* <\($url)|\($title)>" } },
+#                { type: "divider" },
+#                { type: "section", text: { type: "mrkdwn", text: "🐛 *Open Issues:* \($open_issues)\n🔧 *Open PRs:* \($open_prs)" } },
+#                { type: "divider" }
+#              ] + $fields
+#                      )
+#          }')
+#
+#
+#
+#          echo "$PAYLOAD" | jq . # 디버깅용 출력
+#
+#          curl -X POST -H "Content-Type: application/json" -d "$PAYLOAD" "$SLACK_WEBHOOK_URL"
+##      - name: 응답 파싱 및 마일스톤 테이블 생성
+##        run: |
+##          OPEN_ISSUES=$(jq '.data.repository.openIssues.totalCount' result.json)
+##          OPEN_PRS=$(jq '.data.repository.openPRs.totalCount' result.json)
+##          TIME=$(date '+%Y-%m-%d %H:%M')
+##
+##          MILESTONES=$(jq -c '.data.repository.milestones.nodes[]' result.json)
+##
+##          TABLE="이름               완료율   남은이슈  마감일\n---------------------------------------------"
+##          while read -r item; do
+##            TITLE=$(echo "$item" | jq -r '.title')
+##            DUE=$(echo "$item" | jq -r '.dueOn // "없음"')
+##            TOTAL=$(echo "$item" | jq '.issues.totalCount // 0')
+##            CLOSED=$(echo "$item" | jq '.closedIssues.totalCount // 0')
+##            REMAIN=$((TOTAL - CLOSED))
+##            PERCENT=$(awk -v total="$TOTAL" -v closed="$CLOSED" 'BEGIN { if (total == 0) print 0; else print int((closed / total) * 100) }')
+##            TABLE+="\n$(printf \"%-18s %3s%%       %2s       %s\" \"$TITLE\" \"$PERCENT\" \"$REMAIN\" \"$DUE\")"
+##          done <<< "$MILESTONES"
+##
+##
+##          echo "$TABLE" > milestone_table.txt
+##          echo "OPEN_ISSUES=$OPEN_ISSUES" >> $GITHUB_ENV
+##          echo "OPEN_PRS=$OPEN_PRS" >> $GITHUB_ENV
+##          echo "TIME=$TIME" >> $GITHUB_ENV
+##
+##      - name: Slack 메시지 전송
+##        env:
+##          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+##        run: |
+##          MSG=$(cat milestone_table.txt)
+##
+##          PAYLOAD=$(jq -n --arg time "$TIME" \
+##                           --arg trigger "${{ github.event_name }}" \
+##                           --arg user "$USER" \
+##                           --arg url "$URL" \
+##                           --arg title "$TITLE" \
+##                           --arg open_issues "$OPEN_ISSUES" \
+##                           --arg open_prs "$OPEN_PRS" \
+##                           --arg milestones "$MSG" \
+##          '{
+##            blocks: [
+##              { type: "header", text: { type: "plain_text", text: "📊 GitHub 저장소 상태 보고" } },
+##              { type: "section", text: { type: "mrkdwn", text: "📅 *시간:* \($time)\n🔧 *트리거:* \($trigger) by `\($user)`" } },
+##              { type: "section", text: { type: "mrkdwn", text: "*📌 변경 내용:* <\($url)|\($title)>" } },
+##              { type: "divider" },
+##              { type: "section", text: { type: "mrkdwn", text: "🐛 *Open Issues:* \($open_issues)\n🔧 *Open PRs:* \($open_prs)" } },
+##              { type: "divider" },
+##              { type: "section", text: { type: "plain_text", text: "📌 마일스톤 현황", emoji: true } },
+##              { type: "section", text: { type: "mrkdwn", text: "```\n\($milestones)\n```" } }
+##            ]
+##          }')
+##
+##          curl -X POST -H "Content-Type: application/json" -d "$PAYLOAD" "$SLACK_WEBHOOK_URL"
 name: GitHub 상태 요약 및 변경 알림
 
 on:
@@ -17,35 +169,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 이벤트 추출
-        run: |
-          echo "TITLE=${{ github.event.issue.title || github.event.pull_request.title || '스케줄 실행' }}" >> $GITHUB_ENV
-          echo "URL=${{ github.event.issue.html_url || github.event.pull_request.html_url || github.event.compare || '' }}" >> $GITHUB_ENV
-          echo "USER=${{ github.actor }}" >> $GITHUB_ENV
-
       - name: GraphQL 조회
         run: |
           curl -s -H "Authorization: bearer ${{ secrets.GITHUB_TOKEN }}" -X POST -d '{
-            "query": "query { repository(owner: \"ogongchill\", name: \"barlow-front\") { openIssues: issues(states: OPEN) { totalCount } openPRs: pullRequests(states: OPEN) { totalCount } milestones(first: 10, states: [OPEN]) { nodes { title dueOn issues { totalCount } closedIssues: issues(states: CLOSED) { totalCount } } } } }"
+            "query": "query { repository(owner: \"ogongchill\", name: \"barlow-front\") { openIssues: issues(first: 10, states: OPEN, orderBy: {field: CREATED_AT, direction: DESC}) { nodes { title url } totalCount } openPRs: pullRequests(first: 10, states: OPEN, orderBy: {field: CREATED_AT, direction: DESC}) { nodes { title url } totalCount } milestones(first: 10) { nodes { title dueOn issues { totalCount } closedIssues: issues(states: CLOSED) { totalCount } } } } }"
           }' https://api.github.com/graphql > result.json
-
-      - name: Debug GraphQL 응답
-        run: cat result.json
 
       - name: Slack 메시지 전송
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: |
           TIME=$(date '+%Y-%m-%d %H:%M')
-          TITLE="$TITLE"
-          URL="$URL"
-          USER="$USER"
-          
           OPEN_ISSUES=$(jq '.data.repository.openIssues.totalCount' result.json)
           OPEN_PRS=$(jq '.data.repository.openPRs.totalCount' result.json)
-          
+
+          ### 마일스톤 정보 구성
           MILESTONES=$(jq -c '.data.repository.milestones.nodes[]' result.json)
-          
           FIELDS=()
           while read -r item; do
             TITLE_FIELD=$(echo "$item" | jq -r '.title')
@@ -54,7 +193,7 @@ jobs:
             CLOSED=$(echo "$item" | jq '.closedIssues.totalCount // 0')
             REMAIN=$((TOTAL - CLOSED))
             PERCENT=$(awk -v total="$TOTAL" -v closed="$CLOSED" 'BEGIN { if (total == 0) print 0; else print int((closed / total) * 100) }')
-          
+
             FIELD=$(jq -n --arg t "📌 *$TITLE_FIELD*" \
                            --arg p "*완료율:* ${PERCENT}%" \
                            --arg r "*남은 이슈:* ${REMAIN}" \
@@ -68,85 +207,36 @@ jobs:
             }')
             FIELDS+=("$FIELD")
           done <<< "$MILESTONES"
-          
           FIELDS_JSON=$(printf "%s\n" "${FIELDS[@]}" | jq -s '.')
-          
-          PAYLOAD=$(jq -n --arg time "$TIME" \
-                 --arg trigger "${{ github.event_name }}" \
-                 --arg user "$USER" \
-                 --arg url "$URL" \
-                 --arg title "$TITLE" \
-                 --arg open_issues "$OPEN_ISSUES" \
-                 --arg open_prs "$OPEN_PRS" \
-                 --argjson fields "$FIELDS_JSON" '
+
+          ### 열려 있는 PR 목록
+          PR_LIST=$(jq -r '.data.repository.openPRs.nodes[] | "- <\(.url)|\(.title)>"' result.json | paste -sd '\n' -)
+          ISSUE_LIST=$(jq -r '.data.repository.openIssues.nodes[] | "- <\(.url)|\(.title)>"' result.json | paste -sd '\n' -)
+
+          PAYLOAD=$(jq -n \
+            --arg time "$TIME" \
+            --arg open_issues "$OPEN_ISSUES" \
+            --arg open_prs "$OPEN_PRS" \
+            --arg pr_list "$PR_LIST" \
+            --arg issue_list "$ISSUE_LIST" \
+            --argjson fields "$FIELDS_JSON" '
           {
             blocks: (
               [
                 { type: "header", text: { type: "plain_text", text: "📊 GitHub 저장소 상태 보고" } },
-                { type: "section", text: { type: "mrkdwn", text: "📅 *시간:* \($time)\n🔧 *트리거:* \($trigger) by `\($user)`" } },
-                { type: "section", text: { type: "mrkdwn", text: "*📌 변경 내용:* <\($url)|\($title)>" } },
-                { type: "divider" },
+                { type: "section", text: { type: "mrkdwn", text: "📅 *시간:* \($time)" } },
                 { type: "section", text: { type: "mrkdwn", text: "🐛 *Open Issues:* \($open_issues)\n🔧 *Open PRs:* \($open_prs)" } },
+                { type: "divider" },
+                { type: "section", text: { type: "plain_text", text: "✅ 열린 PR 목록", emoji: true } },
+                { type: "section", text: { type: "mrkdwn", text: "\($pr_list)" } },
+                { type: "divider" },
+                { type: "section", text: { type: "plain_text", text: "🐞 열린 Issue 목록", emoji: true } },
+                { type: "section", text: { type: "mrkdwn", text: "\($issue_list)" } },
                 { type: "divider" }
               ] + $fields
-                      )
+            )
           }')
 
+          echo "$PAYLOAD" | jq . # 디버깅 출력
 
-          
-          echo "$PAYLOAD" | jq . # 디버깅용 출력
-          
           curl -X POST -H "Content-Type: application/json" -d "$PAYLOAD" "$SLACK_WEBHOOK_URL"
-#      - name: 응답 파싱 및 마일스톤 테이블 생성
-#        run: |
-#          OPEN_ISSUES=$(jq '.data.repository.openIssues.totalCount' result.json)
-#          OPEN_PRS=$(jq '.data.repository.openPRs.totalCount' result.json)
-#          TIME=$(date '+%Y-%m-%d %H:%M')
-#
-#          MILESTONES=$(jq -c '.data.repository.milestones.nodes[]' result.json)
-#
-#          TABLE="이름               완료율   남은이슈  마감일\n---------------------------------------------"
-#          while read -r item; do
-#            TITLE=$(echo "$item" | jq -r '.title')
-#            DUE=$(echo "$item" | jq -r '.dueOn // "없음"')
-#            TOTAL=$(echo "$item" | jq '.issues.totalCount // 0')
-#            CLOSED=$(echo "$item" | jq '.closedIssues.totalCount // 0')
-#            REMAIN=$((TOTAL - CLOSED))
-#            PERCENT=$(awk -v total="$TOTAL" -v closed="$CLOSED" 'BEGIN { if (total == 0) print 0; else print int((closed / total) * 100) }')
-#            TABLE+="\n$(printf \"%-18s %3s%%       %2s       %s\" \"$TITLE\" \"$PERCENT\" \"$REMAIN\" \"$DUE\")"
-#          done <<< "$MILESTONES"
-#
-#
-#          echo "$TABLE" > milestone_table.txt
-#          echo "OPEN_ISSUES=$OPEN_ISSUES" >> $GITHUB_ENV
-#          echo "OPEN_PRS=$OPEN_PRS" >> $GITHUB_ENV
-#          echo "TIME=$TIME" >> $GITHUB_ENV
-#
-#      - name: Slack 메시지 전송
-#        env:
-#          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-#        run: |
-#          MSG=$(cat milestone_table.txt)
-#
-#          PAYLOAD=$(jq -n --arg time "$TIME" \
-#                           --arg trigger "${{ github.event_name }}" \
-#                           --arg user "$USER" \
-#                           --arg url "$URL" \
-#                           --arg title "$TITLE" \
-#                           --arg open_issues "$OPEN_ISSUES" \
-#                           --arg open_prs "$OPEN_PRS" \
-#                           --arg milestones "$MSG" \
-#          '{
-#            blocks: [
-#              { type: "header", text: { type: "plain_text", text: "📊 GitHub 저장소 상태 보고" } },
-#              { type: "section", text: { type: "mrkdwn", text: "📅 *시간:* \($time)\n🔧 *트리거:* \($trigger) by `\($user)`" } },
-#              { type: "section", text: { type: "mrkdwn", text: "*📌 변경 내용:* <\($url)|\($title)>" } },
-#              { type: "divider" },
-#              { type: "section", text: { type: "mrkdwn", text: "🐛 *Open Issues:* \($open_issues)\n🔧 *Open PRs:* \($open_prs)" } },
-#              { type: "divider" },
-#              { type: "section", text: { type: "plain_text", text: "📌 마일스톤 현황", emoji: true } },
-#              { type: "section", text: { type: "mrkdwn", text: "```\n\($milestones)\n```" } }
-#            ]
-#          }')
-#
-#          curl -X POST -H "Content-Type: application/json" -d "$PAYLOAD" "$SLACK_WEBHOOK_URL"
