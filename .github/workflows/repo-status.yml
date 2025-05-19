@@ -10,7 +10,6 @@ on:
   milestone:
     types: [created, closed, edited]
   push:
-    branches: [main]
   workflow_dispatch:
 
 jobs:
