@@ -1,5 +1,4 @@
 import 'dart:collection';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:front/dependency/service_locator.dart';
@@ -7,25 +6,29 @@ import 'package:front/features/settings/domain/entities/notification.dart';
 import 'package:front/features/settings/domain/usecases/notification_usecase.dart';
 
 class NotificationToggleState {
-
   final UnmodifiableMapView<NotificationType, bool> notifications;
   final bool isToggleEnabled;
+  final bool isInitialized;
 
   const NotificationToggleState({
     required this.notifications,
     required this.isToggleEnabled,
+    this.isInitialized = false,
   });
 
   NotificationToggleState copyWith({
     Map<NotificationType, bool>? notifications,
     bool? isToggleEnabled,
+    bool? isInitialized,
   }) {
     return NotificationToggleState(
       notifications: UnmodifiableMapView(notifications ?? this.notifications),
       isToggleEnabled: isToggleEnabled ?? this.isToggleEnabled,
+      isInitialized: isInitialized ?? this.isInitialized,
     );
   }
 }
+
 
 class NotificationToggleStateNotifier extends StateNotifier<NotificationToggleState> {
 
@@ -35,6 +38,7 @@ class NotificationToggleStateNotifier extends StateNotifier<NotificationToggleSt
       : super(NotificationToggleState(
     notifications: UnmodifiableMapView({}),
     isToggleEnabled: true,
+    isInitialized: false
   ));
 
   Future<void> initialize() async {
@@ -44,6 +48,7 @@ class NotificationToggleStateNotifier extends StateNotifier<NotificationToggleSt
     state = state.copyWith(
       notifications: result,
       isToggleEnabled: true,
+      isInitialized: true
     );
   }
 
@@ -78,6 +83,6 @@ class NotificationToggleStateNotifier extends StateNotifier<NotificationToggleSt
   }
 }
 
-final notificationToggleProvider = StateNotifierProvider.autoDispose<NotificationToggleStateNotifier, NotificationToggleState>(
+final notificationToggleProvider = StateNotifierProvider<NotificationToggleStateNotifier, NotificationToggleState>(
       (ref) => NotificationToggleStateNotifier(),
 );

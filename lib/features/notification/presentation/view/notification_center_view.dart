@@ -12,13 +12,6 @@ import 'package:intl/intl.dart';
 
 class NotificationCenterView extends ConsumerWidget {
 
-  static const TextStyle _notificationNewStyle = TextStyle(
-    fontFamily: 'gmarketSans',
-    fontWeight: FontWeight.w800,
-    fontSize: 12,
-    color: ColorPalette.orangeLight
-  );
-
   const NotificationCenterView({super.key});
 
   @override
@@ -79,7 +72,7 @@ class NotificationCenterView extends ConsumerWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     SizedBox(
-                      width: 250,
+                      width: MediaQuery.of(context).size.width * 0.7,
                       child: Column(
                         spacing: 10,
                         mainAxisSize: MainAxisSize.max,

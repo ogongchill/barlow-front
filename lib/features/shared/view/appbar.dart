@@ -46,14 +46,27 @@ class TextAppBar extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 
-
   Widget _titleSection() {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(_title, style: TextStylePreset.appBarTitle),
-        if(_subtitle != null)
-         Text(_subtitle, style: TextStylePreset.appBarSubtitle),
+        FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text(
+            _title,
+            style: TextStylePreset.appBarTitle,
+            textAlign: TextAlign.center,
+          ),
+        ),
+        if (_subtitle != null)
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              _subtitle,
+              style: TextStylePreset.appBarSubtitle,
+              textAlign: TextAlign.center,
+            ),
+          ),
       ],
     );
   }

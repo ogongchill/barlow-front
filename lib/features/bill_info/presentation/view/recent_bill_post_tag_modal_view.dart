@@ -42,23 +42,30 @@ class RecentBillPostTagModalView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Column(
       children: [
+        // 🔒 상단 핸들 (고정)
         Container(
-          margin: const EdgeInsets.only(top: 10, bottom: 30),
-          decoration: const BoxDecoration(
-              color: ColorPalette.greyDark,
-              borderRadius: BorderRadius.all(Radius.circular(10))
-          ),
-          height: 3,
+          margin: const EdgeInsets.only(top: 10, bottom: 16),
+          height: 4,
           width: 50,
+          decoration: BoxDecoration(
+            color: Colors.grey[400],
+            borderRadius: BorderRadius.circular(2),
+          ),
         ),
-        _buildPartyTags(ref),
-        _buildProposerTypeTag(ref),
-        _buildProgressStatusTag(ref),
-        const Expanded(child: SizedBox()),
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: _tagButtons(context, ref),
-        )
+
+        // 🔄 스크롤 가능한 콘텐츠 영역
+        Expanded(
+          child: ListView(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            children: [
+              _buildPartyTags(ref),
+              _buildProposerTypeTag(ref),
+              _buildProgressStatusTag(ref),
+            ],
+          ),
+        ),
+        // 🔒 하단 버튼 (고정)
+        _tagButtons(context, ref),
       ],
     );
   }
@@ -161,38 +168,49 @@ class RecentBillPostTagModalView extends ConsumerWidget {
             child: Text("정당별", style: TextStylePreset.sectionTitle),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0),
+            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 5.0),
             child: GridView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(), // ✅ 스크롤 방지 (부모 스크롤과 충돌 방지)
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 4, //  가로 4개씩 배치
-                crossAxisSpacing: 8.0, //  가로 간격
-                mainAxisSpacing: 8.0, //  세로 간격
+                crossAxisSpacing: 10.0, //  가로 간격
+                mainAxisSpacing: 1.0, //  세로 간격
                 childAspectRatio: 1.0, // 사각형 형태 유지
               ),
               itemCount: availableTags.length,
               itemBuilder: (context, index) {
                 final tag = availableTags[index];
                 final isSelected = billPostTagState.contains(tag);
-
                 return ChoiceChip(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  padding: const EdgeInsets.all(0),
                   backgroundColor: ColorPalette.whitePrimary,
-                  selectedColor: ColorPalette.greyLight,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      side: const BorderSide(
-                          color: ColorPalette.whitePrimary
-                      )//
+                  selectedColor: ColorPalette.whitePrimary,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.zero,
+                    side: BorderSide(color: Colors.transparent, width: 0),
                   ),
-                  label: AnimatedContainer(
-                    duration: const Duration(milliseconds: 200), //  부드러운 애니메이션
-                    width: isSelected ? 50 : 40, // 선택 시 커지는 효과
-                    height: isSelected ? 50 : 40,
-                    child: FittedBox(
-                      fit: BoxFit.contain, // 또는 BoxFit.scaleDown
-                      child: tag.value.svgPicture,
+                  label: SizedBox(
+                    width: 50,
+                    height: 50,
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        AnimatedScale(
+                          scale: isSelected ? 1.2 : 1.0,
+                          duration: const Duration(milliseconds: 200),
+                          child: tag.value.svgPicture,
+                        ),
+                        if (!isSelected)
+                          Container(
+                            width: double.infinity,
+                            height: double.infinity,
+                            decoration:
+                            const BoxDecoration(
+                              color: Colors.white30,
+                            ),
+                          ),
+                      ],
                     ),
                   ),
                   selected: isSelected,
@@ -208,7 +226,8 @@ class RecentBillPostTagModalView extends ConsumerWidget {
 
   Widget _tagButtons(BuildContext context, WidgetRef ref) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 30),
+      color: ColorPalette.greyLight,
+      padding: const EdgeInsets.symmetric(vertical: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         spacing: 10,
@@ -240,7 +259,7 @@ class RecentBillPostTagModalView extends ConsumerWidget {
 
   Widget _submitButton(WidgetRef ref, BuildContext context) {
     final List<BillPostTag> selectedTags = ref.read(recentBillTagProvider).toList();
-    final billPostNotifier = ref.read(recentBillProvider.notifier);
+      final billPostNotifier = ref.read(recentBillProvider.notifier);
     return ElevatedButton(
         style: ElevatedButton.styleFrom(
             elevation: 0,
@@ -256,9 +275,65 @@ class RecentBillPostTagModalView extends ConsumerWidget {
           Navigator.pop(context);
         },
         child: SizedBox(
-          width: 150,
-          child: Text("${selectedTags.length}개 태그 적용하기", style: _submitButtonStyle, textAlign: TextAlign.center,),
+          width: MediaQuery.of(context).size.width * 0.45,
+          child: Text("${selectedTags.length}개 태그 적용", style: _submitButtonStyle, textAlign: TextAlign.center),
         )
     );
   }
+
+  // Widget _tagButtons(BuildContext context, WidgetRef ref) {
+  //   return Container(
+  //     margin: const EdgeInsets.only(bottom: 30),
+  //     child: Row(
+  //       mainAxisAlignment: MainAxisAlignment.center,
+  //       spacing: 10,
+  //       children: [
+  //         _resetButton(ref),
+  //         _submitButton(ref, context)
+  //       ],
+  //     ),
+  //   );
+  // }
+  //
+  // Widget _resetButton(WidgetRef ref) {
+  //   final billPostNotifier = ref.read(recentBillTagProvider.notifier);
+  //   return ElevatedButton(
+  //       style: ElevatedButton.styleFrom(
+  //           elevation: 0,
+  //           shadowColor: Colors.transparent,
+  //           backgroundColor: ColorPalette.innerContent,
+  //           overlayColor: ColorPalette.greyLight,
+  //           shape: RoundedRectangleBorder(
+  //               side: const BorderSide(color: ColorPalette.greyLight, width: 1),
+  //               borderRadius: BorderRadius.circular(10)
+  //           )
+  //       ),
+  //       onPressed: () => billPostNotifier.resetTag(),
+  //       child: const Text("초기화", style: _resetButtonStyle)
+  //   );
+  // }
+  //
+  // Widget _submitButton(WidgetRef ref, BuildContext context) {
+  //   final List<BillPostTag> selectedTags = ref.read(recentBillTagProvider).toList();
+  //   final billPostNotifier = ref.read(recentBillProvider.notifier);
+  //   return ElevatedButton(
+  //       style: ElevatedButton.styleFrom(
+  //           elevation: 0,
+  //           shadowColor: Colors.transparent,
+  //           backgroundColor: ColorPalette.bluePrimary,
+  //           overlayColor: ColorPalette.greyLight,
+  //           shape: RoundedRectangleBorder(
+  //               borderRadius: BorderRadius.circular(10)
+  //           )
+  //       ),
+  //       onPressed: () {
+  //         billPostNotifier.changeTags(selectedTags);
+  //         Navigator.pop(context);
+  //       },
+  //       child: SizedBox(
+  //         width: 150,
+  //         child: Text("${selectedTags.length}개 태그 적용하기", style: _submitButtonStyle, textAlign: TextAlign.center,),
+  //       )
+  //   );
+  // }
 }

@@ -164,7 +164,6 @@ class SettingView extends ConsumerWidget {
             color: ColorPalette.innerContent
           ),
           child: Row(
-            spacing: 30,
             children: [
               Container(
                 height: 60,
@@ -179,15 +178,18 @@ class SettingView extends ConsumerWidget {
                   size: 40,
                 )
               ),
+              const SizedBox(width: 30,),
               userInfo.when(
                   data: (userInfo) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(userInfo.role.name, style: _roleStyle,),
-                        Text(userInfo.userName, style: _nicknameStyle,),
-                        Text(userInfo.userId, style: _idStyle,)
-                      ],
+                    return Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(userInfo.role.name, style: _roleStyle,),
+                            Text(userInfo.userName, style: _nicknameStyle,),
+                            Text(userInfo.userId, style: _idStyle,)
+                          ],
+                        )
                     );
                   }, 
                   error: (error, stack) => const SomethingWentWrongWidget(), 

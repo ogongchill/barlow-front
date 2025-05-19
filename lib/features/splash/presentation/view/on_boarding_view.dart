@@ -255,7 +255,6 @@ class _OnboardingScreenState extends ConsumerState<OnboardingView> {
             );
           }
 
-
           return Dialog(
           insetPadding: const EdgeInsets.all(10),
             shape: RoundedRectangleBorder(
@@ -278,58 +277,174 @@ class _OnboardingScreenState extends ConsumerState<OnboardingView> {
                       ]
                   ),
                 ),
-                CheckboxListTile(
-                  activeColor: Colors.green,
-                  title: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text("서비스 이용약관 동의", style: _agreementStyle),
-                      TextButton(
-                        onPressed: () => showWebDialog(context, "서비스 약관", 'https://ogongchill.github.io/barlow/terms-of-service.html'),
-                        child: const Text("보기", style: TextStyle(color: Colors.grey),),
+                Column(
+                  children: [
+                    // ✅ 서비스 이용약관 동의
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Checkbox(
+                            value: termsChecked,
+                            activeColor: Colors.green,
+                            onChanged: (value) {
+                              setState(() {
+                                termsChecked = value ?? false;
+                                updateAllChecked();
+                              });
+                            },
+                          ),
+                          Expanded(
+                            child: Row(
+                              children: [
+                                const Expanded(
+                                  child: Text(
+                                    "서비스 이용약관 동의",
+                                    style: _agreementStyle,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 2,
+                                  ),
+                                ),
+                                TextButton(
+                                  onPressed: () => showWebDialog(
+                                    context,
+                                    "서비스 약관",
+                                    'https://ogongchill.github.io/barlow/terms-of-service.html',
+                                  ),
+                                  child: const Text("보기", style: TextStyle(color: Colors.grey)),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                  value: termsChecked,
-                  onChanged: (value) {
-                    setState(() {
-                      termsChecked = value ?? false;
-                      updateAllChecked();
-                    });
-                  },
-                ),
-                CheckboxListTile(
-                  activeColor: Colors.green,
-                  title: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text("개인정보 처리방침 동의", style: _agreementStyle),
-                      TextButton(
-                        onPressed: () => showWebDialog(context, "개인정보 처리방침", 'https://ogongchill.github.io/barlow/privacy-policy.html'),
-                        child: const Text("보기", style: TextStyle(color: Colors.grey)),
+                    ),
+
+                    // ✅ 개인정보 처리방침 동의
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Checkbox(
+                            value: privacyChecked,
+                            activeColor: Colors.green,
+                            onChanged: (value) {
+                              setState(() {
+                                privacyChecked = value ?? false;
+                                updateAllChecked();
+                              });
+                            },
+                          ),
+                          Expanded(
+                            child: Row(
+                              children: [
+                                const Expanded(
+                                  child: Text(
+                                    "개인정보 처리방침 동의",
+                                    style: _agreementStyle,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 2,
+                                  ),
+                                ),
+                                TextButton(
+                                  onPressed: () => showWebDialog(
+                                    context,
+                                    "개인정보 처리방침",
+                                    'https://ogongchill.github.io/barlow/privacy-policy.html',
+                                  ),
+                                  child: const Text("보기", style: TextStyle(color: Colors.grey)),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                  value: privacyChecked,
-                  onChanged: (value) {
-                    setState(() {
-                      privacyChecked = value ?? false;
-                      updateAllChecked();
-                    });
-                  },
+                    ),
+
+                    // ✅ 모두 동의
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Row(
+                        children: [
+                          Checkbox(
+                            value: allChecked,
+                            activeColor: Colors.green,
+                            onChanged: (value) {
+                              setState(() {
+                                allChecked = value ?? false;
+                                termsChecked = value ?? false;
+                                privacyChecked = value ?? false;
+                              });
+                            },
+                          ),
+                          const Expanded(
+                            child: Text(
+                              "모두 동의",
+                              style: _agreementStyle,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-                CheckboxListTile(
-                  activeColor: Colors.green,
-                  title: const Text("모두 동의", style: _agreementStyle),
-                  value: allChecked,
-                  onChanged: (value) {
-                    setState(() {
-                      allChecked = value ?? false;
-                      termsChecked = value ?? false;
-                      privacyChecked = value ?? false;
-                    });
-                  },
-                ),
+
+                // CheckboxListTile(
+                //   activeColor: Colors.green,
+                //   title: Row(
+                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //     children: [
+                //       const Text("서비스 이용약관 동의", style: _agreementStyle),
+                //       TextButton(
+                //         onPressed: () => showWebDialog(context, "서비스 약관", 'https://ogongchill.github.io/barlow/terms-of-service.html'),
+                //         child: const Text("보기", style: TextStyle(color: Colors.grey),),
+                //       ),
+                //     ],
+                //   ),
+                //   value: termsChecked,
+                //   onChanged: (value) {
+                //     setState(() {
+                //       termsChecked = value ?? false;
+                //       updateAllChecked();
+                //     });
+                //   },
+                // ),
+                // CheckboxListTile(
+                //   activeColor: Colors.green,
+                //   title: Row(
+                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //     children: [
+                //       const Text("개인정보 처리방침 동의", style: _agreementStyle),
+                //       TextButton(
+                //         onPressed: () => showWebDialog(context, "개인정보 처리방침", 'https://ogongchill.github.io/barlow/privacy-policy.html'),
+                //         child: const Text("보기", style: TextStyle(color: Colors.grey)),
+                //       ),
+                //     ],
+                //   ),
+                //   value: privacyChecked,
+                //   onChanged: (value) {
+                //     setState(() {
+                //       privacyChecked = value ?? false;
+                //       updateAllChecked();
+                //     });
+                //   },
+                // ),
+                // CheckboxListTile(
+                //   activeColor: Colors.green,
+                //   title: const Text("모두 동의", style: _agreementStyle),
+                //   value: allChecked,
+                //   onChanged: (value) {
+                //     setState(() {
+                //       allChecked = value ?? false;
+                //       termsChecked = value ?? false;
+                //       privacyChecked = value ?? false;
+                //     });
+                //   },
+                // ),
                 Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: ElevatedButton(
