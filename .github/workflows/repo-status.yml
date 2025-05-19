@@ -1,0 +1,122 @@
+name: GitHub 상태 요약 및 변경 알림
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # 매일 오전 9시 (KST)
+  issues:
+    types: [opened, closed, edited]
+  pull_request:
+    types: [opened, closed, reopened]
+  milestone:
+    types: [created, closed, edited]
+  push:
+  workflow_dispatch:
+
+jobs:
+  report-status:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: GraphQL 조회
+        run: |
+          curl -s -H "Authorization: bearer ${{ secrets.GITHUB_TOKEN }}" -X POST -d '{
+            "query": "query { repository(owner: \"ogongchill\", name: \"barlow-front\") { openIssues: issues(first: 10, states: OPEN, orderBy: {field: CREATED_AT, direction: DESC}) { nodes { title url } totalCount } openPRs: pullRequests(first: 10, states: OPEN, orderBy: {field: CREATED_AT, direction: DESC}) { nodes { title url } totalCount } milestones(first: 10) { nodes { title dueOn url issues { totalCount } closedIssues: issues(states: CLOSED) { totalCount } } } } }"
+          }' https://api.github.com/graphql > result.json
+
+      - name: Slack 메시지 전송
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          TIME=$(date '+%Y-%m-%d %H:%M')
+          OPEN_ISSUES=$(jq '.data.repository.openIssues.totalCount' result.json)
+          OPEN_PRS=$(jq '.data.repository.openPRs.totalCount' result.json)
+          RAW_TRIGGER=${GITHUB_EVENT_NAME:-unknown}
+                    if [ "$RAW_TRIGGER" = "schedule" ]; then
+            TRIGGER="아침 점호"
+          else
+            TRIGGER="$RAW_TRIGGER"
+          fi
+          
+          MILESTONES=$(jq -c '.data.repository.milestones.nodes[]' result.json)
+          FIELDS=()
+          while read -r item; do
+            MILESTONE_URL=$(echo "$item" | jq -r '.url')
+            TITLE=$(echo "$item" | jq -r '.title')
+            TITLE_FIELD="*<${MILESTONE_URL}|${TITLE}>*"
+            DUE_RAW=$(echo "$item" | jq -r '.dueOn // empty')
+            if [ -z "$DUE_RAW" ]; then
+              DUE="없음"
+            else
+              DUE=$(date -d "$DUE_RAW" '+%Y-%m-%d')
+            fi
+            
+            TOTAL=$(echo "$item" | jq '.issues.totalCount // 0')
+            CLOSED=$(echo "$item" | jq '.closedIssues.totalCount // 0')
+          
+            if [ "$TOTAL" -eq "$CLOSED" ] && [ "$TOTAL" -ne 0 ]; then
+              continue  # 완료된 마일스톤은 건너뜀
+            fi
+          
+            REMAIN=$((TOTAL - CLOSED))
+            PERCENT=$(awk -v total="$TOTAL" -v closed="$CLOSED" 'BEGIN { if (total == 0) print 0; else print int((closed / total) * 100) }')
+
+            FIELD=$(jq -n --arg t "$TITLE_FIELD" \
+              --arg p "*완료율:* ${PERCENT}%" \
+              --arg r "*남은 이슈:* ${REMAIN}" \
+              --arg d "*마감일:* ${DUE}" \
+              '{
+              type: "section",
+              text: {
+                type: "mrkdwn",
+                text: "🗿_MILESTONE_ \($t)\n\($p)\n\($r)\n\($d)"
+              }
+            }')
+            FIELDS+=("$FIELD")
+          done <<< "$MILESTONES"
+          
+          # 👉 마일스톤이 모두 완료되어 FIELDS가 비었을 경우 방어 처리
+          if [ ${#FIELDS[@]} -eq 0 ]; then
+            FIELD=$(jq -n '{
+            type: "section",
+            text: { type: "mrkdwn", text: "🗿 *진행 중인 마일스톤 없음*" }
+            }')
+              FIELDS+=("$FIELD")
+          fi
+            
+          FIELDS_JSON=$(printf "%s\n" "${FIELDS[@]}" | jq -s '.')
+
+          ### 열려 있는 PR 목록
+          PR_LIST=$(jq -r '.data.repository.openPRs.nodes[] | "- <\(.url)|\(.title)>"' result.json | paste -sd '\n' -)
+          [ -z "$PR_LIST" ] && PR_LIST="없음"
+          ISSUE_LIST=$(jq -r '.data.repository.openIssues.nodes[] | "- <\(.url)|\(.title)>"' result.json | paste -sd '\n' -)
+          [ -z "$ISSUE_LIST" ] && ISSUE_LIST="없음"
+
+          PAYLOAD=$(jq -n \
+          --arg time "$TIME" \
+          --arg open_issues "$OPEN_ISSUES" \
+          --arg open_prs "$OPEN_PRS" \
+          --arg pr_list "$PR_LIST" \
+          --arg issue_list "$ISSUE_LIST" \
+          --arg trigger "$TRIGGER" \
+          --argjson fields "$FIELDS_JSON" '
+          {
+            blocks: (
+              [
+                { type: "header", text: { type: "plain_text", text: "📊 GitHub 저장소 상태 보고" } },
+                { type: "section", text: { type: "mrkdwn", text: "_triggered by: \($trigger) at \($time) UTC_"  } },
+                { type: "section", text: { type: "mrkdwn", text: "*ISSUES:* \($open_issues)\t*PRs:* \($open_prs)" } },
+                { type: "divider" },
+                { "type": "section", "text": { "type": "mrkdwn", "text": "🤌 *열린 PRs*" } },
+                { type: "section", text: { type: "mrkdwn", text: $pr_list } },
+                { type: "divider" },
+                { type: "section", text: { type: "mrkdwn", text: "🚧 *열린 ISSUES*"} },
+                { type: "section", text: { type: "mrkdwn", text: $issue_list } },
+                { type: "divider" }
+              ] + $fields
+                      )
+          }')
+
+  
+          echo "$PAYLOAD" | jq . # 디버깅 출력
+
+          curl -X POST -H "Content-Type: application/json" -d "$PAYLOAD" "$SLACK_WEBHOOK_URL"
