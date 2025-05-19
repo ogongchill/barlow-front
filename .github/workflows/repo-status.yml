@@ -214,12 +214,12 @@ jobs:
           ISSUE_LIST=$(jq -r '.data.repository.openIssues.nodes[] | "- <\(.url)|\(.title)>"' result.json | paste -sd '\n' -)
 
           PAYLOAD=$(jq -n \
-            --arg time "$TIME" \
-            --arg open_issues "$OPEN_ISSUES" \
-            --arg open_prs "$OPEN_PRS" \
-            --arg pr_list "$PR_LIST" \
-            --arg issue_list "$ISSUE_LIST" \
-            --argjson fields "$FIELDS_JSON" '
+          --arg time "$TIME" \
+          --arg open_issues "$OPEN_ISSUES" \
+          --arg open_prs "$OPEN_PRS" \
+          --arg pr_list "$PR_LIST" \
+          --arg issue_list "$ISSUE_LIST" \
+          --argjson fields "$FIELDS_JSON" '
           {
             blocks: (
               [
@@ -228,15 +228,16 @@ jobs:
                 { type: "section", text: { type: "mrkdwn", text: "🐛 *Open Issues:* \($open_issues)\n🔧 *Open PRs:* \($open_prs)" } },
                 { type: "divider" },
                 { type: "section", text: { type: "plain_text", text: "✅ 열린 PR 목록", emoji: true } },
-                { type: "section", text: { type: "mrkdwn", text: "\($pr_list)" } },
+                { type: "section", text: { type: "mrkdwn", text: $pr_list } },
                 { type: "divider" },
                 { type: "section", text: { type: "plain_text", text: "🐞 열린 Issue 목록", emoji: true } },
-                { type: "section", text: { type: "mrkdwn", text: "\($issue_list)" } },
+                { type: "section", text: { type: "mrkdwn", text: $issue_list } },
                 { type: "divider" }
               ] + $fields
-            )
+                      )
           }')
-
+  
+  
           echo "$PAYLOAD" | jq . # 디버깅 출력
 
           curl -X POST -H "Content-Type: application/json" -d "$PAYLOAD" "$SLACK_WEBHOOK_URL"
