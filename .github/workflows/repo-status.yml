@@ -211,7 +211,9 @@ jobs:
 
           ### 열려 있는 PR 목록
           PR_LIST=$(jq -r '.data.repository.openPRs.nodes[] | "- <\(.url)|\(.title)>"' result.json | paste -sd '\n' -)
+          [ -z "$PR_LIST" ] && PR_LIST="없음"
           ISSUE_LIST=$(jq -r '.data.repository.openIssues.nodes[] | "- <\(.url)|\(.title)>"' result.json | paste -sd '\n' -)
+          [ -z "$ISSUE_LIST" ] && ISSUE_LIST="없음"
 
           PAYLOAD=$(jq -n \
           --arg time "$TIME" \
