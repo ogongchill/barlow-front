@@ -32,7 +32,7 @@ jobs:
       - name: Debug GraphQL 응답
         run: cat result.json
 
-      - name: 응답 파싱 및 Slack 메시지 전송
+      - name: Slack 메시지 전송
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: |
@@ -46,7 +46,7 @@ jobs:
           
           MILESTONES=$(jq -c '.data.repository.milestones.nodes[]' result.json)
           
-          FIELDS=""
+          FIELDS=()
           while read -r item; do
             TITLE_FIELD=$(echo "$item" | jq -r '.title')
             DUE=$(echo "$item" | jq -r '.dueOn // "없음"')
@@ -55,14 +55,22 @@ jobs:
             REMAIN=$((TOTAL - CLOSED))
             PERCENT=$(awk -v total="$TOTAL" -v closed="$CLOSED" 'BEGIN { if (total == 0) print 0; else print int((closed / total) * 100) }')
           
-            FIELDS+=$(jq -n --arg t "📌 *$TITLE_FIELD*" --arg p "*완료율:* ${PERCENT}%" --arg r "*남은 이슈:* ${REMAIN}" --arg d "*마감일:* ${DUE}" \
-            '{ type: "section", fields: [
+            FIELD=$(jq -n --arg t "📌 *$TITLE_FIELD*" \
+                           --arg p "*완료율:* ${PERCENT}%" \
+                           --arg r "*남은 이슈:* ${REMAIN}" \
+                           --arg d "*마감일:* ${DUE}" \
+            '{
+              type: "section",
+              fields: [
                 { type: "mrkdwn", text: $t },
                 { type: "mrkdwn", text: "\($p)\n\($r)\n\($d)" }
-              ] },')
+              ]
+            }')
+            FIELDS+=("$FIELD")
           done <<< "$MILESTONES"
           
-          # 마지막 콤마 제거를 위해 빈 객체 붙임
+          FIELDS_JSON=$(printf "%s\n" "${FIELDS[@]}" | jq -s '.')
+          
           PAYLOAD=$(jq -n --arg time "$TIME" \
                            --arg trigger "${{ github.event_name }}" \
                            --arg user "$USER" \
@@ -70,7 +78,7 @@ jobs:
                            --arg title "$TITLE" \
                            --arg open_issues "$OPEN_ISSUES" \
                            --arg open_prs "$OPEN_PRS" \
-                           --argjson fields "[$FIELDS{}]" '
+                           --argjson fields "$FIELDS_JSON" '
           {
             blocks: [
               { type: "header", text: { type: "plain_text", text: "📊 GitHub 저장소 상태 보고" } },
@@ -82,7 +90,7 @@ jobs:
             ] + $fields
           }')
           
-          echo "$PAYLOAD" | jq . # (디버깅용 출력)
+          echo "$PAYLOAD" | jq . # 디버깅용 출력
           
           curl -X POST -H "Content-Type: application/json" -d "$PAYLOAD" "$SLACK_WEBHOOK_URL"
 #      - name: 응답 파싱 및 마일스톤 테이블 생성
