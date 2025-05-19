@@ -42,6 +42,9 @@ jobs:
             }"
           }' https://api.github.com/graphql > result.json
 
+      - name: Debug GraphQL 응답
+        run: cat result.json
+
       - name: 응답 파싱 및 마일스톤 테이블 생성
         run: |
           OPEN_ISSUES=$(jq '.data.repository.openIssues.totalCount' result.json)
