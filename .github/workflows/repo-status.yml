@@ -63,15 +63,25 @@ jobs:
         run: |
           MSG=$(cat milestone_table.txt)
 
-          curl -X POST -H 'Content-type: application/json' --data "{
-            \"blocks\": [
-              { \"type\": \"header\", \"text\": { \"type\": \"plain_text\", \"text\": \"📊 GitHub 저장소 상태 보고\" }},
-              { \"type\": \"section\", \"text\": { \"type\": \"mrkdwn\", \"text\": \"📅 *시간:* $TIME\n🔧 *트리거:* ${{ github.event_name }} by \`${USER}\`\" }},
-              { \"type\": \"section\", \"text\": { \"type\": \"mrkdwn\", \"text\": \"*📌 변경 내용:* <${URL}|${TITLE}>\" }},
-              { \"type\": \"divider\" },
-              { \"type\": \"section\", \"text\": { \"type\": \"mrkdwn\", \"text\": \"🐛 *Open Issues:* $OPEN_ISSUES\n🔧 *Open PRs:* $OPEN_PRS\" }},
-              { \"type\": \"divider\" },
-              { \"type\": \"section\", \"text\": { \"type\": \"plain_text\", \"text\": \"📌 마일스톤 현황\", \"emoji\": true }},
-              { \"type\": \"section\", \"text\": { \"type\": \"mrkdwn\", \"text\": \"\`\`\`\n$MSG\n\`\`\`\" }}
+          PAYLOAD=$(jq -n --arg time "$TIME" \
+                           --arg trigger "${{ github.event_name }}" \
+                           --arg user "$USER" \
+                           --arg url "$URL" \
+                           --arg title "$TITLE" \
+                           --arg open_issues "$OPEN_ISSUES" \
+                           --arg open_prs "$OPEN_PRS" \
+                           --arg milestones "$MSG" \
+          '{
+            blocks: [
+              { type: "header", text: { type: "plain_text", text: "📊 GitHub 저장소 상태 보고" } },
+              { type: "section", text: { type: "mrkdwn", text: "📅 *시간:* \($time)\n🔧 *트리거:* \($trigger) by `\($user)`" } },
+              { type: "section", text: { type: "mrkdwn", text: "*📌 변경 내용:* <\($url)|\($title)>" } },
+              { type: "divider" },
+              { type: "section", text: { type: "mrkdwn", text: "🐛 *Open Issues:* \($open_issues)\n🔧 *Open PRs:* \($open_prs)" } },
+              { type: "divider" },
+              { type: "section", text: { type: "plain_text", text: "📌 마일스톤 현황", emoji: true } },
+              { type: "section", text: { type: "mrkdwn", text: "```\n\($milestones)\n```" } }
             ]
-          }" $SLACK_WEBHOOK_URL
+          }')
+
+          curl -X POST -H "Content-Type: application/json" -d "$PAYLOAD" "$SLACK_WEBHOOK_URL"
