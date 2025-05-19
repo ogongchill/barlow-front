@@ -47,9 +47,10 @@ jobs:
             TOTAL=$(echo "$item" | jq '.issues.totalCount // 0')
             CLOSED=$(echo "$item" | jq '.closedIssues.totalCount // 0')
             REMAIN=$((TOTAL - CLOSED))
-            PERCENT=$(awk "BEGIN {if ($TOTAL == 0) print 0; else print int(($CLOSED/$TOTAL)*100)}")
+            PERCENT=$(awk -v total="$TOTAL" -v closed="$CLOSED" 'BEGIN { if (total == 0) print 0; else print int((closed / total) * 100) }')
             TABLE+="\n$(printf \"%-18s %3s%%       %2s       %s\" \"$TITLE\" \"$PERCENT\" \"$REMAIN\" \"$DUE\")"
           done <<< "$MILESTONES"
+
 
           echo "$TABLE" > milestone_table.txt
           echo "OPEN_ISSUES=$OPEN_ISSUES" >> $GITHUB_ENV
