@@ -72,23 +72,27 @@ jobs:
           FIELDS_JSON=$(printf "%s\n" "${FIELDS[@]}" | jq -s '.')
           
           PAYLOAD=$(jq -n --arg time "$TIME" \
-                           --arg trigger "${{ github.event_name }}" \
-                           --arg user "$USER" \
-                           --arg url "$URL" \
-                           --arg title "$TITLE" \
-                           --arg open_issues "$OPEN_ISSUES" \
-                           --arg open_prs "$OPEN_PRS" \
-                           --argjson fields "$FIELDS_JSON" '
+                 --arg trigger "${{ github.event_name }}" \
+                 --arg user "$USER" \
+                 --arg url "$URL" \
+                 --arg title "$TITLE" \
+                 --arg open_issues "$OPEN_ISSUES" \
+                 --arg open_prs "$OPEN_PRS" \
+                 --argjson fields "$FIELDS_JSON" '
           {
-            blocks: [
-              { type: "header", text: { type: "plain_text", text: "📊 GitHub 저장소 상태 보고" } },
-              { type: "section", text: { type: "mrkdwn", text: "📅 *시간:* \($time)\n🔧 *트리거:* \($trigger) by `\($user)`" } },
-              { type: "section", text: { type: "mrkdwn", text: "*📌 변경 내용:* <\($url)|\($title)>" } },
-              { type: "divider" },
-              { type: "section", text: { type: "mrkdwn", text: "🐛 *Open Issues:* \($open_issues)\n🔧 *Open PRs:* \($open_prs)" } },
-              { type: "divider" }
-            ] + $fields
+            blocks: (
+              [
+                { type: "header", text: { type: "plain_text", text: "📊 GitHub 저장소 상태 보고" } },
+                { type: "section", text: { type: "mrkdwn", text: "📅 *시간:* \($time)\n🔧 *트리거:* \($trigger) by `\($user)`" } },
+                { type: "section", text: { type: "mrkdwn", text: "*📌 변경 내용:* <\($url)|\($title)>" } },
+                { type: "divider" },
+                { type: "section", text: { type: "mrkdwn", text: "🐛 *Open Issues:* \($open_issues)\n🔧 *Open PRs:* \($open_prs)" } },
+                { type: "divider" }
+              ] + $fields
+                      )
           }')
+
+
           
           echo "$PAYLOAD" | jq . # 디버깅용 출력
           
