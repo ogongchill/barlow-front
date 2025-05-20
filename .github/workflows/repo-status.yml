@@ -67,7 +67,7 @@ jobs:
             '{
               type: "section",
               fields: [
-                { type: "section", text: { type: "mrkdwn", text: "*$t* \n \($p)\t\($r)\t\($d) "}},
+                { type: "section", text: { type: "mrkdwn", text: "*\($t)* \n \($p)\t\($r)\t\($d) "}},
                 { type: "mrkdwn", text: "**MILESTONES**" },
                 { type: "mrkdwn", text: $t },
                 { type: "mrkdwn", text: "\($p)\n\($r)\n\($d)" }
