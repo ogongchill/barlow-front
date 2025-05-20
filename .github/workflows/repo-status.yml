@@ -55,6 +55,7 @@ jobs:
             if [ "$TOTAL" -eq "$CLOSED" ] && [ "$TOTAL" -ne 0 ]; then
               continue  # 완료된 마일스톤은 건너뜀
             fi
+          
             REMAIN=$((TOTAL - CLOSED))
             PERCENT=$(awk -v total="$TOTAL" -v closed="$CLOSED" 'BEGIN { if (total == 0) print 0; else print int((closed / total) * 100) }')
 
@@ -62,8 +63,6 @@ jobs:
                            --arg p "*완료율:* ${PERCENT}%" \
                            --arg r "*남은 이슈:* ${REMAIN}" \
                            --arg d "*마감일:* ${DUE}" \
-                           --arg trigger "$TRIGGER" \
-
             '{
               type: "section",
               fields: [
@@ -73,6 +72,16 @@ jobs:
             }')
             FIELDS+=("$FIELD")
           done <<< "$MILESTONES"
+          
+          # 👉 마일스톤이 모두 완료되어 FIELDS가 비었을 경우 방어 처리
+          if [ ${#FIELDS[@]} -eq 0 ]; then
+            FIELD=$(jq -n '{
+            type: "section",
+            text: { type: "mrkdwn", text: "📌 *진행 중인 마일스톤 없음*" }
+            }')
+              FIELDS+=("$FIELD")
+          fi
+            
           FIELDS_JSON=$(printf "%s\n" "${FIELDS[@]}" | jq -s '.')
 
           ### 열려 있는 PR 목록
