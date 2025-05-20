@@ -68,7 +68,7 @@ jobs:
               type: "section",
               text: {
                 type: "mrkdwn",
-                text: "🗿##MILESTONES##\n#\($t)#\n\($p)\n\($r)\n\($d)"
+                text: "🗿#MILESTONE-\($t)\n\($p)\n\($r)\n\($d)"
               }
             }')
             FIELDS+=("$FIELD")
@@ -106,10 +106,10 @@ jobs:
                 { type: "section", text: { type: "mrkdwn", text: "_triggered by: \($trigger) at \($time) UTC_"  } },
                 { type: "section", text: { type: "mrkdwn", text: "*ISSUES:* \($open_issues)\t*PRs:* \($open_prs)" } },
                 { type: "divider" },
-                { type: "section", text: { type: "plain_text", text: "🤌 PULL REQUESTS", emoji: true } },
+                { type: "section", text: { type: "plain_text", text: "🤌 *열린 PRs*", emoji: true } },
                 { type: "section", text: { type: "mrkdwn", text: $pr_list } },
                 { type: "divider" },
-                { type: "section", text: { type: "plain_text", text: "🚧 ISSUES", emoji: true } },
+                { type: "section", text: { type: "plain_text", text: "🚧 열린 *ISSUES*", emoji: true } },
                 { type: "section", text: { type: "mrkdwn", text: $issue_list } },
                 { type: "divider" }
               ] + $fields
