@@ -60,17 +60,17 @@ jobs:
             REMAIN=$((TOTAL - CLOSED))
             PERCENT=$(awk -v total="$TOTAL" -v closed="$CLOSED" 'BEGIN { if (total == 0) print 0; else print int((closed / total) * 100) }')
 
-            FIELD=$(jq -n --arg t "📌 *$TITLE_FIELD*" \
-                           --arg p "*완료율:* ${PERCENT}%" \
-                           --arg r "*남은 이슈:* ${REMAIN}" \
-                           --arg d "*마감일:* ${DUE}" \
-            '{
+          
+            FIELD=$(jq -n --arg t "$TITLE_FIELD" \
+              --arg p "*완료율:* ${PERCENT}%" \
+              --arg r "*남은 이슈:* ${REMAIN}" \
+              --arg d "*마감일:* ${DUE}" \
+              '{
               type: "section",
-              fields: [
-                { type: "section", text: { type: "mrkdwn", text: "*\($t)* \n \($p)\t\($r)\t\($d) "}},
-                { type: "mrkdwn", text: $t },
-                { type: "mrkdwn", text: "\($p)\n\($r)\n\($d)" }
-              ]
+              text: {
+                type: "mrkdwn",
+                text: "\($t)\n\($p)\n\($r)\n\($d)"
+              }
             }')
             FIELDS+=("$FIELD")
           done <<< "$MILESTONES"
