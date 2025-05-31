@@ -16,7 +16,6 @@ class LoginUseCase {
   Future<void> execute() async {
      String token = await _loginRepository.guestLogin();
      await _tokenRepository.writeAccessToken(token);
-     await _appSettingsRepository.setLoginStatus(true);
      await _userRepository.retrieve();
   }
 }
