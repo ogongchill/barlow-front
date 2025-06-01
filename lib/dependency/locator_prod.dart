@@ -4,6 +4,7 @@ import 'package:front/core/api/common/api_client.dart';
 import 'package:front/core/api/dio/dio_configs.dart';
 import 'package:front/core/database/notification/notification_read_status_repository_adapter.dart';
 import 'package:front/core/database/secure-storage/token_repository.dart';
+import 'package:front/core/database/setting/user_reject_hive_repository_adapter.dart';
 import 'package:front/core/database/shared-preferences/share_prefs_terms_agreement_repository.dart';
 import 'package:front/core/database/shared-preferences/shared_prefs_application_setting_repository.dart';
 import 'package:front/core/database/shared-preferences/shared_prefs_system_permission_repository.dart';
@@ -36,9 +37,12 @@ import 'package:front/features/pre_announce/domain/usecases/fetch_preannounce_th
 import 'package:front/features/pre_announce/infra/preannounce_bill_detail_repository_adapter.dart';
 import 'package:front/features/pre_announce/infra/preannounce_bill_thumbnail_respository_adapter.dart';
 import 'package:front/features/settings/domain/repositories/notification_repository.dart';
+import 'package:front/features/settings/domain/repositories/user_reject_repository.dart';
 import 'package:front/features/settings/domain/repositories/user_repository.dart';
+import 'package:front/features/settings/domain/usecases/check_reject_status_usecase.dart';
 import 'package:front/features/settings/domain/usecases/delete_guest_user_usecase.dart';
 import 'package:front/features/settings/domain/usecases/load_user_info_usecase.dart';
+import 'package:front/features/settings/domain/usecases/mark_as_reject_usecase.dart';
 import 'package:front/features/settings/domain/usecases/notification_usecase.dart';
 import 'package:front/features/settings/infra/notification_repository_adapter.dart';
 import 'package:front/features/splash/domain/repositories/auth_repository.dart';
@@ -184,5 +188,10 @@ Future<void> setUpProdLocator() async {
   ///for permissions
   getIt.registerLazySingleton<RequestNotificationPermissionUseCase>(() => RequestNotificationPermissionUseCase());
   getIt.registerLazySingleton<MarkAsCheckNotificationPermissionUseCase>(() => MarkAsCheckNotificationPermissionUseCase(repository: getIt<PermissionCheckStatusRepository>()));
+
+  ///for user-reject status
+  getIt.registerLazySingleton<UserRejectRepository>(() => UserRejectHiveRepositoryAdapter());
+  getIt.registerLazySingleton<CheckUserRejectStatusUseCase>(() => CheckUserRejectStatusUseCase(repository: getIt<UserRejectRepository>()));
+  getIt.registerLazySingleton<MarkAsRejectUseCase>(() => MarkAsRejectUseCase(repository: getIt<UserRejectRepository>()));
 }
 

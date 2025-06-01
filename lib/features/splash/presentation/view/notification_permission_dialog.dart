@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:front/core/theme/color_palette.dart';
 import 'package:front/features/splash/domain/usecases/check_notification_permission_permanently_denied_usecase.dart';
+import 'package:front/features/splash/presentation/viewmodel/open_app_setting_provider.dart';
 import 'package:front/features/splash/presentation/viewmodel/permission_check_provider.dart';
 
 class NotificationPermissionDialog {
@@ -28,14 +29,13 @@ class NotificationPermissionDialog {
   );
 
   static void show(BuildContext context, WidgetRef ref) {
-    final asyncValue = ref.watch(checkNotificationPermissionPermanentlyDeniedProvider);
+    final asyncValue = ref.watch(checkNotificationPermissionStatusProvider);
     asyncValue.when(
         data: (status) {
           if(status != PermissionStatus.granted) {
             _showNotificationPermissionDialog(context, ref);
             return;
           }
-          ref.read(requestNotificationPermissionProvider);
         },
         error: (err, stack){ print("ERR:${err}");},
         loading: (){}
@@ -71,7 +71,7 @@ class NotificationPermissionDialog {
           TextButton(
             onPressed: () {
               Navigator.pop(context);
-              ref.read(requestNotificationPermissionProvider);
+              ref.read(openAppSettingProvider)();
             } ,
             child: const Row(
               mainAxisSize: MainAxisSize.min,

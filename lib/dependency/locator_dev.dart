@@ -13,6 +13,7 @@ import 'package:front/core/utils/application_version_info.dart';
 import 'package:front/core/utils/device_info_manager.dart';
 import 'package:front/core/database/cache.dart';
 import 'package:front/dev/dummy-repository/dummy_permission_status_repository.dart';
+import 'package:front/dev/dummy-repository/dummy_user_reject_repository.dart';
 import 'package:front/features/bill_info/domain/usecases/fetch_recent_bill_thumbail_usecase.dart';
 import 'package:front/features/bill_info/domain/usecases/get_bill_detail_usecase.dart';
 import 'package:front/features/bill_info/infra/recent_bill_repository_adapter.dart';
@@ -38,9 +39,12 @@ import 'package:front/features/pre_announce/domain/usecases/fetch_preannounce_th
 import 'package:front/features/pre_announce/infra/preannounce_bill_detail_repository_adapter.dart';
 import 'package:front/features/pre_announce/infra/preannounce_bill_thumbnail_respository_adapter.dart';
 import 'package:front/features/settings/domain/repositories/notification_repository.dart';
+import 'package:front/features/settings/domain/repositories/user_reject_repository.dart';
 import 'package:front/features/settings/domain/repositories/user_repository.dart';
+import 'package:front/features/settings/domain/usecases/check_reject_status_usecase.dart';
 import 'package:front/features/settings/domain/usecases/delete_guest_user_usecase.dart';
 import 'package:front/features/settings/domain/usecases/load_user_info_usecase.dart';
+import 'package:front/features/settings/domain/usecases/mark_as_reject_usecase.dart';
 import 'package:front/features/settings/domain/usecases/notification_usecase.dart';
 import 'package:front/features/settings/infra/notification_repository_adapter.dart';
 import 'package:front/features/splash/domain/repositories/auth_repository.dart';
@@ -186,5 +190,10 @@ Future<void> setUpDevLocator() async {
   ///for permissions
   getIt.registerLazySingleton<RequestNotificationPermissionUseCase>(() => RequestNotificationPermissionUseCase());
   getIt.registerLazySingleton<MarkAsCheckNotificationPermissionUseCase>(() => MarkAsCheckNotificationPermissionUseCase(repository: getIt<PermissionCheckStatusRepository>()));
+
+  ///for user-reject status
+  getIt.registerLazySingleton<UserRejectRepository>(() => DummyUserRejectRepository());
+  getIt.registerLazySingleton<CheckUserRejectStatusUseCase>(() => CheckUserRejectStatusUseCase(repository: getIt<UserRejectRepository>()));
+  getIt.registerLazySingleton<MarkAsRejectUseCase>(() => MarkAsRejectUseCase(repository: getIt<UserRejectRepository>()));
 }
 

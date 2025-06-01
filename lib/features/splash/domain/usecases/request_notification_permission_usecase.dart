@@ -23,7 +23,6 @@ class RequestNotificationPermissionUseCase {
 
   Future<void> _requestAndroidNotificationPermission() async {
     final status = await Permission.notification.status;
-    print("[DEBUG]: status == ${status.name}");
     if (!status.isGranted) {
       await Permission.notification.request();
       return;

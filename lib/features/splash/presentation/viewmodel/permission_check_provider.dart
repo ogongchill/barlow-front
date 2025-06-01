@@ -6,7 +6,7 @@ import 'package:front/features/splash/domain/usecases/request_notification_permi
 
 final requestNotificationPermissionProvider = FutureProvider<void>((ref) => getIt<RequestNotificationPermissionUseCase>().execute());
 final notificationPermissionCheckStatusProvider = StateProvider.autoDispose<bool>((ref)=>false);
-final checkNotificationPermissionPermanentlyDeniedProvider = FutureProvider<PermissionStatus>((ref) => CheckNotificationPermissionStatusUseCase.execute());
+final checkNotificationPermissionStatusProvider = FutureProvider.autoDispose<PermissionStatus>((ref) => CheckNotificationPermissionStatusUseCase.execute());
 final markAsCheckNotificationPermissionProvider = Provider<void Function()>((ref) {
   return () {
     getIt<MarkAsCheckNotificationPermissionUseCase>().execute();
