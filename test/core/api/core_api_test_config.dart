@@ -84,6 +84,10 @@ class MockAndroidDeviceInfo implements DeviceInfo {
   @override
   // TODO: implement deviceOsVersion
   String get deviceOsVersion => "21";
+
+  @override
+  // TODO: implement appVersion
+  String get appVersion => "1.0.0-alpha";
 }
 
 class MockIosDeviceInfo implements DeviceInfo {
@@ -98,6 +102,10 @@ class MockIosDeviceInfo implements DeviceInfo {
   @override
   // TODO: implement deviceOsVersion
   String get deviceOsVersion => "21";
+
+  @override
+  // TODO: implement appVersion
+  String get appVersion => "1.0.0-alpha";
 }
 
 class MockTokenRepository implements TokenRepository {
