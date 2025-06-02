@@ -81,7 +81,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingView> {
                   color: Colors.white,
                   child: Stack(
                     children: [
-                      Image.asset(page.imagePath),
+                      Center(child: Image.asset(page.imagePath)),
                       if (page.isLast) ...[
                         Center(
                           child: Container(
