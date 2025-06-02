@@ -61,6 +61,8 @@ class ApplicationNavigatorService {
 
   static void goToOnBoarding() => GoRouter.of(_context!).go('/onboarding');
 
+  static void goToPermissions() => GoRouter.of(_context!).go('/splash/permissions');
+
   static void popWithResult(BuildContext context) {
     return Navigator.pop(context, true);
   }

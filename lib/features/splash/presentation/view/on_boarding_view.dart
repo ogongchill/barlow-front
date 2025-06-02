@@ -62,7 +62,6 @@ class _OnboardingScreenState extends ConsumerState<OnboardingView> {
   @override
   Widget build(BuildContext context) {
     final randomNickname = ref.watch(nicknameProvider).value ?? "바로_사용자";
-
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(), // 👈 화면 아무 데나 탭하면 포커스 해제
       child: Scaffold(
@@ -392,59 +391,6 @@ class _OnboardingScreenState extends ConsumerState<OnboardingView> {
                     ),
                   ],
                 ),
-
-                // CheckboxListTile(
-                //   activeColor: Colors.green,
-                //   title: Row(
-                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //     children: [
-                //       const Text("서비스 이용약관 동의", style: _agreementStyle),
-                //       TextButton(
-                //         onPressed: () => showWebDialog(context, "서비스 약관", 'https://ogongchill.github.io/barlow/terms-of-service.html'),
-                //         child: const Text("보기", style: TextStyle(color: Colors.grey),),
-                //       ),
-                //     ],
-                //   ),
-                //   value: termsChecked,
-                //   onChanged: (value) {
-                //     setState(() {
-                //       termsChecked = value ?? false;
-                //       updateAllChecked();
-                //     });
-                //   },
-                // ),
-                // CheckboxListTile(
-                //   activeColor: Colors.green,
-                //   title: Row(
-                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //     children: [
-                //       const Text("개인정보 처리방침 동의", style: _agreementStyle),
-                //       TextButton(
-                //         onPressed: () => showWebDialog(context, "개인정보 처리방침", 'https://ogongchill.github.io/barlow/privacy-policy.html'),
-                //         child: const Text("보기", style: TextStyle(color: Colors.grey)),
-                //       ),
-                //     ],
-                //   ),
-                //   value: privacyChecked,
-                //   onChanged: (value) {
-                //     setState(() {
-                //       privacyChecked = value ?? false;
-                //       updateAllChecked();
-                //     });
-                //   },
-                // ),
-                // CheckboxListTile(
-                //   activeColor: Colors.green,
-                //   title: const Text("모두 동의", style: _agreementStyle),
-                //   value: allChecked,
-                //   onChanged: (value) {
-                //     setState(() {
-                //       allChecked = value ?? false;
-                //       termsChecked = value ?? false;
-                //       privacyChecked = value ?? false;
-                //     });
-                //   },
-                // ),
                 Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: ElevatedButton(

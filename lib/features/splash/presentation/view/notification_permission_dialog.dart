@@ -1,17 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:front/core/theme/color_palette.dart';
-import 'package:front/features/settings/domain/entities/user_reject.dart';
-import 'package:front/features/settings/presentation/view/notification_widget.dart';
-import 'package:front/features/settings/presentation/viewmodel/user_reject_provider.dart';
-import 'package:front/features/shared/view/appbar.dart';
-import 'package:front/features/shared/view/error.dart';
 import 'package:front/features/splash/domain/usecases/check_notification_permission_permanently_denied_usecase.dart';
 import 'package:front/features/splash/presentation/viewmodel/open_app_setting_provider.dart';
 import 'package:front/features/splash/presentation/viewmodel/permission_check_provider.dart';
 
-class NotificationSettingView extends ConsumerWidget {
-
+class NotificationPermissionDialog {
 
   static const TextStyle _header = TextStyle(
       fontFamily: "gmarketSans",
@@ -34,39 +28,7 @@ class NotificationSettingView extends ConsumerWidget {
       fontWeight: FontWeight.w500
   );
 
-  const NotificationSettingView({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final rejectStatus = ref.watch(checkUserRejectStatusProvider(UserRejectCategory.notificationPermissionDialog));
-    return rejectStatus.when(
-        data: (hasRejectDialog) {
-          if (!hasRejectDialog) {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              show(context, ref);
-            });
-          }
-          return _buildScaffold();
-        },
-        error: (err, stack) => const SomethingWentWrongWidget(),
-        loading: () => _buildScaffold()
-    );
-  }
-
-  Widget _buildScaffold() {
-    return Scaffold(
-      appBar: const TextAppBar(title: "알림 설정"),
-      body: SingleChildScrollView(
-        child: Container(
-          color: ColorPalette.background,
-          padding: const EdgeInsets.all(15),
-          child: const NotificationWidget(),
-        ),
-      ),
-    );
-  }
-
-  void show(BuildContext context, WidgetRef ref) {
+  static void show(BuildContext context, WidgetRef ref) {
     final asyncValue = ref.watch(checkNotificationPermissionStatusProvider);
     asyncValue.when(
         data: (status) {
@@ -75,12 +37,12 @@ class NotificationSettingView extends ConsumerWidget {
             return;
           }
         },
-        error: (err, stack) => const SomethingWentWrongWidget(),
+        error: (err, stack){ print("ERR:${err}");},
         loading: (){}
     );
   }
 
-  void _showNotificationPermissionDialog(BuildContext context, WidgetRef ref) {
+  static void _showNotificationPermissionDialog(BuildContext context, WidgetRef ref) {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
@@ -122,10 +84,9 @@ class NotificationSettingView extends ConsumerWidget {
           ),
           TextButton(
             onPressed: () {
-              ref.read(markAsRejectProvider)(UserRejectCategory.notificationPermissionDialog);
               Navigator.pop(context);
             } ,
-            child: const Text("다시 보지 않기", style: _button,),
+            child: const Text("알림을 켜지 않을래요", style: _button,),
           ),
         ],
       ),

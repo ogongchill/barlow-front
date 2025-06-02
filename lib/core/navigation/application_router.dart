@@ -14,6 +14,7 @@ import 'package:front/features/settings/presentation/view/setting_view.dart';
 import 'package:front/features/shared/domain/committee.dart';
 import 'package:front/features/shared/view/donation/donation_view.dart';
 import 'package:front/features/splash/presentation/view/on_boarding_view.dart';
+import 'package:front/features/splash/presentation/view/permisssion_view.dart';
 import 'package:front/features/splash/presentation/view/splash_view.dart';
 import 'package:go_router/go_router.dart';
 
@@ -112,7 +113,13 @@ final GoRoute _donationRouter = GoRoute(
 
 final GoRoute _splashRouter = GoRoute(
     path: '/splash',
-    builder: (context, state) => SplashView()
+    builder: (context, state) => const SplashView(),
+    routes: [
+      GoRoute(
+        path: '/permissions',
+        builder: (context, state) => const PermissionView()
+      )
+    ]
 );
 
 final GoRoute _onBoardingRouter = GoRoute(

@@ -14,7 +14,6 @@ class DeleteGuestUserUseCase {
 
   Future<void> execute() async {
       await _repository.deleteUserInfo();
-      await _appSettingsRepository.setLoginStatus(false);
       await _appSettingsRepository.setFirstLaunch(true);
       await _tokenRepository.deleteAccessToken();
 

@@ -4,8 +4,10 @@ import 'package:front/core/api/common/api_client.dart';
 import 'package:front/core/api/dio/dio_configs.dart';
 import 'package:front/core/database/notification/notification_read_status_repository_adapter.dart';
 import 'package:front/core/database/secure-storage/token_repository.dart';
+import 'package:front/core/database/setting/user_reject_hive_repository_adapter.dart';
 import 'package:front/core/database/shared-preferences/share_prefs_terms_agreement_repository.dart';
 import 'package:front/core/database/shared-preferences/shared_prefs_application_setting_repository.dart';
+import 'package:front/core/database/shared-preferences/shared_prefs_system_permission_repository.dart';
 import 'package:front/core/database/user/user_info_hive_repository.dart';
 import 'package:front/core/utils/application_version_info.dart';
 import 'package:front/core/utils/device_info_manager.dart';
@@ -35,14 +37,19 @@ import 'package:front/features/pre_announce/domain/usecases/fetch_preannounce_th
 import 'package:front/features/pre_announce/infra/preannounce_bill_detail_repository_adapter.dart';
 import 'package:front/features/pre_announce/infra/preannounce_bill_thumbnail_respository_adapter.dart';
 import 'package:front/features/settings/domain/repositories/notification_repository.dart';
+import 'package:front/features/settings/domain/repositories/user_reject_repository.dart';
 import 'package:front/features/settings/domain/repositories/user_repository.dart';
+import 'package:front/features/settings/domain/usecases/check_reject_status_usecase.dart';
 import 'package:front/features/settings/domain/usecases/delete_guest_user_usecase.dart';
 import 'package:front/features/settings/domain/usecases/load_user_info_usecase.dart';
+import 'package:front/features/settings/domain/usecases/mark_as_reject_usecase.dart';
 import 'package:front/features/settings/domain/usecases/notification_usecase.dart';
 import 'package:front/features/settings/infra/notification_repository_adapter.dart';
 import 'package:front/features/splash/domain/repositories/auth_repository.dart';
 import 'package:front/features/splash/domain/usecases/agree_terms_and_policies_usecase.dart';
 import 'package:front/features/splash/domain/usecases/login_usecase.dart';
+import 'package:front/features/splash/domain/usecases/mark_as_check_notification_permission_usecase.dart';
+import 'package:front/features/splash/domain/usecases/request_notification_permission_usecase.dart';
 import 'package:front/features/splash/domain/usecases/retrieve_app_initialize_info_usecase.dart';
 import 'package:front/features/splash/domain/usecases/sign_up_usecase.dart';
 import 'package:front/features/splash/infra/app_anitialize_info_repository_adapter.dart';
@@ -138,7 +145,11 @@ Future<void> setUpProdLocator() async {
           getIt<UserInfoRepository>()
       ));
   getIt.registerLazySingleton<RetrieveAppInitializeInfoUseCase>(
-          () => RetrieveAppInitializeInfoUseCase(AppInitializeInfoRepositoryAdapter(getIt<AppSettingsRepository>()))
+          () => RetrieveAppInitializeInfoUseCase(AppInitializeInfoRepositoryAdapter(
+              getIt<AppSettingsRepository>(),
+              getIt<PermissionCheckStatusRepository>(),
+              getIt<TokenRepository>()
+          ))
   );
 
   /// for barlow-api
@@ -172,5 +183,15 @@ Future<void> setUpProdLocator() async {
   getIt.registerLazySingleton<TokenRepository> (() => SecureStorageTokenRepository());
   getIt.registerLazySingleton<AppSettingsRepository> (() => SharedPrefsAppSettingRepository());
   getIt.registerLazySingleton<UserInfoRepository> (() => UserInfoHiveRepository());
+  getIt.registerLazySingleton<PermissionCheckStatusRepository> (() => SharedPrefsPermissionCheckStatusRepository());
+
+  ///for permissions
+  getIt.registerLazySingleton<RequestNotificationPermissionUseCase>(() => RequestNotificationPermissionUseCase());
+  getIt.registerLazySingleton<MarkAsCheckNotificationPermissionUseCase>(() => MarkAsCheckNotificationPermissionUseCase(repository: getIt<PermissionCheckStatusRepository>()));
+
+  ///for user-reject status
+  getIt.registerLazySingleton<UserRejectRepository>(() => UserRejectHiveRepositoryAdapter());
+  getIt.registerLazySingleton<CheckUserRejectStatusUseCase>(() => CheckUserRejectStatusUseCase(repository: getIt<UserRejectRepository>()));
+  getIt.registerLazySingleton<MarkAsRejectUseCase>(() => MarkAsRejectUseCase(repository: getIt<UserRejectRepository>()));
 }
 
