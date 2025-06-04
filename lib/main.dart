@@ -17,6 +17,11 @@ void main() async {
   _assertFlavor();
   bool clearHive = false;
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  await HiveInitializer.initializeApp();
+  if(clearHive) {
+    HiveInitializer.clearBox();
+  }
   if (_flavor == 'prod') {
     await prod.setUpProdLocator();
   } else if(_flavor == 'prod:clearHive') {
@@ -25,11 +30,6 @@ void main() async {
     await dev.setUpDevLocator();
   }
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-  await Firebase.initializeApp();
-  await HiveInitializer.initializeApp();
-  if(clearHive) {
-    HiveInitializer.clearBox();
-  }
   FcmInitializer(
     plugin: FlutterLocalNotificationsPlugin(),
     onMessageForegroundHandler: (RemoteMessage message) {},

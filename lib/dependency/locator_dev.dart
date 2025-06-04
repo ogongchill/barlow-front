@@ -3,8 +3,10 @@ import 'package:front/core/api/api_router.dart';
 import 'package:front/core/api/common/api_client.dart';
 import 'package:front/core/api/dio/dio_configs.dart';
 import 'package:front/core/api/logger_interceptor.dart';
+import 'package:front/core/api/version/app_version_status_remote_config_repository_adapter.dart';
 import 'package:front/core/database/notification/notification_read_status_repository_adapter.dart';
 import 'package:front/core/database/secure-storage/token_repository.dart';
+import 'package:front/core/database/setting/user_reject_hive_repository_adapter.dart';
 import 'package:front/core/database/shared-preferences/share_prefs_terms_agreement_repository.dart';
 import 'package:front/core/database/shared-preferences/shared_prefs_application_setting_repository.dart';
 import 'package:front/core/database/shared-preferences/shared_prefs_system_permission_repository.dart';
@@ -12,6 +14,7 @@ import 'package:front/core/database/user/user_info_hive_repository.dart';
 import 'package:front/core/utils/application_version_info.dart';
 import 'package:front/core/utils/device_info_manager.dart';
 import 'package:front/core/database/cache.dart';
+import 'package:front/dev/dummy-repository/dummy_app_version_status_repository.dart';
 import 'package:front/dev/dummy-repository/dummy_permission_status_repository.dart';
 import 'package:front/dev/dummy-repository/dummy_user_reject_repository.dart';
 import 'package:front/features/bill_info/domain/usecases/fetch_recent_bill_thumbail_usecase.dart';
@@ -47,8 +50,11 @@ import 'package:front/features/settings/domain/usecases/load_user_info_usecase.d
 import 'package:front/features/settings/domain/usecases/mark_as_reject_usecase.dart';
 import 'package:front/features/settings/domain/usecases/notification_usecase.dart';
 import 'package:front/features/settings/infra/notification_repository_adapter.dart';
+import 'package:front/features/splash/domain/entities/app_version_status.dart';
+import 'package:front/features/splash/domain/repositories/app_version_status_repository.dart';
 import 'package:front/features/splash/domain/repositories/auth_repository.dart';
 import 'package:front/features/splash/domain/usecases/agree_terms_and_policies_usecase.dart';
+import 'package:front/features/splash/domain/usecases/get_store_url_usecase.dart';
 import 'package:front/features/splash/domain/usecases/login_usecase.dart';
 import 'package:front/features/splash/domain/usecases/mark_as_check_notification_permission_usecase.dart';
 import 'package:front/features/splash/domain/usecases/request_notification_permission_usecase.dart';
@@ -147,11 +153,15 @@ Future<void> setUpDevLocator() async {
           getIt<UserInfoRepository>()
       ));
   getIt.registerLazySingleton<RetrieveAppInitializeInfoUseCase>(
-          () => RetrieveAppInitializeInfoUseCase(AppInitializeInfoRepositoryAdapter(
-          getIt<AppSettingsRepository>(),
-          getIt<PermissionCheckStatusRepository>(),
-          getIt<TokenRepository>()
-      ))
+          () => RetrieveAppInitializeInfoUseCase(
+              appInitializeInfoRepository: AppInitializeInfoRepositoryAdapter(
+                  getIt<AppSettingsRepository>(),
+                  getIt<PermissionCheckStatusRepository>(),
+                  getIt<TokenRepository>()
+              ),
+              appVersionStatusRepository: getIt<AppVersionStatusRepository>(),
+              userRejectRepository: getIt<UserRejectRepository>()
+          )
   );
 
   /// for barlow-api
@@ -185,15 +195,27 @@ Future<void> setUpDevLocator() async {
   getIt.registerLazySingleton<TokenRepository> (() => SecureStorageTokenRepository());
   getIt.registerLazySingleton<AppSettingsRepository> (() => SharedPrefsAppSettingRepository());
   getIt.registerLazySingleton<UserInfoRepository> (() => UserInfoHiveRepository());
-  getIt.registerLazySingleton<PermissionCheckStatusRepository> (() => DummyPermissionStatusRepository());
+  // getIt.registerLazySingleton<PermissionCheckStatusRepository> (() => DummyPermissionStatusRepository());
+  getIt.registerLazySingleton<PermissionCheckStatusRepository> (() => SharedPrefsPermissionCheckStatusRepository());
 
   ///for permissions
   getIt.registerLazySingleton<RequestNotificationPermissionUseCase>(() => RequestNotificationPermissionUseCase());
   getIt.registerLazySingleton<MarkAsCheckNotificationPermissionUseCase>(() => MarkAsCheckNotificationPermissionUseCase(repository: getIt<PermissionCheckStatusRepository>()));
 
   ///for user-reject status
-  getIt.registerLazySingleton<UserRejectRepository>(() => DummyUserRejectRepository());
+  getIt.registerLazySingleton<UserRejectRepository>(() => UserRejectHiveRepositoryAdapter());
+  // getIt.registerLazySingleton<UserRejectRepository>(() => DummyUserRejectRepository());
   getIt.registerLazySingleton<CheckUserRejectStatusUseCase>(() => CheckUserRejectStatusUseCase(repository: getIt<UserRejectRepository>()));
   getIt.registerLazySingleton<MarkAsRejectUseCase>(() => MarkAsRejectUseCase(repository: getIt<UserRejectRepository>()));
+
+  ///remote-config
+  VersionCheckRemoteConfig remoteConfig = await VersionCheckRemoteConfig.init();
+  getIt.registerLazySingleton<VersionCheckRemoteConfig>(() => remoteConfig);
+  getIt.registerLazySingleton<VersionCheckRemoteConfigService>(() => VersionCheckRemoteConfigService(versionCheckRemoteConfig: getIt<VersionCheckRemoteConfig>(), deviceInfo: getIt<DeviceInfo>()));
+  getIt.registerLazySingleton<AppVersionStatusRepository>(() => AppVersionStatusRemoteConfigRepositoryAdapter(versionCheckRemoteConfigService: getIt<VersionCheckRemoteConfigService>()));
+  // getIt.registerLazySingleton<AppVersionStatusRepository>(() => DummyAppVersionStatusRepository(AppVersionStatus.updateAvailable));
+
+  ///store-url
+  getIt.registerLazySingleton<GetStoreUrlUseCase>(() => GetStoreUrlUseCase(deviceInfo: getIt<DeviceInfo>()));
 }
 

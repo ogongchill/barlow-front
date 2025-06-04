@@ -87,7 +87,7 @@ class PermissionView extends ConsumerWidget {
       ),
       bottomNavigationBar: TextButton(onPressed: () {
         ref.read(markAsCheckNotificationPermissionProvider)();
-        ref.invalidate(appInitializeInfoProvider);
+        ref.invalidate(appInitializeStateProvider);
         ApplicationNavigatorService.goToSplash();
       },
       child: const Padding(
