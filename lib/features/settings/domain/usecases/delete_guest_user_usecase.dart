@@ -1,6 +1,7 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:front/core/database/secure-storage/token_repository.dart';
 import 'package:front/core/database/shared-preferences/shared_prefs_application_setting_repository.dart';
+import 'package:front/features/settings/domain/repositories/user_account_withdraw_repository.dart';
 import 'package:front/features/settings/domain/repositories/user_repository.dart';
 
 class DeleteGuestUserUseCase {
@@ -9,15 +10,15 @@ class DeleteGuestUserUseCase {
   final FirebaseMessaging _firebaseMessaging;
   final AppSettingsRepository _appSettingsRepository;
   final TokenRepository _tokenRepository;
+  final UserAccountWithdrawRepository _userAccountWithdrawRepository;
 
-  DeleteGuestUserUseCase(this._repository, this._firebaseMessaging, this._appSettingsRepository, this._tokenRepository);
+  DeleteGuestUserUseCase(this._repository, this._firebaseMessaging, this._appSettingsRepository, this._tokenRepository, this._userAccountWithdrawRepository);
 
   Future<void> execute() async {
       await _repository.deleteUserInfo();
       await _appSettingsRepository.setFirstLaunch(true);
+      await _userAccountWithdrawRepository.withDraw();
       await _tokenRepository.deleteAccessToken();
-
-      // 2️⃣ 네트워크 작업: FCM token 삭제 (최대 3번, 지수 백오프)
       await _retryWithBackoff(
             () async {
           await _firebaseMessaging.deleteToken();

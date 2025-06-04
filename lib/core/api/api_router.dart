@@ -1,3 +1,4 @@
+import 'package:front/core/api/account/account_router.dart';
 import 'package:front/core/api/common/api_client.dart';
 import 'package:front/core/api/legislation-account/legislation_account_router.dart';
 import 'package:front/core/api/menu/menu_router.dart';
@@ -17,6 +18,7 @@ class ApiRouter {
   final PreAnnounceRouter preAnnounceRouter;
   final RecentBillRouter recentBillRouter;
   final VersionCheckRouter versionCheckRouter;
+  final AccountRouter accountRouter;
 
   ApiRouter({required ApiClient apiClient})
     : authRouter = AuthRouter(apiClient),
@@ -25,5 +27,6 @@ class ApiRouter {
       preAnnounceRouter = PreAnnounceRouter(apiClient),
       menuRouter = MenuRouter(apiClient),
       recentBillRouter = RecentBillRouter(apiClient),
-      versionCheckRouter = VersionCheckRouter(apiClient);
+      versionCheckRouter = VersionCheckRouter(apiClient),
+      accountRouter = AccountRouter(apiClient);
 }

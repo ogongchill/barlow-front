@@ -24,7 +24,6 @@ class UserInfoHiveRepository implements UserInfoRepository {
 
   @override
   Future<void> deleteUserInfo() async{
-    print("deleteUserINfo");
     await _box.clear();
   }
 }

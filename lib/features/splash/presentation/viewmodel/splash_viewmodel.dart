@@ -6,7 +6,7 @@ import 'package:front/features/splash/domain/usecases/get_store_url_usecase.dart
 import 'package:front/features/splash/domain/usecases/retrieve_app_initialize_info_usecase.dart';
 import 'package:front/features/splash/domain/usecases/sign_up_usecase.dart';
 
-final signupUseCaseProvider = FutureProvider.family<void, String>((ref, nickname) async {
+final signupUseCaseProvider = FutureProvider.family.autoDispose<void, String>((ref, nickname) async {
   return getIt<SignupUseCase>().execute(nickname);
 });
 
