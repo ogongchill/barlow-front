@@ -2,6 +2,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:front/core/api/api_router.dart';
 import 'package:front/core/api/common/api_client.dart';
 import 'package:front/core/api/dio/dio_configs.dart';
+import 'package:front/core/api/version/app_version_status_remote_config_repository_adapter.dart';
 import 'package:front/core/database/notification/notification_read_status_repository_adapter.dart';
 import 'package:front/core/database/secure-storage/token_repository.dart';
 import 'package:front/core/database/setting/user_reject_hive_repository_adapter.dart';
@@ -45,8 +46,10 @@ import 'package:front/features/settings/domain/usecases/load_user_info_usecase.d
 import 'package:front/features/settings/domain/usecases/mark_as_reject_usecase.dart';
 import 'package:front/features/settings/domain/usecases/notification_usecase.dart';
 import 'package:front/features/settings/infra/notification_repository_adapter.dart';
+import 'package:front/features/splash/domain/repositories/app_version_status_repository.dart';
 import 'package:front/features/splash/domain/repositories/auth_repository.dart';
 import 'package:front/features/splash/domain/usecases/agree_terms_and_policies_usecase.dart';
+import 'package:front/features/splash/domain/usecases/get_store_url_usecase.dart';
 import 'package:front/features/splash/domain/usecases/login_usecase.dart';
 import 'package:front/features/splash/domain/usecases/mark_as_check_notification_permission_usecase.dart';
 import 'package:front/features/splash/domain/usecases/request_notification_permission_usecase.dart';
@@ -145,11 +148,15 @@ Future<void> setUpProdLocator() async {
           getIt<UserInfoRepository>()
       ));
   getIt.registerLazySingleton<RetrieveAppInitializeInfoUseCase>(
-          () => RetrieveAppInitializeInfoUseCase(AppInitializeInfoRepositoryAdapter(
+          () => RetrieveAppInitializeInfoUseCase(
+          appInitializeInfoRepository: AppInitializeInfoRepositoryAdapter(
               getIt<AppSettingsRepository>(),
               getIt<PermissionCheckStatusRepository>(),
               getIt<TokenRepository>()
-          ))
+          ),
+          appVersionStatusRepository: getIt<AppVersionStatusRepository>(),
+          userRejectRepository: getIt<UserRejectRepository>()
+      )
   );
 
   /// for barlow-api
@@ -193,5 +200,14 @@ Future<void> setUpProdLocator() async {
   getIt.registerLazySingleton<UserRejectRepository>(() => UserRejectHiveRepositoryAdapter());
   getIt.registerLazySingleton<CheckUserRejectStatusUseCase>(() => CheckUserRejectStatusUseCase(repository: getIt<UserRejectRepository>()));
   getIt.registerLazySingleton<MarkAsRejectUseCase>(() => MarkAsRejectUseCase(repository: getIt<UserRejectRepository>()));
+
+  ///remote-config
+  VersionCheckRemoteConfig remoteConfig = await VersionCheckRemoteConfig.init();
+  getIt.registerLazySingleton<VersionCheckRemoteConfig>(() => remoteConfig);
+  getIt.registerLazySingleton<VersionCheckRemoteConfigService>(() => VersionCheckRemoteConfigService(versionCheckRemoteConfig: getIt<VersionCheckRemoteConfig>(), deviceInfo: getIt<DeviceInfo>()));
+  getIt.registerLazySingleton<AppVersionStatusRepository>(() => AppVersionStatusRemoteConfigRepositoryAdapter(versionCheckRemoteConfigService: getIt<VersionCheckRemoteConfigService>()));
+
+  ///store-url
+  getIt.registerLazySingleton<GetStoreUrlUseCase>(() => GetStoreUrlUseCase(deviceInfo: getIt<DeviceInfo>()));
 }
 

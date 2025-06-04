@@ -4,6 +4,7 @@ class LoggerInterceptor extends Interceptor {
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
+    print("HEADER: ${options.headers}");
     options.extra['startTime'] = DateTime.now(); // 요청 시작 시간 저장
     print('*** Request ***');
     print('--> ${options.method} ${Uri.decodeFull(options.uri.toString())}');

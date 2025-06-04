@@ -52,7 +52,6 @@ class ApiClient {
       response.data,
           (json) => fromJson(json as Map<String, dynamic>),
     );
-
     return apiResponse.data;
   }
 
@@ -76,6 +75,7 @@ class ApiClient {
       'X-Client-OS': _deviceInfo.deviceOs,
       'X-Client-OS-Version': _deviceInfo.deviceOsVersion,
       'X-Device-ID': _deviceInfo.deviceId,
+      'X-App-Version': _deviceInfo.appVersion,
     };
 
     if (apiRoute.requiresAuth) {

@@ -25,5 +25,4 @@ class UserRejectHiveRepositoryAdapter implements UserRejectRepository {
     );
     _box.put(category.name, userRejectHiveEntity);
   }
-  
 }
