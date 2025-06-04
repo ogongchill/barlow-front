@@ -33,10 +33,12 @@ class SecureStorageTokenRepository implements TokenRepository{
   @override
   Future<void> deleteAccessToken() async {
     await _storage.delete(key: _accessTokenKey);
+    accessTokenCache = null;
   }
 
   @override
   Future<void> clearAll() async {
     await _storage.deleteAll();
+    accessTokenCache = null;
   }
 }

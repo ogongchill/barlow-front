@@ -42,6 +42,7 @@ import 'package:front/features/pre_announce/domain/usecases/fetch_preannounce_th
 import 'package:front/features/pre_announce/infra/preannounce_bill_detail_repository_adapter.dart';
 import 'package:front/features/pre_announce/infra/preannounce_bill_thumbnail_respository_adapter.dart';
 import 'package:front/features/settings/domain/repositories/notification_repository.dart';
+import 'package:front/features/settings/domain/repositories/user_account_withdraw_repository.dart';
 import 'package:front/features/settings/domain/repositories/user_reject_repository.dart';
 import 'package:front/features/settings/domain/repositories/user_repository.dart';
 import 'package:front/features/settings/domain/usecases/check_reject_status_usecase.dart';
@@ -50,6 +51,7 @@ import 'package:front/features/settings/domain/usecases/load_user_info_usecase.d
 import 'package:front/features/settings/domain/usecases/mark_as_reject_usecase.dart';
 import 'package:front/features/settings/domain/usecases/notification_usecase.dart';
 import 'package:front/features/settings/infra/notification_repository_adapter.dart';
+import 'package:front/features/settings/infra/user_account_withdraw_repository_adpater.dart';
 import 'package:front/features/splash/domain/entities/app_version_status.dart';
 import 'package:front/features/splash/domain/repositories/app_version_status_repository.dart';
 import 'package:front/features/splash/domain/repositories/auth_repository.dart';
@@ -187,8 +189,11 @@ Future<void> setUpDevLocator() async {
       getIt<UserInfoRepository>(),
       FirebaseMessaging.instance,
       getIt<AppSettingsRepository>(),
-      getIt<TokenRepository>()
-  ));
+      getIt<TokenRepository>(),
+      getIt<UserAccountWithdrawRepository>()
+  )
+  );
+  getIt.registerLazySingleton<UserAccountWithdrawRepository>(() => UserAccountWithdrawRepositoryAdapter(getIt<ApiRouter>()));
 
   /// for device info
   getIt.registerLazySingleton<DeviceInfo> (() => DeviceInfoManager());
