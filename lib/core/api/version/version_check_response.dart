@@ -12,5 +12,5 @@ class VersionCheckResponseBody {
     required this.isUpdateAvailable
   });
 
-  factory VersionCheckResponseBody.fromJson(Map<String, dynamic> json) => _$VersionCheckResponseFromJson(json);
+  factory VersionCheckResponseBody.fromJson(Map<String, dynamic> json) => _$VersionCheckResponseBodyFromJson(json);
 }
