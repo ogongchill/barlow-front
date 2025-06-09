@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:front/core/theme/color_palette.dart';
 import 'package:front/core/theme/test_style_preset.dart';
 import 'package:front/features/bill_info/domain/entities/bill_detail.dart';
+import 'package:front/features/pre_announce/presentation/view/disclaimer_widget.dart';
 import 'package:front/features/shared/view/bill_detail_paragraph_widget.dart';
 import 'package:front/features/shared/view/bill_proposer_section_widget.dart';
 import 'package:front/features/bill_info/presentation/viewmodel/bill_detail_provider.dart';
@@ -83,7 +84,12 @@ class BillDetailView extends ConsumerWidget {
                   color: ColorPalette.innerContent,
                   borderRadius: BorderRadius.zero
             ),
-            child: CaptureAndShareWidget(body: body),
+            child: Column(
+              children: [
+                CaptureAndShareWidget(body: body),
+                const DisclaimerWidget(),
+              ],
+            ),
          ),
       ),
     );

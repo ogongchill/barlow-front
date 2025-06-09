@@ -68,9 +68,13 @@ class PreAnnounceView extends ConsumerWidget {
                         children: [
                           Container(
                             padding: const EdgeInsets.all(10),
-                            child: const Text(
-                              "위원회에 회부된 법률안을 심사하기 전에 법률안의 입법 취지와 주요 내용 등을 국민들에게 미리 알리는 절차를 말해요",
-                              style: TextStylePreset.innerContentSubtitle,
+                            child: Column(
+                              children: [
+                                const Text(
+                                  "위원회에 회부된 법률안을 심사하기 전에 법률안의 입법 취지와 주요 내용 등을 국민들에게 미리 알리는 절차를 말해요\n",
+                                  style: TextStylePreset.thumbnailTitle,
+                                ),
+                              ],
                             ),
                           ),
                           const SizedBox(height: 30,),
