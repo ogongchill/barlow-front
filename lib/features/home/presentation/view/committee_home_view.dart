@@ -8,6 +8,7 @@ import 'package:front/features/home/presentation/view/home_appbar.dart';
 import 'package:front/features/home/presentation/view/home_shortcut_widget.dart';
 import 'package:front/features/home/presentation/view/today_bill_thumbnail_widget.dart';
 import 'package:front/features/home/presentation/viewmodel/home_view_provider.dart';
+import 'package:front/features/pre_announce/presentation/view/disclaimer_widget.dart';
 import 'package:front/features/shared/view/bottom_nav_bar_widget.dart';
 import 'package:front/features/shared/view/error.dart';
 import 'package:shimmer/shimmer.dart';
@@ -37,17 +38,20 @@ class CommitteeHomeView extends ConsumerWidget {
                 data: (data) => [
                   const HomeShortcutWidget(),
                   _buildSubscribeCommitteeSection(CommitteeAccountListWidget(accounts: data.subscriptions), ref),
-                  _buildTodayThumbnailSection(TodayBillThumbnailWidget(data.thumbnails))
+                  _buildTodayThumbnailSection(TodayBillThumbnailWidget(data.thumbnails)),
+                  const DisclaimerWidget()
                 ],
                 error: (err, stack) => [
                   const HomeShortcutWidget(),
                   _buildSubscribeCommitteeSection(const SomethingWentWrongWidget(), ref),
-                  _buildTodayThumbnailSection(const SomethingWentWrongWidget())
+                  _buildTodayThumbnailSection(const SomethingWentWrongWidget()),
+                  const DisclaimerWidget()
                 ],
                 loading: () => [
                   const HomeShortcutWidget(),
                   _buildSubscribeCommitteeSection(_buildSkeletonLoader(), ref),
-                  _buildTodayThumbnailSection(_buildSkeletonLoader())
+                  _buildTodayThumbnailSection(_buildSkeletonLoader()),
+                  const DisclaimerWidget()
                 ]
             ),
           ),
