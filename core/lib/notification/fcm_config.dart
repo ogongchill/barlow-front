@@ -2,12 +2,10 @@ import 'package:core/notification/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-// import 'package:front/core/notification/firebase_options.dart';
 
 import 'notification_channels.dart';
 
-@pragma('vm:entry-point') // Flutter 3.3.0 이상에서 권장
+@pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print("백그라운드 메시지 처리 시작: ${message.messageId}");
   return;
