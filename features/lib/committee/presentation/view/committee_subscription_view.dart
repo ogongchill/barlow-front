@@ -1,9 +1,9 @@
-import 'package:core/navigation/application_navigation_service.dart';
 import 'package:design_system/theme/color_palette.dart';
 import 'package:design_system/theme/test_style_preset.dart';
 import 'package:features/committee/domain/entities/committee_subscription.dart';
 import 'package:features/committee/presentation/view/committe_subscription_list_widget.dart';
 import 'package:features/committee/presentation/viewmodel/committee_subscription_viewmodel.dart';
+import 'package:features/navigation/application_navigation_service.dart';
 import 'package:features/shared/view/appbar.dart';
 import 'package:features/shared/view/bottom_nav_bar_widget.dart';
 import 'package:flutter/material.dart';

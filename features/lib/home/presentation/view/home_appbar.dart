@@ -1,12 +1,9 @@
-import 'package:core/navigation/application_navigation_service.dart';
 import 'package:design_system/theme/color_palette.dart';
 import 'package:features/home/presentation/viewmodel/home_view_provider.dart';
+import 'package:features/navigation/application_navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-// import 'package:front/core/navigation/application_navigation_service.dart';
-// import 'package:front/core/theme/color_palette.dart';
-// import 'package:front/features/home/presentation/viewmodel/home_view_provider.dart';
+import 'package:flutter_svg/svg.dart';
 
 class HomeAppbar extends ConsumerWidget implements PreferredSizeWidget {
 

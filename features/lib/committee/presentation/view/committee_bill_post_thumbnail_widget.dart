@@ -1,7 +1,7 @@
-import 'package:core/navigation/application_navigation_service.dart';
 import 'package:design_system/theme/color_palette.dart';
 import 'package:design_system/theme/test_style_preset.dart';
 import 'package:features/committee/presentation/viewmodel/committee_bill_post_viewmodel.dart';
+import 'package:features/navigation/application_navigation_service.dart';
 import 'package:features/shared/domain/bill_thumbnail.dart';
 import 'package:features/shared/domain/committee.dart';
 import 'package:features/shared/view/error.dart';

@@ -1,6 +1,6 @@
-import 'package:core/navigation/application_navigation_service.dart';
 import 'package:design_system/theme/color_palette.dart';
 import 'package:design_system/theme/test_style_preset.dart';
+import 'package:features/navigation/application_navigation_service.dart';
 import 'package:features/settings/presentation/viewmodel/delete_guest_user_provider.dart';
 import 'package:features/settings/presentation/viewmodel/user_info_viewmodel.dart';
 import 'package:features/shared/view/appbar.dart';

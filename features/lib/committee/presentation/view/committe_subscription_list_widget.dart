@@ -1,8 +1,8 @@
-import 'package:core/navigation/application_navigation_service.dart';
 import 'package:design_system/theme/color_palette.dart';
 import 'package:design_system/theme/test_style_preset.dart';
 import 'package:features/committee/domain/entities/committee_subscription.dart';
 import 'package:features/committee/presentation/viewmodel/committee_subscription_viewmodel.dart';
+import 'package:features/navigation/application_navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';

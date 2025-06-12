@@ -1,4 +1,3 @@
-import 'package:core/navigation/application_navigation_service.dart';
 import 'package:features/bill_info/presentation/view/bill_detail_view.dart';
 import 'package:features/bill_info/presentation/view/recent_bill_thumbnail_view.dart';
 import 'package:features/committee/presentation/view/committee_profile_view.dart';
@@ -15,12 +14,8 @@ import 'package:features/splash/presentation/view/on_boarding_view.dart';
 import 'package:features/splash/presentation/view/permisssion_view.dart';
 import 'package:features/splash/presentation/view/splash_view.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-
-final applicationRouterProvider = Provider<GoRouter> ((ref) {
-  return applicationRouter;
-});
+import 'package:features/navigation/application_navigation_service.dart';
 
 final GoRouter applicationRouter = GoRouter(
   navigatorKey: ApplicationNavigatorService.navigatorKey,

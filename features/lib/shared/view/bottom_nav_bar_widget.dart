@@ -1,5 +1,5 @@
-import 'package:core/navigation/application_navigation_service.dart';
 import 'package:design_system/theme/color_palette.dart';
+import 'package:features/navigation/application_navigation_service.dart';
 import 'package:flutter/material.dart';
 
 class ApplicationBottomNavigationBarWidget extends StatelessWidget {

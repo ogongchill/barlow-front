@@ -1,6 +1,6 @@
-import 'package:core/navigation/application_navigation_service.dart';
 import 'package:design_system/theme/color_palette.dart';
 import 'package:design_system/theme/test_style_preset.dart';
+import 'package:features/navigation/application_navigation_service.dart';
 import 'package:features/pre_announce/domain/entities/preannounce_bill_thumbnail.dart';
 import 'package:features/pre_announce/presentation/view/d_day_widget.dart';
 import 'package:features/pre_announce/presentation/viewmodel/preannounce_thumbnail_viewmodel.dart';

@@ -3,19 +3,12 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-// import 'package:front/core/database/hive_configs.dart';
-// import 'package:front/core/navigation/application_router.dart';
-// import 'package:front/core/utils/device_info_manager.dart';
-// import 'core/notification/fcm_config.dart';
-// import 'dependency/locator_dev.dart' as dev;
-// import 'dependency/locator_prod.dart' as prod;
 import 'package:core/database/hive_configs.dart';
-import 'package:core/navigation/application_router.dart';
 import 'package:core/utils/device_info_manager.dart';
 import 'package:core/notification/fcm_config.dart';
 import 'package:core/dependency/locator_dev.dart' as dev;
 import 'package:core/dependency/locator_prod.dart' as prod;
+import 'package:features/barlow_app.dart';
 
 const _flavor = String.fromEnvironment('FLAVOR');
 
@@ -44,11 +37,7 @@ void main() async {
   ).initialize();
   await DeviceInfoManager().init();
   FlutterNativeSplash.remove();
-  runApp(
-    const ProviderScope(
-      child: MyApp(),
-      )
-  );
+  runApp(barlowMobileApp);
 }
 
 void _assertFlavor() {
@@ -60,36 +49,4 @@ void _assertFlavor() {
     }
     return true;
   }());
-}
-
-class MyApp extends ConsumerWidget {
-
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return MaterialApp.router(
-      theme: ThemeData(
-        chipTheme: const ChipThemeData(
-        showCheckmark: false, // ✅ 체크 아이콘 제거
-      ),
-    ),
-      debugShowCheckedModeBanner: true,
-      routerConfig: applicationRouter,
-      builder: (context, child) {
-        final mediaQuery = MediaQuery.of(context);
-        final clampedScale = mediaQuery.textScaler.clamp(
-          minScaleFactor: 1.0,
-          maxScaleFactor: 1.2,
-        );
-        return MediaQuery(
-          data: mediaQuery.copyWith(
-              textScaler: clampedScale, // os 설정에서 글자 크기 무시
-              boldText: false // os 설정에서 글자 굵기 무시
-            ),
-          child: child!,
-        );
-      },
-    );
-  }
 }

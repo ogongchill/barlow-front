@@ -1,7 +1,7 @@
 import 'dart:collection';
-import 'package:core/navigation/application_navigation_service.dart';
 import 'package:design_system/theme/color_palette.dart';
 import 'package:design_system/theme/test_style_preset.dart';
+import 'package:features/navigation/application_navigation_service.dart';
 import 'package:features/notification/domain/entities/received_notificaton.dart';
 import 'package:features/notification/presentation/viewmodel/notification_viewmodel.dart';
 import 'package:features/shared/view/appbar.dart';

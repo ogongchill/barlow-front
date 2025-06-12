@@ -1,4 +1,3 @@
-import 'package:core/navigation/application_navigation_service.dart';
 import 'package:design_system/theme/color_palette.dart';
 import 'package:design_system/theme/test_style_preset.dart';
 import 'package:features/committee/presentation/view/committee_bill_post_tag_widget.dart';
@@ -7,6 +6,7 @@ import 'package:features/committee/presentation/view/committee_profile_widget.da
 import 'package:features/committee/presentation/viewmodel/committe_bill_post_tag_viewmodel.dart';
 import 'package:features/committee/presentation/viewmodel/committee_bill_post_viewmodel.dart';
 import 'package:features/committee/presentation/viewmodel/committee_subscription_viewmodel.dart';
+import 'package:features/navigation/application_navigation_service.dart';
 import 'package:features/shared/domain/bill_post_tag.dart';
 import 'package:features/shared/domain/committee.dart';
 import 'package:features/shared/domain/party.dart';

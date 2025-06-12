@@ -1,8 +1,8 @@
-import 'package:core/navigation/application_navigation_service.dart';
 import 'package:design_system/theme/color_palette.dart';
 import 'package:design_system/theme/test_style_preset.dart';
 import 'package:features/home/domain/entities/committee_account.dart';
 import 'package:features/home/presentation/viewmodel/home_view_provider.dart';
+import 'package:features/navigation/application_navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shimmer/shimmer.dart';

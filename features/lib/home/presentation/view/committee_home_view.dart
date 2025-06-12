@@ -1,4 +1,3 @@
-import 'package:core/navigation/application_navigation_service.dart';
 import 'package:design_system/theme/color_palette.dart';
 import 'package:design_system/theme/test_style_preset.dart';
 import 'package:features/home/presentation/view/committee_account_list_widget.dart';
@@ -6,6 +5,7 @@ import 'package:features/home/presentation/view/home_appbar.dart';
 import 'package:features/home/presentation/view/home_shortcut_widget.dart';
 import 'package:features/home/presentation/view/today_bill_thumbnail_widget.dart';
 import 'package:features/home/presentation/viewmodel/home_view_provider.dart';
+import 'package:features/navigation/application_navigation_service.dart';
 import 'package:features/shared/view/bottom_nav_bar_widget.dart';
 import 'package:features/shared/view/error.dart';
 import 'package:flutter/material.dart';
