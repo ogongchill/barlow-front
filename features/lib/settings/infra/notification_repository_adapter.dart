@@ -1,15 +1,11 @@
-// import 'package:front/core/api/api_router.dart';
-// import 'package:front/core/api/common/legislation_type.dart';
-// import 'package:front/features/settings/domain/entities/notification.dart';
-// import 'package:front/features/settings/domain/repositories/notification_repository.dart';
-// import 'package:front/features/shared/domain/committee.dart';
-
 import 'package:core/api/api_router.dart';
 import 'package:features/settings/domain/entities/notification.dart';
 import 'package:features/settings/domain/repositories/notification_repository.dart';
 import 'package:features/shared/domain/committee.dart';
 import 'package:core/api/common/legislation_type.dart';
+import 'package:injectable/injectable.dart';
 
+@LazySingleton(as: NotificationRepository)
 class NotificationRepositoryAdapter implements NotificationRepository {
 
   final ApiRouter _apiRouter;

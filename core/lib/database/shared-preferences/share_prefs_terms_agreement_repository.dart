@@ -1,3 +1,4 @@
+import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract interface class TermsAgreementRepository {
@@ -6,6 +7,7 @@ abstract interface class TermsAgreementRepository {
   Future<void> saveAgreement(String version);
 }
 
+@LazySingleton(as: TermsAgreementRepository)
 class TermsAgreementRepositoryAdapter implements TermsAgreementRepository {
   static const _key = 'agreed_terms_version';
 

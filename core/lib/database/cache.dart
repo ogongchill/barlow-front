@@ -1,10 +1,7 @@
-// import 'package:front/features/committee/domain/entities/committee_profile.dart';
-// import 'package:front/features/committee/domain/entities/committee_subscription.dart';
-// import 'package:front/features/shared/domain/committee.dart';
-
 import 'package:features/committee/domain/entities/committee_profile.dart';
 import 'package:features/committee/domain/entities/committee_subscription.dart';
 import 'package:features/shared/domain/committee.dart';
+import 'package:injectable/injectable.dart';
 
 abstract class Cache<K,V> {
 
@@ -14,7 +11,7 @@ abstract class Cache<K,V> {
   void _cleanUp(K key);
 }
 
-
+@LazySingleton()
 class CommitteeNotificationCache implements Cache<Committee, bool>{
 
   static const Duration ttl = Duration(milliseconds: 100000);
@@ -55,6 +52,7 @@ class CommitteeNotificationCache implements Cache<Committee, bool>{
   }
 }
 
+@LazySingleton()
 class CommitteeSubscriptionCache implements Cache<Committee, bool>{
 
   static const Duration ttl = Duration(milliseconds: 100000);
@@ -115,6 +113,7 @@ class CommitteeSubscriptionCache implements Cache<Committee, bool>{
   }
 }
 
+@LazySingleton()
 class CommitteeProfileCache implements Cache<Committee, CommitteeProfile>{
 
   static const Duration ttl = Duration(milliseconds: 100000);

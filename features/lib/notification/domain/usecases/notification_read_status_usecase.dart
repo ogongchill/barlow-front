@@ -1,5 +1,7 @@
 import 'package:features/notification/domain/repositories/read_status_repository.dart';
+import 'package:injectable/injectable.dart';
 
+@injectable
 class MarkAsReadNotificationUseCase {
 
   final ReadStatusRepository _repository;
@@ -11,6 +13,7 @@ class MarkAsReadNotificationUseCase {
   }
 }
 
+@injectable
 class CheckIsReadNotificationUseCase {
 
   final ReadStatusRepository _repository;

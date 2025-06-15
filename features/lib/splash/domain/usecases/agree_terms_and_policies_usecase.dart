@@ -1,6 +1,8 @@
 import 'package:core/database/shared-preferences/share_prefs_terms_agreement_repository.dart';
 import 'package:core/utils/application_version_info.dart';
+import 'package:injectable/injectable.dart';
 
+@injectable
 class AgreeTermsAndPoliciesUseCase {
 
   final TermsAgreementRepository _repository;
@@ -13,6 +15,7 @@ class AgreeTermsAndPoliciesUseCase {
   }
 }
 
+@injectable
 class CheckTermsAndPoliciesUseCase {
 
   final TermsAgreementRepository _repository;

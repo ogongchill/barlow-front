@@ -1,4 +1,5 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:injectable/injectable.dart';
 
 abstract interface class TokenRepository {
 
@@ -8,6 +9,7 @@ abstract interface class TokenRepository {
   Future<void> clearAll();
 }
 
+@LazySingleton(as: TokenRepository)
 class SecureStorageTokenRepository implements TokenRepository{
 
   static const _accessTokenKey = "accessToken";

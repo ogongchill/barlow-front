@@ -1,6 +1,8 @@
 import 'package:features/committee/domain/entities/committe_notification.dart';
 import 'package:features/committee/domain/repositories/commitee_notification_repository.dart';
+import 'package:injectable/injectable.dart';
 
+@injectable
 class ToggleCommitteeNotificationUseCase {
 
   final CommitteeNotificationRepository _repository;

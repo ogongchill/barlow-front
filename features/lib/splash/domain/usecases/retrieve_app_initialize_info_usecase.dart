@@ -4,6 +4,7 @@ import 'package:features/splash/domain/entities/app_initialize_info.dart';
 import 'package:features/splash/domain/entities/app_version_status.dart';
 import 'package:features/splash/domain/repositories/app_initialize_info_repository.dart';
 import 'package:features/splash/domain/repositories/app_version_status_repository.dart';
+import 'package:injectable/injectable.dart';
 
 class AppInitializeStatus {
 
@@ -24,6 +25,7 @@ class AppInitializeStatus {
   });
 }
 
+@injectable
 class RetrieveAppInitializeInfoUseCase {
 
   final AppInitializeInfoRepository _repository;

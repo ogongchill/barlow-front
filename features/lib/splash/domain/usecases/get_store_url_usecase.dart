@@ -1,24 +1,21 @@
-import 'package:firebase_remote_config/firebase_remote_config.dart';
+import 'package:core/notification/firebase_manager.dart';
 import 'package:core/utils/device_info_manager.dart';
+import 'package:injectable/injectable.dart';
 
+@injectable
 class GetStoreUrlUseCase {
 
-  static final FirebaseRemoteConfig _remoteConfig = FirebaseRemoteConfig.instance;
   final DeviceInfo _deviceInfo;
-  final String _playStoreUrl;
-  final String _appStoreUrl;
+  final RemoteConfigManager _remoteConfigManager;
 
-  GetStoreUrlUseCase({required DeviceInfo deviceInfo})
-    : _deviceInfo = deviceInfo,
-      _playStoreUrl = _remoteConfig.getString("androidStoreUrl"),
-      _appStoreUrl = _remoteConfig.getString("appStoreUrl");
+  GetStoreUrlUseCase(this._deviceInfo, this._remoteConfigManager);
 
   String execute() {
     if(_deviceInfo.deviceOs == "android") {
-      return _playStoreUrl;
+      return _remoteConfigManager.readPlayStoreUrl();
     }
     if(_deviceInfo.deviceOs == "ios") {
-      return _appStoreUrl;
+      return _remoteConfigManager.readAppstoreUrl();
     }
     return "https://ogongchill.github.io";
   }

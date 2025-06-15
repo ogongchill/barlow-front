@@ -3,8 +3,10 @@ import 'package:core/database/shared-preferences/shared_prefs_application_settin
 import 'package:features/settings/domain/entities/user.dart';
 import 'package:features/settings/domain/repositories/user_repository.dart';
 import 'package:features/splash/domain/repositories/auth_repository.dart';
+import 'package:injectable/injectable.dart';
 import 'package:uuid/uuid.dart';
 
+@injectable
 class SignupUseCase {
 
   final AuthRepository _repository;

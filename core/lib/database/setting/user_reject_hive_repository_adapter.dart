@@ -7,7 +7,9 @@ import 'package:core/database/hive_configs.dart';
 import 'package:core/database/setting/user_reject_hive_entity.dart';
 import 'package:features/settings/domain/entities/user_reject.dart';
 import 'package:features/settings/domain/repositories/user_reject_repository.dart';
+import 'package:injectable/injectable.dart';
 
+@LazySingleton(as: UserRejectRepository)
 class UserRejectHiveRepositoryAdapter implements UserRejectRepository {
   
   static final _box = HiveBoxes.userRejectBox;

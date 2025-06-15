@@ -3,7 +3,9 @@ import 'package:core/database/shared-preferences/shared_prefs_application_settin
 import 'package:core/database/shared-preferences/shared_prefs_system_permission_repository.dart';
 import 'package:features/splash/domain/entities/app_initialize_info.dart';
 import 'package:features/splash/domain/repositories/app_initialize_info_repository.dart';
+import 'package:injectable/injectable.dart';
 
+@LazySingleton(as: AppInitializeInfoRepository)
 class AppInitializeInfoRepositoryAdapter implements AppInitializeInfoRepository {
 
   final AppSettingsRepository _appSettingsRepository;

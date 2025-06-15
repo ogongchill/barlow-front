@@ -5,7 +5,9 @@ import 'package:features/pre_announce/domain/entities/preannounce_bill_detail.da
 import 'package:features/pre_announce/domain/repositories/preannounce_bill_detail_respository.dart';
 import 'package:features/shared/domain/bil_detail.dart';
 import 'package:features/shared/domain/party.dart';
+import 'package:injectable/injectable.dart';
 
+@LazySingleton(as: PreAnnounceBillDetailRepository)
 class PreAnnounceBillDetailRepositoryAdapter implements PreAnnounceBillDetailRepository{
 
   final ApiRouter _apiRouter;

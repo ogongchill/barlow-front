@@ -3,7 +3,9 @@ import 'package:core/database/cache.dart';
 import 'package:features/committee/domain/repositories/commitee_notification_repository.dart';
 import 'package:features/shared/domain/committee.dart';
 import 'package:core/api/common/legislation_type.dart';
+import 'package:injectable/injectable.dart';
 
+@LazySingleton(as: CommitteeNotificationRepository)
 class CommitteeNotificationRepositoryAdapter implements CommitteeNotificationRepository {
 
   final ApiRouter _apiRouter;

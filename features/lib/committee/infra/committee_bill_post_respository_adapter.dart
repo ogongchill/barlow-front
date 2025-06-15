@@ -5,7 +5,9 @@ import 'package:features/shared/domain/bill_thumbnail.dart';
 import 'package:features/shared/domain/committee.dart';
 import 'package:features/shared/domain/page.dart';
 import 'package:features/shared/infra/bill_post_tag_processor.dart';
+import 'package:injectable/injectable.dart';
 
+@LazySingleton(as: CommitteeBillPostRepository)
 class CommitteeBillPostRepositoryAdapter implements CommitteeBillPostRepository {
 
   final ApiRouter _apiRouter;

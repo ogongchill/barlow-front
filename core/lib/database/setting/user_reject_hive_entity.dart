@@ -1,4 +1,3 @@
-// import 'package:front/features/settings/domain/entities/user_reject.dart';
 import 'package:features/settings/domain/entities/user_reject.dart';
 import 'package:hive/hive.dart';
 

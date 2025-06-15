@@ -2,7 +2,9 @@ import 'package:features/bill_info/domain/repositories/bill_repository.dart';
 import 'package:features/shared/domain/bill_post_tag.dart';
 import 'package:features/shared/domain/bill_thumbnail.dart';
 import 'package:features/shared/domain/page.dart';
+import 'package:injectable/injectable.dart';
 
+@injectable
 class FetchRecentBillThumbnailUseCase {
 
   final RecentBillRepository _repository;

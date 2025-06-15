@@ -2,11 +2,9 @@ import 'package:core/database/hive_configs.dart';
 import 'package:core/database/user/user_info_hive_entity.dart';
 import 'package:features/settings/domain/entities/user.dart';
 import 'package:features/settings/domain/repositories/user_repository.dart';
-// import 'package:front/core/database/hive_configs.dart';
-// import 'package:front/core/database/user/user_info_hive_entity.dart';
-// import 'package:front/features/settings/domain/entities/user.dart';
-// import 'package:front/features/settings/domain/repositories/user_repository.dart';
+import 'package:injectable/injectable.dart';
 
+@LazySingleton(as: UserInfoRepository)
 class UserInfoHiveRepository implements UserInfoRepository {
 
   static final _box = HiveBoxes.userInfoBox;

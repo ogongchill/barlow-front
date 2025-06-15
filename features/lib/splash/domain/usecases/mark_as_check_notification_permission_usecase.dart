@@ -1,5 +1,7 @@
 import 'package:core/database/shared-preferences/shared_prefs_system_permission_repository.dart';
+import 'package:injectable/injectable.dart';
 
+@injectable
 class MarkAsCheckNotificationPermissionUseCase {
 
   final PermissionCheckStatusRepository _repository;

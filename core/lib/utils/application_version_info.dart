@@ -1,3 +1,4 @@
+import 'package:injectable/injectable.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 abstract interface class ApplicationVersionInfo {
@@ -8,16 +9,17 @@ abstract interface class ApplicationVersionInfo {
   String get buildNumber;
 }
 
+@LazySingleton(as: ApplicationVersionInfo)
 class ApplicationVersionInfoManager implements ApplicationVersionInfo{
 
   final PackageInfo _packageInfo;
 
-  ApplicationVersionInfoManager._(this._packageInfo);
+  ApplicationVersionInfoManager(this._packageInfo);
 
-  static Future<ApplicationVersionInfoManager> init() async {
-    final info = await PackageInfo.fromPlatform();
-    return ApplicationVersionInfoManager._(info);
-  }
+  // static Future<ApplicationVersionInfoManager> init() async {
+  //   final info = await PackageInfo.fromPlatform();
+  //   return ApplicationVersionInfoManager._(info);
+  // }
 
   @override
   String get appName => _packageInfo.appName;
@@ -30,4 +32,11 @@ class ApplicationVersionInfoManager implements ApplicationVersionInfo{
 
   @override
   String get version => _packageInfo.version;
+}
+
+@module
+abstract class PackageInfoModule {
+
+  @preResolve
+  Future<PackageInfo> get packageInfo => PackageInfo.fromPlatform();
 }

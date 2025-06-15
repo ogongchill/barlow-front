@@ -3,7 +3,9 @@ import 'package:features/shared/domain/bill_post_tag.dart';
 import 'package:features/shared/domain/bill_thumbnail.dart';
 import 'package:features/shared/domain/committee.dart';
 import 'package:features/shared/domain/page.dart';
+import 'package:injectable/injectable.dart';
 
+@injectable
 class FetchCommitteeBillPostThumbnailsUseCase {
 
   final CommitteeBillPostRepository _repository;

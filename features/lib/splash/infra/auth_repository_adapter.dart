@@ -1,22 +1,24 @@
 import 'package:core/api/api_router.dart';
 import 'package:core/api/auth/auth_requests.dart';
+import 'package:core/notification/firebase_manager.dart';
 import 'package:core/utils/device_info_manager.dart';
 import 'package:features/splash/domain/repositories/auth_repository.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:injectable/injectable.dart';
 
+@LazySingleton(as: AuthRepository)
 class AuthRepositoryAdapter implements AuthRepository {
 
   final ApiRouter _router;
   final DeviceInfo _deviceInfo;
-  final FirebaseMessaging _firebaseMessaging;
+  final FcmManager _firebaseManager;
 
   AuthRepositoryAdapter({
     required ApiRouter router,
     required DeviceInfo deviceInfo,
-    required FirebaseMessaging firebaseMessaging
+    required FcmManager firebaseManager
   }): _router = router,
       _deviceInfo = deviceInfo,
-      _firebaseMessaging = firebaseMessaging;
+      _firebaseManager = firebaseManager;
 
   @override
   Future<String> guestLogin() async {
@@ -46,10 +48,6 @@ class AuthRepositoryAdapter implements AuthRepository {
   }
 
   Future<String?> getFcmToken() async {
-    String? fcmToken = await _firebaseMessaging.getToken();
-    if(fcmToken == null) {
-      throw StateError("fcm token이 초기화 되지 않음");
-    }
-    return fcmToken;
+    return _firebaseManager.getToken();
   }
 }

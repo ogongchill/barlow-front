@@ -1,15 +1,11 @@
-// import 'package:front/features/pre_announce/domain/entities/preannounce_bill_thumbnail.dart';
-// import 'package:front/features/pre_announce/domain/repositories/preannounce_bill_thumbnail_repository.dart';
-// import 'package:front/features/pre_announce/domain/repositories/sort_key.dart';
-// import 'package:front/features/shared/domain/bill_post_tag.dart';
-// import 'package:front/features/shared/domain/page.dart';
-
 import 'package:features/pre_announce/domain/entities/preannounce_bill_thumbnail.dart';
 import 'package:features/pre_announce/domain/repositories/preannounce_bill_thumbnail_repository.dart';
 import 'package:features/pre_announce/domain/repositories/sort_key.dart';
 import 'package:features/shared/domain/bill_post_tag.dart';
 import 'package:features/shared/domain/page.dart';
+import 'package:injectable/injectable.dart';
 
+@injectable
 class FetchPreAnnounceThumbnailUseCase {
 
   final PreAnnounceBillThumbnailRepository _repository;

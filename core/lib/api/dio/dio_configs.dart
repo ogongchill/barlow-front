@@ -16,3 +16,4 @@ final DioConfig testServerConfig = DioConfig(
     connectionTimeOut: const Duration(seconds: 10),
     receiveTimeOut: const Duration(seconds: 10)
 );
+

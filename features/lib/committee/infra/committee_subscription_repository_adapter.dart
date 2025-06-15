@@ -5,7 +5,9 @@ import 'package:features/committee/domain/entities/committee_subscription.dart';
 import 'package:features/committee/domain/repositories/committee_subscription_repository.dart';
 import 'package:features/shared/domain/committee.dart';
 import 'package:core/api/common/legislation_type.dart';
+import 'package:injectable/injectable.dart';
 
+@LazySingleton(as: CommitteeSubscriptionRepository)
 class CommitteeSubscriptionRepositoryAdapter implements CommitteeSubscriptionRepository {
 
   final ApiRouter _router;

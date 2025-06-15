@@ -5,7 +5,9 @@ import 'package:features/pre_announce/domain/repositories/sort_key.dart';
 import 'package:features/shared/domain/bill_post_tag.dart';
 import 'package:features/shared/domain/page.dart';
 import 'package:features/shared/infra/bill_post_tag_processor.dart';
+import 'package:injectable/injectable.dart';
 
+@LazySingleton(as: PreAnnounceBillThumbnailRepository)
 class PreAnnounceBillThumbnailRepositoryAdapter implements PreAnnounceBillThumbnailRepository {
 
   final ApiRouter _apiRouter;

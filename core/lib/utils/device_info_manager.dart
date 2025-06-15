@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:injectable/injectable.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 abstract interface class DeviceInfo {
@@ -10,6 +11,7 @@ abstract interface class DeviceInfo {
   String get appVersion;
 }
 
+@LazySingleton(as: DeviceInfo)
 class DeviceInfoManager implements DeviceInfo{
 
   static final DeviceInfoManager _instance = DeviceInfoManager._internal();

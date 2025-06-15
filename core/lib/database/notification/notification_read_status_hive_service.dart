@@ -1,6 +1,3 @@
-// import 'package:front/core/database/notification/notification_read_status_hive_entity.dart';
-// import 'package:front/core/database/hive_configs.dart';
-
 import 'package:core/database/hive_configs.dart' show HiveBoxes;
 import 'package:core/database/notification/notification_read_status_hive_entity.dart';
 

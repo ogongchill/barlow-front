@@ -2,17 +2,18 @@ import 'package:core/database/secure-storage/token_repository.dart';
 import 'package:core/database/shared-preferences/shared_prefs_application_setting_repository.dart';
 import 'package:features/settings/domain/repositories/user_account_withdraw_repository.dart';
 import 'package:features/settings/domain/repositories/user_repository.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-
+import 'package:injectable/injectable.dart';
+import 'package:core/notification/firebase_manager.dart';
+@injectable
 class DeleteGuestUserUseCase {
 
   final UserInfoRepository _repository;
-  final FirebaseMessaging _firebaseMessaging;
+  final FcmManager _fireBaseManager;
   final AppSettingsRepository _appSettingsRepository;
   final TokenRepository _tokenRepository;
   final UserAccountWithdrawRepository _userAccountWithdrawRepository;
 
-  DeleteGuestUserUseCase(this._repository, this._firebaseMessaging, this._appSettingsRepository, this._tokenRepository, this._userAccountWithdrawRepository);
+  DeleteGuestUserUseCase(this._repository, this._fireBaseManager, this._appSettingsRepository, this._tokenRepository, this._userAccountWithdrawRepository);
 
   Future<void> execute() async {
       await _repository.deleteUserInfo();
@@ -21,7 +22,7 @@ class DeleteGuestUserUseCase {
       await _tokenRepository.deleteAccessToken();
       await _retryWithBackoff(
             () async {
-          await _firebaseMessaging.deleteToken();
+          await _fireBaseManager.deleteToken();
         },
         maxRetries: 5,
         label: 'FCM 토큰 삭제',

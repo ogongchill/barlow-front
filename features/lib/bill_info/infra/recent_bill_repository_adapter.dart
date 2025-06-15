@@ -8,7 +8,9 @@ import 'package:features/shared/domain/bill_thumbnail.dart';
 import 'package:features/shared/domain/page.dart';
 import 'package:features/shared/domain/party.dart';
 import 'package:features/shared/infra/bill_post_tag_processor.dart';
+import 'package:injectable/injectable.dart';
 
+@LazySingleton(as: BillDetailRepository)
 class BillDetailRepositoryAdapter implements BillDetailRepository {
 
   final ApiRouter _router;
@@ -53,6 +55,7 @@ class BillDetailRepositoryAdapter implements BillDetailRepository {
   }
 }
 
+@LazySingleton(as: RecentBillRepository)
 class RecentBillRepositoryAdapter implements RecentBillRepository{
 
   final ApiRouter _router;

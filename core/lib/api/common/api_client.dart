@@ -1,7 +1,7 @@
 import 'package:core/api/api_exception.dart';
 import 'package:core/api/common/api_response.dart';
-import 'package:core/api/dio/dio_configs.dart';
 import 'package:dio/dio.dart';
+import 'package:injectable/injectable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 enum HttpMethod { get, post, put, delete, patch }
@@ -18,19 +18,24 @@ class ApiRoute {
   });
 }
 
+@LazySingleton()
 class ApiClient {
 
   final Dio _dio;
 
-  ApiClient({required DioConfig dioConfig, List<Interceptor>? interceptors})
-    : _dio = Dio(
-    BaseOptions(
-        connectTimeout: dioConfig.connectionTimeOut,
-        receiveTimeout: dioConfig.receiveTimeOut,
-        baseUrl: dioConfig.hostUrl
-    )
-  )
-  ..interceptors.addAll(interceptors ?? []);
+  // @factoryMethod
+  // ApiClient.dev(this._dio);
+  //
+  // ApiClient({required DioConfig dioConfig, List<Interceptor>? interceptors})
+  //   : _dio = Dio(
+  //   BaseOptions(
+  //       connectTimeout: dioConfig.connectionTimeOut,
+  //       receiveTimeout: dioConfig.receiveTimeOut,
+  //       baseUrl: dioConfig.hostUrl
+  //   )
+  // )
+  // ..interceptors.addAll(interceptors ?? []);
+  ApiClient(this._dio);
 
   Future<TRes?> request<TReq, TRes>({
     required ApiRoute apiRoute,

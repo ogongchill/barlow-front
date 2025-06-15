@@ -1,10 +1,10 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:injectable/injectable.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'dart:io' show Platform;
 
+@injectable
 class RequestNotificationPermissionUseCase {
-
-  final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
   RequestNotificationPermissionUseCase();
 
@@ -30,6 +30,7 @@ class RequestNotificationPermissionUseCase {
   }
 
   Future<void> _requestIosNotificationPermission() async {
+    final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
     final iosPlugin = flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>();
 

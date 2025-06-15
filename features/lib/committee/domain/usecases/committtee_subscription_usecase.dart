@@ -1,6 +1,8 @@
 import 'package:features/committee/domain/entities/committee_subscription.dart';
 import 'package:features/committee/domain/repositories/committee_subscription_repository.dart';
+import 'package:injectable/injectable.dart';
 
+@injectable
 class FetchCommitteeSubscriptionUseCase {
 
   final CommitteeSubscriptionRepository _repository;
@@ -12,6 +14,7 @@ class FetchCommitteeSubscriptionUseCase {
   }
 }
 
+@injectable
 class ToggleCommitteeSubscriptionUseCase {
 
   final CommitteeSubscriptionRepository _repository;

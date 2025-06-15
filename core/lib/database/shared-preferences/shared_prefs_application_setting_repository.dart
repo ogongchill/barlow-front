@@ -1,3 +1,4 @@
+import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract interface class AppSettingsRepository {
@@ -7,6 +8,7 @@ abstract interface class AppSettingsRepository {
   Future<void> clear();
 }
 
+@LazySingleton(as: AppSettingsRepository)
 class SharedPrefsAppSettingRepository implements AppSettingsRepository{
 
   static const String _isFirstLaunchKey = "first_launch";

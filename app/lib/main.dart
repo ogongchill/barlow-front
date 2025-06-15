@@ -6,27 +6,22 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:core/database/hive_configs.dart';
 import 'package:core/utils/device_info_manager.dart';
 import 'package:core/notification/fcm_config.dart';
-import 'package:core/dependency/locator_dev.dart' as dev;
-import 'package:core/dependency/locator_prod.dart' as prod;
 import 'package:features/barlow_app.dart';
+
+import 'di.dart';
 
 const _flavor = String.fromEnvironment('FLAVOR');
 
 void main() async {
   _assertFlavor();
-  bool clearHive = false;
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await HiveInitializer.initializeApp();
-  if(clearHive) {
+  if(_flavor == 'prod:clearHive') {
     HiveInitializer.clearBox();
-  }
-  if (_flavor == 'prod') {
-    await prod.setUpProdLocator();
-  } else if(_flavor == 'prod:clearHive') {
-    clearHive = true;
-  }else {
-    await dev.setUpDevLocator();
+    configureDependencies('prod');
+  } else {
+    configureDependencies(_flavor);
   }
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   FcmInitializer(

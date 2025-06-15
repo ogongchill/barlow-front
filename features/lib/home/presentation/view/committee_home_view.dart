@@ -39,11 +39,14 @@ class CommitteeHomeView extends ConsumerWidget {
                   _buildSubscribeCommitteeSection(CommitteeAccountListWidget(accounts: data.subscriptions), ref),
                   _buildTodayThumbnailSection(TodayBillThumbnailWidget(data.thumbnails))
                 ],
-                error: (err, stack) => [
+                error: (err, stack)  {
+                  print("[ERR] : ${err.toString()}");
+                  return [
                   const HomeShortcutWidget(),
                   _buildSubscribeCommitteeSection(const SomethingWentWrongWidget(), ref),
                   _buildTodayThumbnailSection(const SomethingWentWrongWidget())
-                ],
+                  ];
+                },
                 loading: () => [
                   const HomeShortcutWidget(),
                   _buildSubscribeCommitteeSection(_buildSkeletonLoader(), ref),

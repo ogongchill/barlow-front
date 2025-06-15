@@ -1,5 +1,4 @@
 import 'package:core/api/common/common_responses.dart';
-// import 'package:front/core/api/common/common_responses.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'pre_announce_responses.g.dart';
@@ -37,7 +36,7 @@ class JsonPreAnnounceBillThumbnail{
     required this.dDay
   });
 
-  factory JsonPreAnnounceBillThumbnail.fromJson(Map<String, dynamic> json) => _$PreAnnounceBillThumbnailFromJson(json);
+  factory JsonPreAnnounceBillThumbnail.fromJson(Map<String, dynamic> json) => _$JsonPreAnnounceBillThumbnailFromJson(json);
 }
 
 @JsonSerializable()

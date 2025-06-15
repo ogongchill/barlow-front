@@ -1,3 +1,4 @@
+import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 enum PermissionType {
@@ -17,6 +18,7 @@ enum PermissionType {
   Future<void> markAsUnchecked(PermissionType permissionType);
 }
 
+@LazySingleton(as: PermissionCheckStatusRepository)
 class SharedPrefsPermissionCheckStatusRepository implements PermissionCheckStatusRepository {
 
   @override

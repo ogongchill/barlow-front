@@ -1,9 +1,8 @@
-// import 'package:front/features/settings/domain/entities/notification.dart';
-// import 'package:front/features/settings/domain/repositories/notification_repository.dart';
-
 import 'package:features/settings/domain/entities/notification.dart';
 import 'package:features/settings/domain/repositories/notification_repository.dart';
+import 'package:injectable/injectable.dart';
 
+@injectable
 class ChangeNotificationUseCase {
 
   final NotificationRepository _repository;
@@ -19,6 +18,7 @@ class ChangeNotificationUseCase {
   }
 }
 
+@injectable
 class FetchNotificationUseCase {
 
   final NotificationRepository _repository;
