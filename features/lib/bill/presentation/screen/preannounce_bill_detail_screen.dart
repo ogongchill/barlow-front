@@ -18,6 +18,8 @@ import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:design_system/theme/color_palette.dart';
 
+import '../../../settings/presentation/widgets/disclaimer_widget.dart';
+
 class PreAnnounceBillDetailScreen extends ConsumerWidget {
 
   static const TextStyle _externalLinkTextStyle = TextStyle(
@@ -40,7 +42,7 @@ class PreAnnounceBillDetailScreen extends ConsumerWidget {
         onPressedBack: () => ApplicationNavigatorService.popWithResult(context),
       ),
       body: billDetail.when(
-          data: (billDetail) => _buildBody(billDetail),
+          data: (billDetail) => _buildBody(billDetail, context),
           error: (error, stack) => const SomethingWentWrongWidget(),
           loading: () => Shimmer.fromColors(
             baseColor: Colors.grey[300]!, // 어두운 회색
@@ -59,46 +61,53 @@ class PreAnnounceBillDetailScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildBody(PreAnnounceBillDetail billDetail) {
+  Widget _buildBody(PreAnnounceBillDetail billDetail, BuildContext context) {
     return SingleChildScrollView(
-      child: CaptureAndShareWidget(
-          body: Container(
-            color: ColorPalette.innerContent,
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              children: [
-                _buildPreAnnouncementSectionWidget(billDetail),
-                BillDetailParagraphWidget(text: billDetail.detail),
-                if(billDetail.preAnnouncementSection.linkUrl != null)
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.transparent,
-                      shadowColor: Colors.transparent,
-                      overlayColor: Colors.black26,
-                      elevation: 0
-                    ),
-                    onPressed: () => _openExternalBrowser(billDetail.preAnnouncementSection.linkUrl!),
-                    child: const Text.rich(
-                      TextSpan(
-                        children: [
-                          TextSpan(
-                            text: '국회에 의견 등록하러 가기 ',
-                            style: _externalLinkTextStyle,
+      child: Column(
+        children: [
+          CaptureAndShareWidget(
+              body: Container(
+                color: ColorPalette.innerContent,
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  children: [
+                    _buildPreAnnouncementSectionWidget(billDetail),
+                    BillDetailParagraphWidget(text: billDetail.detail),
+                    if(billDetail.preAnnouncementSection.linkUrl != null)
+                      ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.transparent,
+                              shadowColor: Colors.transparent,
+                              overlayColor: Colors.black26,
+                              elevation: 0
                           ),
-                          WidgetSpan(
-                            alignment: PlaceholderAlignment.middle,
-                            child: Icon(Icons.link_rounded, size: 16, color: ColorPalette.greyDark),
-                          ),
-                        ],
+                          // onPressed: () => _openExternalBrowser(billDetail.preAnnouncementSection.linkUrl!),
+                          onPressed: () => _showDisclaimerDialog(context, billDetail.preAnnouncementSection.linkUrl!),
+                          child: const Text.rich(
+                            TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: '의견 등록하러 가기',
+                                  style: _externalLinkTextStyle,
+                                ),
+                                WidgetSpan(
+                                  alignment: PlaceholderAlignment.middle,
+                                  child: Icon(Icons.link_rounded, size: 16, color: ColorPalette.greyDark),
+                                ),
+                              ],
+                            ),
+                            textAlign: TextAlign.center,
+                          )
                       ),
-                      textAlign: TextAlign.center,
-                    )
-                  ),
-                if(billDetail.proposerSection != null)
-                  BillProposerSectionWidget(billProposerSection: billDetail.proposerSection!)
-              ],
-            ),
-        )
+                    // const Text("※ 본 앱은 국회 입법예고 시스템과 직접적인 관련이 없는 비공식 서비스입니다.해당 링크를 통해 국회에서 운영하는 공식 사이트(open.assembly.go.kr)로 이동 가능합니다", style: TextStylePreset.innerContentSubtitle,),
+                    if(billDetail.proposerSection != null)
+                      BillProposerSectionWidget(billProposerSection: billDetail.proposerSection!)
+                  ],
+                ),
+              )
+          ),
+          const DisclaimerWidget(),
+        ],
       ),
     );
   }
@@ -162,9 +171,39 @@ class PreAnnounceBillDetailScreen extends ConsumerWidget {
   Widget _buildIconOrFallback(String legislativeBody) {
     try {
       Committee committee = Committee.findByName(legislativeBody);
-      return SvgPicture.asset(CommitteeIconMapper.getPath(committee));
+      return SvgPicture.asset(CommitteeIconMapper.getPath(committee), width: 24, height: 24,);
     } catch (e) {
       return const SizedBox.shrink(); // 아이콘 대신 빈 박스
     }
+  }
+
+  void _showDisclaimerDialog(BuildContext context, String url) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("의견 등록 안내", style: TextStylePreset.sectionTitle,),
+        backgroundColor: ColorPalette.whitePrimary,
+        content: const Text(
+          "본 앱은 국회 입법예고 시스템과 직접적인 관련이 없는 비공식 서비스입니다.\n\n"
+              "해당 링크는 국회에서 운영하는 공식 사이트(open.assembly.go.kr)로 연결되며, "
+              "의견 등록은 사용자께서 해당 공식 페이지에서 직접 진행하셔야 합니다.\n\n"
+              "본 앱의 의견 제출 절차를 중개하거나 저장하지 않습니다.",
+          style: TextStylePreset.innerContentSubtitle,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(), // 닫기
+            child: const Text("취소", style: TextStylePreset.thumbnailTitle),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(); // 다이얼로그 닫기
+              _openExternalBrowser(url);  // 외부 브라우저 열기
+            },
+            child: const Text("이해했어요", style: TextStylePreset.thumbnailTitle,),
+          ),
+        ],
+      ),
+    );
   }
 }

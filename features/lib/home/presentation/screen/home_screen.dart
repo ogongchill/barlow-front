@@ -1,5 +1,6 @@
 import 'package:design_system/theme/color_palette.dart';
 import 'package:design_system/theme/text_style_preset.dart';
+import 'package:features/settings/presentation/widgets/disclaimer_widget.dart';
 import 'package:features/home/presentation/view/subscribed_committee_list_view.dart';
 import 'package:features/home/presentation/widgets/home_appbar.dart';
 import 'package:features/home/presentation/widgets/home_shortcut_widget.dart';
@@ -37,20 +38,23 @@ class HomeScreen extends ConsumerWidget {
                 data: (data) => [
                   const HomeShortcutWidget(),
                   _buildSubscribeCommitteeSection(SubscribeCommitteeListView(accounts: data.subscriptions), ref),
-                  _buildTodayThumbnailSection(TodayBillThumbnailWidget(data.thumbnails))
+                  _buildTodayThumbnailSection(TodayBillThumbnailWidget(data.thumbnails)),
+                  const DisclaimerWidget()
                 ],
                 error: (err, stack)  {
                   print("[ERR] : ${err.toString()}");
                   return [
                   const HomeShortcutWidget(),
                   _buildSubscribeCommitteeSection(const SomethingWentWrongWidget(), ref),
-                  _buildTodayThumbnailSection(const SomethingWentWrongWidget())
+                  _buildTodayThumbnailSection(const SomethingWentWrongWidget()),
+                  const DisclaimerWidget()
                   ];
                 },
                 loading: () => [
                   const HomeShortcutWidget(),
                   _buildSubscribeCommitteeSection(_buildSkeletonLoader(), ref),
-                  _buildTodayThumbnailSection(_buildSkeletonLoader())
+                  _buildTodayThumbnailSection(_buildSkeletonLoader()),
+                  const DisclaimerWidget()
                 ]
             ),
           ),

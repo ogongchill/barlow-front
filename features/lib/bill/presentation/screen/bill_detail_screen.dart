@@ -12,6 +12,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../../../settings/presentation/widgets/disclaimer_widget.dart';
+
 class BillDetailScreen extends ConsumerWidget {
 
   final String _title;
@@ -83,7 +85,12 @@ class BillDetailScreen extends ConsumerWidget {
                   color: ColorPalette.innerContent,
                   borderRadius: BorderRadius.zero
             ),
-            child: CaptureAndShareWidget(body: body),
+            child: Column(
+              children: [
+                CaptureAndShareWidget(body: body),
+                const DisclaimerWidget(),
+              ],
+            ),
          ),
       ),
     );

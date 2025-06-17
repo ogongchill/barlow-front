@@ -1,5 +1,6 @@
 import 'package:design_system/theme/color_palette.dart';
 import 'package:design_system/theme/text_style_preset.dart';
+import 'package:features/settings/presentation/widgets/disclaimer_widget.dart';
 import 'package:features/navigation/application_navigation_service.dart';
 import 'package:features/settings/presentation/viewmodel/delete_guest_user_provider.dart';
 import 'package:features/settings/presentation/viewmodel/user_info_viewmodel.dart';
@@ -132,18 +133,7 @@ class SettingScreen extends ConsumerWidget {
             ],
           ),
         ),
-      Container(
-        padding: const EdgeInsets.all(20),
-        child: const Text("""
- ‘바로’ 서비스 내에서 제공되는 법안 정보, 국회의원 발의 현황 등 입법 관련 정보는 「열린국회정보 API」에서 수집하고 있습니다.
-  정부 기관 또는 국회를 공식적으로 대변하지 않으며, 
-  정보의 정확성이나 최신성에 대해서는 보증하지 않습니다.
-  
-  문의 : ogogchill@googlegroups.com""",
-        style: TextStylePreset.thumbnailSubtitle,
-        textAlign: TextAlign.center,),
-      ),
-
+      const DisclaimerWidget()
       ],
     );
   }
