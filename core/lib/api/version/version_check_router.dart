@@ -1,7 +1,5 @@
 import 'package:core/api/common/api_client.dart';
 import 'package:core/api/version/version_check_response.dart';
-// import 'package:front/core/api/common/api_client.dart';
-// import 'package:front/core/api/version/version_check_response.dart';
 
 class VersionCheckRouter {
 

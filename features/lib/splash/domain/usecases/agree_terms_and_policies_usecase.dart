@@ -1,4 +1,4 @@
-import 'package:core/database/shared-preferences/share_prefs_terms_agreement_repository.dart';
+import 'package:core/storage/shared-preferences/share_prefs_terms_agreement_repository.dart';
 import 'package:core/utils/application_version_info.dart';
 import 'package:injectable/injectable.dart';
 

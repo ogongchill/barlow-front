@@ -1,7 +1,7 @@
 import 'package:core/api/api_router.dart';
 import 'package:features/settings/domain/entities/notification.dart';
 import 'package:features/settings/domain/repositories/notification_repository.dart';
-import 'package:features/shared/domain/committee.dart';
+import 'package:features/bill/domain/constant/committee.dart';
 import 'package:core/api/common/legislation_type.dart';
 import 'package:injectable/injectable.dart';
 

@@ -1,6 +1,6 @@
-import 'package:core/database/secure-storage/token_repository.dart';
-import 'package:core/database/shared-preferences/shared_prefs_application_setting_repository.dart';
-import 'package:core/database/shared-preferences/shared_prefs_system_permission_repository.dart';
+import 'package:core/storage/secure-storage/token_repository.dart';
+import 'package:core/storage/shared-preferences/shared_prefs_application_setting_repository.dart';
+import 'package:core/storage/shared-preferences/shared_prefs_system_permission_repository.dart';
 import 'package:features/splash/domain/entities/app_initialize_info.dart';
 import 'package:features/splash/domain/repositories/app_initialize_info_repository.dart';
 import 'package:injectable/injectable.dart';

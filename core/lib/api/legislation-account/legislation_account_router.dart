@@ -1,15 +1,7 @@
-// import 'package:front/core/api/common/api_client.dart';
-// import 'package:front/core/api/common/api_request_params.dart';
-// import 'package:front/core/api/common/legislation_type.dart';
-// import 'package:front/features/shared/domain/committee.dart';
-
 import 'package:core/api/common/api_client.dart';
 import 'package:core/api/common/params/api_request_params.dart';
 import 'package:core/api/common/legislation_type.dart';
 import 'package:core/api/constants/committee_param.dart';
-// import 'package:features/shared/domain/legislation_type.dart';
-
-// import 'package:features/shared/domain/committee.dart';
 import 'legislation_account_responses.dart';
 
 class LegislationAccountRouter {

@@ -1,5 +1,5 @@
 import 'dart:collection';
-import 'package:core/dependency/service_locator.dart';
+import 'package:core/dependency/dependency_container.dart';
 import 'package:features/settings/domain/entities/notification.dart';
 import 'package:features/settings/domain/usecases/notification_usecase.dart';
 import 'package:flutter/cupertino.dart';
@@ -42,7 +42,7 @@ class NotificationToggleStateNotifier extends StateNotifier<NotificationToggleSt
   ));
 
   Future<void> initialize() async {
-    final useCase = getIt<FetchNotificationUseCase>();
+    final useCase = dependencyContainer<FetchNotificationUseCase>();
     final result = await useCase.execute();
     debugPrint("알림 초기화: ${result.length}개 - $result");
     state = state.copyWith(
@@ -76,7 +76,7 @@ class NotificationToggleStateNotifier extends StateNotifier<NotificationToggleSt
   }
 
   void _syncWithRepository(NotificationType notificationType, bool isActive) {
-    final useCase = getIt<ChangeNotificationUseCase>();
+    final useCase = dependencyContainer<ChangeNotificationUseCase>();
     isActive
         ? useCase.activate(notificationType)
         : useCase.deactivate(notificationType);

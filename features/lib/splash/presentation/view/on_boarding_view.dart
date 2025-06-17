@@ -1,7 +1,7 @@
 import 'package:design_system/theme/color_palette.dart';
 import 'package:design_system/theme/test_style_preset.dart';
 import 'package:features/navigation/application_navigation_service.dart';
-import 'package:features/shared/view/error.dart';
+import 'package:features/shared/presentation/widget/error.dart';
 import 'package:features/splash/presentation/viewmodel/nickname_provider.dart';
 import 'package:features/splash/presentation/viewmodel/splash_viewmodel.dart';
 import 'package:features/splash/presentation/viewmodel/terms_and_policies_vewmodel.dart';

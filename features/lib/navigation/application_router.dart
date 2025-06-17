@@ -1,15 +1,14 @@
-import 'package:features/bill_info/presentation/view/bill_detail_view.dart';
-import 'package:features/bill_info/presentation/view/recent_bill_thumbnail_view.dart';
-import 'package:features/committee/presentation/view/committee_profile_view.dart';
-import 'package:features/committee/presentation/view/committee_subscription_view.dart';
-import 'package:features/home/presentation/view/committee_home_view.dart';
+import 'package:features/bill/presentation/screen/bill_detail_screen.dart';
+import 'package:features/bill/presentation/screen/preannounce_bill_detail_screen.dart';
+import 'package:features/bill/presentation/screen/preannounce_thumbnail_screen.dart';
+import 'package:features/bill/presentation/screen/recent_bill_thumbnail_screen.dart';
+import 'package:features/bill/presentation/screen/committee_profile_screen.dart';
+import 'package:features/bill/presentation/screen/committee_list_screen.dart';
+import 'package:features/home/presentation/screen/home_screen.dart';
 import 'package:features/notification/presentation/view/notification_center_view.dart';
-import 'package:features/pre_announce/presentation/view/preannounce_bill_detail_view.dart';
-import 'package:features/pre_announce/presentation/view/preannounce_view.dart';
 import 'package:features/settings/presentation/view/notification_setting_view.dart';
 import 'package:features/settings/presentation/view/setting_view.dart';
-import 'package:features/shared/domain/committee.dart';
-import 'package:features/shared/view/donation/donation_view.dart';
+import 'package:features/bill/domain/constant/committee.dart';
 import 'package:features/splash/presentation/view/on_boarding_view.dart';
 import 'package:features/splash/presentation/view/permisssion_view.dart';
 import 'package:features/splash/presentation/view/splash_view.dart';
@@ -27,7 +26,6 @@ final GoRouter applicationRouter = GoRouter(
     _preAnnounceRouter,
     _settingRouter,
     _notificationRouter,
-    _donationRouter,
     _splashRouter,
     _onBoardingRouter
   ],
@@ -36,7 +34,7 @@ final GoRouter applicationRouter = GoRouter(
 final GoRoute _homeRouter = GoRoute(
   path: '/',
   builder: (context, state) {
-    return const CommitteeHomeView();
+    return const HomeScreen();
   },
 );
 
@@ -51,24 +49,24 @@ final GoRoute _billRouter = GoRoute(
             final String title = extraData?["title"] ?? "법안 상세 정보";
             String? subtitle = extraData?["subtitile"];
             final String billId = state.pathParameters['billId']!; // ✅ id 추출
-            return BillDetailView(title: title, subtitle: subtitle, billId: billId);
+            return BillDetailScreen(title: title, subtitle: subtitle, billId: billId);
           }),
       GoRoute(
           path: '/recent',
-          builder: (context, state) => RecentBillThumbnailView()
+          builder: (context, state) => RecentBillThumbnailScreen()
       )
     ]
 );
 
 final GoRoute _committeeRouter = GoRoute(
       path: '/committee',
-      builder: (context, state) => const CommitteeSubscriptionView(),
+      builder: (context, state) => const CommitteeListScreen(),
       routes: [
         GoRoute(
             path: '/profile/:committeeName',
             builder : (context, state) {
               final Committee target = Committee.findByName(state.pathParameters['committeeName']!);
-              return CommitteeProfileView(target);
+              return CommitteeProfileScreen(target);
             }
         )
       ]
@@ -76,11 +74,11 @@ final GoRoute _committeeRouter = GoRoute(
 
 final GoRoute _preAnnounceRouter = GoRoute(
   path: '/pre-announce',
-  builder: (context, state) => const PreAnnounceView(),
+  builder: (context, state) => const PreAnnounceThumbnailScreen(),
   routes: [
     GoRoute(
       path: '/detail/:billId',
-      builder: (context, state) => PreAnnounceBillDetailView(billId: state.pathParameters['billId']!)
+      builder: (context, state) => PreAnnounceBillDetailScreen(billId: state.pathParameters['billId']!)
     )
   ]
 );
@@ -99,11 +97,6 @@ final GoRoute _settingRouter = GoRoute(
 final GoRoute _notificationRouter = GoRoute(
     path: '/notifications',
     builder: (context, state) => const NotificationCenterView()
-);
-
-final GoRoute _donationRouter = GoRoute(
-    path: '/donation',
-    builder: (context, state) => const DonationView()
 );
 
 final GoRoute _splashRouter = GoRoute(

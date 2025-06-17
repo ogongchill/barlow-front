@@ -1,4 +1,3 @@
-
 import 'package:core/api/constants/committee_param.dart';
 
 sealed class LegislationType {

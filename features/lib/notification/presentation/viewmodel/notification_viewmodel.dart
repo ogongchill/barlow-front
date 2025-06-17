@@ -1,22 +1,22 @@
 import 'dart:collection';
-import 'package:core/dependency/service_locator.dart';
+import 'package:core/dependency/dependency_container.dart';
 import 'package:features/notification/domain/entities/received_notificaton.dart';
 import 'package:features/notification/domain/usecases/fetch_received_notification_usecase.dart';
 import 'package:features/notification/domain/usecases/notification_read_status_usecase.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final receivedNotificationFutureProvider = FutureProvider.autoDispose<List<ReceivedNotification>>( (ref) async {
-  final useCase = getIt<FetchReceivedNotificationUseCase>();
+  final useCase = dependencyContainer<FetchReceivedNotificationUseCase>();
   return useCase.execute();
 });
 
 final readStatusProvider = FutureProvider.family.autoDispose<bool, String>((ref, billId) {
-  final useCase = getIt<CheckIsReadNotificationUseCase>();
+  final useCase = dependencyContainer<CheckIsReadNotificationUseCase>();
   return useCase.execute(billId);
 });
 
 final markAsRead = Provider.family.autoDispose<void Function(), String>((ref, billId) {
-  final useCase = getIt<MarkAsReadNotificationUseCase>();
+  final useCase = dependencyContainer<MarkAsReadNotificationUseCase>();
   return () {
     useCase.execute(billId); // Fire-and-forget
   };
@@ -24,8 +24,8 @@ final markAsRead = Provider.family.autoDispose<void Function(), String>((ref, bi
 
 final notificationReadStatusProvider = StateNotifierProvider.autoDispose<NotificationReadStatusNotifier, UnmodifiableMapView<String, bool>>(
       (ref) => NotificationReadStatusNotifier(
-    getIt<CheckIsReadNotificationUseCase>(),
-    getIt<MarkAsReadNotificationUseCase>(),
+    dependencyContainer<CheckIsReadNotificationUseCase>(),
+    dependencyContainer<MarkAsReadNotificationUseCase>(),
   ),
 );
 

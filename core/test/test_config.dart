@@ -2,9 +2,10 @@ import 'package:core/api/auth_interceptor.dart';
 import 'package:core/api/logger_interceptor.dart';
 import 'package:core/api/auth/auth_requests.dart';
 import 'package:core/api/common/api_client.dart';
-import 'package:core/api/dio/dio_configs.dart';
-import 'package:core/database/secure-storage/token_repository.dart';
+import 'package:core/api/dio_configs.dart';
+import 'package:core/storage/secure-storage/token_repository.dart';
 import 'package:core/utils/device_info_manager.dart';
+import 'package:dio/dio.dart';
 
 class TestUserInfo {
   static const deviceOs = DeviceOs.android;
@@ -15,8 +16,13 @@ class TestUserInfo {
 }
 
 final ApiClient mockClient = ApiClient(
-    dioConfig: testServerConfig,
-    interceptors: [mockHeaderInterceptor, LoggerInterceptor()]
+    Dio(
+        BaseOptions(
+            connectTimeout: testServerConfig.connectionTimeOut,
+            receiveTimeout: testServerConfig.receiveTimeOut,
+            baseUrl: testServerConfig.hostUrl
+        )
+    ).. interceptors.addAll([LoggerInterceptor(), mockHeaderInterceptor])
 );
 
 final HeaderInterceptor mockHeaderInterceptor = HeaderInterceptor(

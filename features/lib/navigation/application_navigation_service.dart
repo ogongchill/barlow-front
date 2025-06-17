@@ -1,6 +1,6 @@
-import 'package:features/committee/presentation/viewmodel/committee_subscription_viewmodel.dart';
+import 'package:features/bill/presentation/viewmodel/committee_subscription_viewmodel.dart';
 import 'package:features/home/presentation/viewmodel/home_view_provider.dart';
-import 'package:features/shared/domain/committee.dart';
+import 'package:features/bill/domain/constant/committee.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';

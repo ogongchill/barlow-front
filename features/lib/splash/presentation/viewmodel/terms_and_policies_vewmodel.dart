@@ -1,11 +1,11 @@
-import 'package:core/dependency/service_locator.dart';
+import 'package:core/dependency/dependency_container.dart';
 import 'package:features/splash/domain/usecases/agree_terms_and_policies_usecase.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final termsAgreementViewModelProvider = StateNotifierProvider<TermsAgreementViewModel, AsyncValue<bool>>(
       (ref) => TermsAgreementViewModel(
-    getIt<CheckTermsAndPoliciesUseCase>(),
-    getIt<AgreeTermsAndPoliciesUseCase>(),
+    dependencyContainer<CheckTermsAndPoliciesUseCase>(),
+    dependencyContainer<AgreeTermsAndPoliciesUseCase>(),
   ),
 );
 

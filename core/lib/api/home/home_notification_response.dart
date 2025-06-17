@@ -1,6 +1,4 @@
-
 import 'dart:convert';
-
 import 'package:json_annotation/json_annotation.dart';
 
 part 'home_notification_response.g.dart';

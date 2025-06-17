@@ -23,18 +23,6 @@ class ApiClient {
 
   final Dio _dio;
 
-  // @factoryMethod
-  // ApiClient.dev(this._dio);
-  //
-  // ApiClient({required DioConfig dioConfig, List<Interceptor>? interceptors})
-  //   : _dio = Dio(
-  //   BaseOptions(
-  //       connectTimeout: dioConfig.connectionTimeOut,
-  //       receiveTimeout: dioConfig.receiveTimeOut,
-  //       baseUrl: dioConfig.hostUrl
-  //   )
-  // )
-  // ..interceptors.addAll(interceptors ?? []);
   ApiClient(this._dio);
 
   Future<TRes?> request<TReq, TRes>({

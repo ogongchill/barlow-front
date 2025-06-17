@@ -47,3 +47,4 @@ app.*.map.json
 
 # for build runner outputs
 *.g.dart
+*.module.dart

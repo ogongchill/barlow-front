@@ -3,10 +3,10 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:core/database/hive_configs.dart';
 import 'package:core/utils/device_info_manager.dart';
 import 'package:core/notification/fcm_config.dart';
 import 'package:features/barlow_app.dart';
+import 'package:core/storage/hive/hive_configs.dart';
 
 import 'di.dart';
 

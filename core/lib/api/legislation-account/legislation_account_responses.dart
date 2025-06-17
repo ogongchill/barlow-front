@@ -1,5 +1,4 @@
 import 'dart:convert';
-// import 'package:front/core/api/common/common_responses.dart';
 import 'package:core/api/common/common_responses.dart';
 import 'package:json_annotation/json_annotation.dart';
 

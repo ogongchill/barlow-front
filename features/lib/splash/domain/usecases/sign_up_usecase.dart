@@ -1,5 +1,5 @@
-import 'package:core/database/secure-storage/token_repository.dart';
-import 'package:core/database/shared-preferences/shared_prefs_application_setting_repository.dart';
+import 'package:core/storage/secure-storage/token_repository.dart';
+import 'package:core/storage/shared-preferences/shared_prefs_application_setting_repository.dart';
 import 'package:features/settings/domain/entities/user.dart';
 import 'package:features/settings/domain/repositories/user_repository.dart';
 import 'package:features/splash/domain/repositories/auth_repository.dart';

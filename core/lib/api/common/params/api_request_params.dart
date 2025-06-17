@@ -4,11 +4,8 @@ import 'package:core/api/common/params/sort_key_query_parameter.dart';
 import 'package:core/api/common/params/page_param.dart';
 import 'package:core/api/constants/bill_proposer_param.dart';
 import 'package:core/api/constants/party_param.dart';
-// import 'package:features/shared/domain/bill_progress_status.dart';
-// import 'package:features/shared/domain/bill_proposer_type.dart';
 import 'package:core/api/common/notification_topics.dart';
 import 'package:core/api/constants/progress_status_param.dart';
-// import 'package:features/shared/domain/party.dart';
 
 class NotificationFilterQueryParameter extends QueryParameter {
 

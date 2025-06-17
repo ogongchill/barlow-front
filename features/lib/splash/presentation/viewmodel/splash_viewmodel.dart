@@ -1,4 +1,4 @@
-import 'package:core/dependency/service_locator.dart';
+import 'package:core/dependency/dependency_container.dart';
 import 'package:features/settings/domain/entities/user_reject.dart';
 import 'package:features/settings/domain/usecases/mark_as_reject_usecase.dart';
 import 'package:features/splash/domain/usecases/get_store_url_usecase.dart';
@@ -7,7 +7,7 @@ import 'package:features/splash/domain/usecases/sign_up_usecase.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final signupUseCaseProvider = FutureProvider.family.autoDispose<void, String>((ref, nickname) async {
-  return getIt<SignupUseCase>().execute(nickname);
+  return dependencyContainer<SignupUseCase>().execute(nickname);
 });
 
 class AppInitializeState {
@@ -56,8 +56,8 @@ final appInitializeStateProvider = StateNotifierProvider.autoDispose<AppInitiali
 
 class AppInitializeInfoNotifier extends StateNotifier<AsyncValue<AppInitializeState>> {
 
-  final RetrieveAppInitializeInfoUseCase _retrieveAppInitializeInfoUseCase = getIt<RetrieveAppInitializeInfoUseCase>();
-  final MarkAsRejectUseCase _markAsRejectUseCase = getIt<MarkAsRejectUseCase>();
+  final RetrieveAppInitializeInfoUseCase _retrieveAppInitializeInfoUseCase = dependencyContainer<RetrieveAppInitializeInfoUseCase>();
+  final MarkAsRejectUseCase _markAsRejectUseCase = dependencyContainer<MarkAsRejectUseCase>();
 
   AppInitializeInfoNotifier() : super(const AsyncLoading()) {
     _initialize();
@@ -91,7 +91,7 @@ class AppInitializeInfoNotifier extends StateNotifier<AsyncValue<AppInitializeSt
   }
 }
 
-final storeUrlProvider = Provider<String>((ref) => getIt<GetStoreUrlUseCase>().execute());
+final storeUrlProvider = Provider<String>((ref) => dependencyContainer<GetStoreUrlUseCase>().execute());
 
 final temporaryDisableUpdateNotifierProvider = StateNotifierProvider<TemporaryRejectUpdateNotifier, bool>(
     (ref) {

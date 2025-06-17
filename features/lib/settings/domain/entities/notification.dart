@@ -1,4 +1,4 @@
-import 'package:features/shared/domain/committee.dart';
+import 'package:features/bill/domain/constant/committee.dart';
 
 sealed class NotificationType {
 

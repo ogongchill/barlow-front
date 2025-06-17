@@ -16,11 +16,6 @@ class ApplicationVersionInfoManager implements ApplicationVersionInfo{
 
   ApplicationVersionInfoManager(this._packageInfo);
 
-  // static Future<ApplicationVersionInfoManager> init() async {
-  //   final info = await PackageInfo.fromPlatform();
-  //   return ApplicationVersionInfoManager._(info);
-  // }
-
   @override
   String get appName => _packageInfo.appName;
 

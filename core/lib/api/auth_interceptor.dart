@@ -1,4 +1,4 @@
-import 'package:core/database/secure-storage/token_repository.dart';
+import 'package:core/storage/secure-storage/token_repository.dart';
 import 'package:core/utils/device_info_manager.dart';
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';

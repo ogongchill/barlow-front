@@ -1,4 +1,4 @@
-import 'package:features/shared/domain/bill_thumbnail.dart';
+import 'package:features/bill/domain/entities/bill_thumbnail.dart';
 
 class SubscribeCommitteeInfo {
   final String name;

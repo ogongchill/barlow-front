@@ -1,7 +1,3 @@
-// import 'package:front/core/api/common/api_client.dart';
-// import 'package:front/core/api/pre-announce/pre_announce_request_param.dart';
-// import 'package:front/core/api/pre-announce/pre_announce_responses.dart';
-
 import 'package:core/api/common/api_client.dart';
 import 'package:core/api/pre-announce/pre_announce_request_param.dart';
 import 'package:core/api/pre-announce/pre_announce_responses.dart';
