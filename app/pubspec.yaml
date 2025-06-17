@@ -74,12 +74,9 @@ flutter:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
   assets:
-    - assets/icons/committee/
-    - assets/icons/party/
     - assets/icons/app/
     - assets/pictures/
-    - assets/animations/lottie/
-    - assets/cards/
+    
   fonts:
     - family: GmarketSans
       fonts:

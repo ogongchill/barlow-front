@@ -1,3 +1,5 @@
+import 'package:design_system/animations/animations.dart';
+import 'package:design_system/icon_utils.dart';
 import 'package:design_system/theme/color_palette.dart';
 import 'package:design_system/theme/text_style_preset.dart';
 import 'package:features/bill/domain/entities/committe_notification.dart';
@@ -10,6 +12,7 @@ import 'package:features/bill/presentation/viewmodel/committee_subscription_view
 import 'package:features/shared/presentation/widget/error.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:lottie/lottie.dart';
 
@@ -73,25 +76,27 @@ class CommitteeProfileView extends ConsumerWidget {
                   color: ColorPalette.greyLight,
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: profile.committee.icon.toSvgPicture(size: 60),
-              ),
-              Container(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Stack(
-                      children: [
-                        const SizedBox(height: 30),
-                        Text("${profile.postCount}", style: _profileCountStyle),
-                      ],
-                    )
-                   ,
-                    const SizedBox(
-                      width: 60,
-                      child: Text("발의법안", style: _profileCountDescriptionStyle, textAlign: TextAlign.center,),
-                    )
-                  ],
+                child: SvgPicture.asset(
+                  CommitteeIcons.findByName(profile.committee.value).path,
+                  width: 60,
+                  height: 60,
                 ),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Stack(
+                    children: [
+                      const SizedBox(height: 30),
+                      Text("${profile.postCount}", style: _profileCountStyle),
+                    ],
+                  )
+                 ,
+                  const SizedBox(
+                    width: 60,
+                    child: Text("발의법안", style: _profileCountDescriptionStyle, textAlign: TextAlign.center,),
+                  )
+                ],
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -290,7 +295,7 @@ class _CommitteeNotificationButtonWidget extends ConsumerWidget {
           left: _width == null ? -2 : (_width - 80) / 2 -2,
           child: isAnimationActive
               ? Lottie.asset(
-            'assets/animations/lottie/simple_fireworks.json',
+            AnimationAssets.fireWorkPath,
             width: 100,
             height: 100,
             repeat: false, // ✅ 한 번만 실행
@@ -365,7 +370,7 @@ class _CommitteeSubscriptionButtonWidget extends ConsumerWidget {
           left: _width == null ? -2 : (_width - 80) / 2 -2,
           child: isFireworkActive
               ? Lottie.asset(
-            'assets/animations/lottie/simple_fireworks.json',
+            AnimationAssets.fireWorkPath,
             width: 100,
             height: 100,
             repeat: false, // ✅ 한 번만 실행

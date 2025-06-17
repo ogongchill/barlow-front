@@ -1,9 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
-// import 'package:core/utils/icon_utils.dart';
 import 'package:design_system/theme/color_palette.dart';
 import 'package:features/bill/domain/entities/bill_detail_sections.dart';
+import 'package:features/bill/presentation/mapper/party_card_mapper.dart';
+import 'package:features/bill/presentation/mapper/party_icon_mapper.dart';
 import 'package:flutter/material.dart';
-import 'package:design_system/svgs/card_svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:design_system/imgs/image_assets.dart';
 
 class BillProposerCardWidget extends StatelessWidget {
 
@@ -13,13 +15,12 @@ class BillProposerCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    PartyCard partyCard = PartyCard.findByName(billProposer.party.name);
     return LayoutBuilder(builder: (context, constraints) {
       return Stack(
         children: [
           Align(
             alignment: Alignment.topRight,
-            child: partyCard.getCard(),
+            child: SvgPicture.asset(PartyCardMapper.backgroundOf(billProposer.party)),
           ),
           Align(
             alignment: Alignment.topCenter,
@@ -33,7 +34,7 @@ class BillProposerCardWidget extends StatelessWidget {
                   alignment: Alignment.centerRight,
                   placeholder: (context, url) => const Center(child: CircularProgressIndicator(strokeWidth: 1.5)),
                   errorWidget: (context, url, error) => Image.asset(
-                    'assets/pictures/default_proposer_profile.png',
+                    ImageAssets.defaultProfileImagePath,
                     alignment: Alignment.centerRight,
                     fit: BoxFit.cover,
                   ),
@@ -41,7 +42,7 @@ class BillProposerCardWidget extends StatelessWidget {
               ),
             ),
           ),
-          partyCard.getNameTag(),
+          SvgPicture.asset(PartyCardMapper.nameTagOf(billProposer.party)),
           Align(
               alignment: Alignment.bottomCenter,
               child: Padding(
@@ -62,10 +63,12 @@ class BillProposerCardWidget extends StatelessWidget {
             spacing: 5,
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Container(
-                child: Material(
-                  elevation: 5,
-                  child: billProposer.party.toSvgPicture(constraints.maxHeight * 0.225),
+              Material(
+                elevation: 5,
+                child: SvgPicture.asset(
+                  PartyIconMapper.getPath(billProposer.party),
+                  width: constraints.maxHeight * 0.225,
+                  height: constraints.maxHeight * 0.225,
                 ),
               ),
               SizedBox(height: constraints.maxHeight * 0.25),

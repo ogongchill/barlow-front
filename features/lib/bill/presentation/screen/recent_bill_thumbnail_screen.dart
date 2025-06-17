@@ -1,6 +1,7 @@
 import 'package:design_system/theme/color_palette.dart';
 import 'package:design_system/theme/text_style_preset.dart';
 import 'package:features/bill/domain/constant/bill_post_tag.dart';
+import 'package:features/bill/presentation/mapper/party_icon_mapper.dart';
 import 'package:features/bill/presentation/viewmodel/recent_bill_post_viewmodel.dart';
 import 'package:features/bill/presentation/viewmodel/recent_bill_tag_viewmodel.dart';
 import 'package:features/bill/presentation/view/recent_bill_post_tag_modal_view.dart';
@@ -9,6 +10,7 @@ import 'package:features/bill/domain/constant/party.dart';
 import 'package:features/shared/presentation/widget/appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 
 class RecentBillThumbnailScreen extends ConsumerWidget {
   
@@ -81,8 +83,24 @@ class RecentBillThumbnailScreen extends ConsumerWidget {
             _createTagBox(BillProposerTypeTag.lawmaker, const Text("의원 발의", style: TextStylePreset.tagStyle,), ref),
             _createTagBox(ProgressStatusTag.promulgated, const Text("공포", style: TextStylePreset.tagStyle), ref),
             _createTagBox(ProgressStatusTag.plenaryDecided, const Text("본회의의결", style: TextStylePreset.tagStyle), ref),
-            _createTagBox(PartyTag.democratic, Party.democratic.toSvgPicture(24), ref),
-            _createTagBox(PartyTag.peoplePower, Party.peoplePower.toSvgPicture(24), ref),
+            _createTagBox(
+                PartyTag.democratic,
+                SvgPicture.asset(
+                  PartyIconMapper.getPath(Party.democratic),
+                  width: 24,
+                  height: 24,
+                ),
+                ref
+            ),
+            _createTagBox(
+                PartyTag.peoplePower,
+                SvgPicture.asset(
+                  PartyIconMapper.getPath(Party.peoplePower),
+                  width: 24,
+                  height: 24,
+                ),
+                ref
+            ),
           ]
       ),
     );

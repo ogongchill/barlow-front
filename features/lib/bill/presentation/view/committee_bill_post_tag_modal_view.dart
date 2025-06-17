@@ -1,11 +1,13 @@
 import 'package:design_system/theme/color_palette.dart';
 import 'package:design_system/theme/text_style_preset.dart';
 import 'package:features/bill/domain/constant/bill_post_tag.dart';
+import 'package:features/bill/presentation/mapper/party_icon_mapper.dart';
 import 'package:features/bill/presentation/viewmodel/committe_bill_post_tag_viewmodel.dart';
 import 'package:features/bill/presentation/viewmodel/committee_bill_post_viewmodel.dart';
 import 'package:features/bill/domain/constant/committee.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 
 class CommitteeBillPostTagModalView extends ConsumerWidget {
 
@@ -169,7 +171,10 @@ class CommitteeBillPostTagModalView extends ConsumerWidget {
                         AnimatedScale(
                           scale: isSelected ? 1.2 : 1.0,
                           duration: const Duration(milliseconds: 200),
-                          child: tag.value.svgPicture,
+                          // child: tag.value.svgPicture,
+                          child: SvgPicture.asset(
+                            PartyIconMapper.getPath(tag.value)
+                          ),
                         ),
                         if (!isSelected)
                           Container(

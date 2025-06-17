@@ -1,3 +1,4 @@
+import 'package:design_system/animations/animations.dart';
 import 'package:design_system/theme/color_palette.dart';
 import 'package:design_system/theme/text_style_preset.dart';
 import 'package:features/bill/domain/entities/committee_subscription.dart';
@@ -113,7 +114,7 @@ class _CommitteeSubscriptionButtonWidget extends ConsumerWidget {
           left: _width == null ? -2 : (_width - 80) / 2 -2,
           child: isFireworkActive
               ? Lottie.asset(
-            'assets/animations/lottie/simple_fireworks.json',
+            AnimationAssets.fireWorkPath,
             width: 100,
             height: 100,
             repeat: false, // ✅ 한 번만 실행

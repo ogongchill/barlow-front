@@ -1,3 +1,4 @@
+import 'package:design_system/imgs/error_image.dart';
 import 'package:design_system/theme/color_palette.dart';
 import 'package:design_system/theme/text_style_preset.dart';
 import 'package:flutter/cupertino.dart';
@@ -18,7 +19,7 @@ class SomethingWentWrongWidget extends StatelessWidget {
             color: ColorPalette.background,
             child: Container(
               margin: EdgeInsets.all(80),
-              child: Image.asset("assets/pictures/error_picture.png"),
+              child: Image.asset(ErrorImage.somethingWentWrong.path),
             ),
           ),
           Text(

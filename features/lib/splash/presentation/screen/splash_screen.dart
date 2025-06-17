@@ -1,12 +1,12 @@
 import 'package:design_system/theme/color_palette.dart';
 import 'package:features/navigation/application_navigation_service.dart';
-import 'package:features/splash/presentation/view/splash_screen_widget.dart';
+import 'package:features/splash/presentation/widget/splash_screen_widget.dart';
 import 'package:features/splash/presentation/viewmodel/splash_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class SplashView extends ConsumerWidget {
+class SplashScreen extends ConsumerWidget {
 
   static const TextStyle _header = TextStyle(
       fontFamily: "gmarketSans",
@@ -36,7 +36,7 @@ class SplashView extends ConsumerWidget {
       fontWeight: FontWeight.w500
   );
 
-  const SplashView({super.key});
+  const SplashScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

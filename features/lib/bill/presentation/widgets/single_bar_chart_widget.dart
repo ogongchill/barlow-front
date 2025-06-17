@@ -2,7 +2,10 @@ import 'dart:async';
 
 import 'package:design_system/theme/text_style_preset.dart';
 import 'package:features/bill/domain/constant/party.dart';
+import 'package:features/bill/presentation/mapper/party_color_mapper.dart';
+import 'package:features/bill/presentation/mapper/party_icon_mapper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class SingleBarChart extends StatefulWidget {
   final Map<Party, int> data;
@@ -72,7 +75,7 @@ class _SingleBarChartState extends State<SingleBarChart> {
                         },
                         child: Container(
                           height: chartHeight,
-                          color: entry.key.color,
+                          color: PartyColorMapper.getColorOf(entry.key),
                           alignment: Alignment.center,
                           child: percentage > 0.05
                               ? Text("${entry.value} 명", style: TextStylePreset.barInnerText)
@@ -94,7 +97,7 @@ class _SingleBarChartState extends State<SingleBarChart> {
                       Container(
                         width: 12,
                         height: 12,
-                        color: party.color,
+                        color: PartyColorMapper.getColorOf(party),
                       ),
                       const SizedBox(width: 5),
                       Text(party.name, style: TextStylePreset.innerContentLight),
@@ -117,7 +120,10 @@ class _SingleBarChartState extends State<SingleBarChart> {
                   shape: BoxShape.rectangle,
                   boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 10)],
                 ),
-                child: selectedParty!.svgPicture, // ✅ 선택한 Party의 아이콘 표시
+                // child: selectedParty!.svgPicture, // ✅ 선택한 Party의 아이콘 표시
+                child: SvgPicture.asset(
+                  PartyIconMapper.getPath(selectedParty!)
+                ),
               ),
             ),
         ],

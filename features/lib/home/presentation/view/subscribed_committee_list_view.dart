@@ -26,7 +26,8 @@ class SubscribeCommitteeListView extends ConsumerWidget {
       cacheExtent: 1000, // 🔥 미리 로드하여 끊김 방지
       itemBuilder: (context, index) {
         final SubscribeCommitteeInfo account = accounts[index];
-        final SvgPicture icon = CommitteeIconContainer.findByName(account.name);
+        // final SvgPicture icon = CommitteeIconContainer.findByName(account.name);
+        final SvgPicture icon = SvgPicture.asset(CommitteeIcons.findByName(account.name).path);
         return createCardWith(icon, account, ref);
       },
     );

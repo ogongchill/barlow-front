@@ -1,4 +1,5 @@
 import 'package:design_system/theme/text_style_preset.dart';
+import 'package:features/bill/presentation/mapper/committee_icon_mapper.dart';
 import 'package:features/bill/presentation/widgets/bill_proposer_section_widget.dart';
 import 'package:features/navigation/application_navigation_service.dart';
 import 'package:features/bill/domain/entities/preannounce_bill_detail.dart';
@@ -11,6 +12,7 @@ import 'package:features/shared/presentation/widget/capturable_widget.dart';
 import 'package:features/shared/presentation/widget/error.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -159,7 +161,8 @@ class PreAnnounceBillDetailScreen extends ConsumerWidget {
 
   Widget _buildIconOrFallback(String legislativeBody) {
     try {
-      return Committee.findByName(legislativeBody).icon.toSvgPicture();
+      Committee committee = Committee.findByName(legislativeBody);
+      return SvgPicture.asset(CommitteeIconMapper.getPath(committee));
     } catch (e) {
       return const SizedBox.shrink(); // 아이콘 대신 빈 박스
     }

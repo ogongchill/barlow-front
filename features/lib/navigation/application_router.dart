@@ -9,9 +9,9 @@ import 'package:features/home/presentation/screen/notification_center_screen.dar
 import 'package:features/settings/presentation/screen/notification_setting_screen.dart';
 import 'package:features/settings/presentation/screen/setting_screen.dart';
 import 'package:features/bill/domain/constant/committee.dart';
-import 'package:features/splash/presentation/view/on_boarding_view.dart';
+import 'package:features/splash/presentation/screen/on_boarding_screen.dart';
 import 'package:features/splash/presentation/view/permisssion_view.dart';
-import 'package:features/splash/presentation/view/splash_view.dart';
+import 'package:features/splash/presentation/screen/splash_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:features/navigation/application_navigation_service.dart';
@@ -101,7 +101,7 @@ final GoRoute _notificationRouter = GoRoute(
 
 final GoRoute _splashRouter = GoRoute(
     path: '/splash',
-    builder: (context, state) => const SplashView(),
+    builder: (context, state) => const SplashScreen(),
     routes: [
       GoRoute(
         path: '/permissions',
@@ -112,5 +112,5 @@ final GoRoute _splashRouter = GoRoute(
 
 final GoRoute _onBoardingRouter = GoRoute(
   path: '/onboarding',
-  builder: (context, state) => const OnboardingView()
+  builder: (context, state) => const OnboardingScreen()
 );

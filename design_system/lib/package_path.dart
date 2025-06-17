@@ -1,0 +1,1 @@
+const String packagePath = 'packages/design_system';

@@ -1,6 +1,7 @@
 import 'package:design_system/theme/color_palette.dart';
 import 'package:design_system/theme/text_style_preset.dart';
 import 'package:features/bill/domain/constant/bill_post_tag.dart';
+import 'package:features/bill/presentation/mapper/party_icon_mapper.dart';
 import 'package:features/bill/presentation/view/committee_bill_post_tag_modal_view.dart';
 import 'package:features/bill/presentation/view/committee_bill_post_thumbnail_view.dart';
 import 'package:features/bill/presentation/view/committee_profile_view.dart';
@@ -13,6 +14,7 @@ import 'package:features/bill/domain/constant/party.dart';
 import 'package:features/shared/presentation/widget/appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class CommitteeProfileScreen extends ConsumerStatefulWidget {
 
@@ -114,9 +116,23 @@ class _CommitteeProfileViewState extends ConsumerState<CommitteeProfileScreen> {
             _createTagBox(ProgressStatusTag.committeeReview,
                 const Text("심사 진행중", style: TextStylePreset.tagStyle), ref),
             _createTagBox(
-                PartyTag.democratic, Party.democratic.toSvgPicture(24), ref),
+                PartyTag.democratic,
+                SvgPicture.asset(
+                    PartyIconMapper.getPath(Party.democratic),
+                    width: 24,
+                    height: 24
+                ),
+                ref)
+            ,
             _createTagBox(
-                PartyTag.peoplePower, Party.peoplePower.toSvgPicture(24), ref)
+                PartyTag.peoplePower,
+                SvgPicture.asset(
+                    PartyIconMapper.getPath(Party.peoplePower),
+                    width: 24,
+                    height: 24
+                ),
+                ref
+            )
           ]
       ),
     );

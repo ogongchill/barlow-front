@@ -9,16 +9,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:design_system/imgs/onboarding_imgs.dart';
 
-class OnboardingView extends ConsumerStatefulWidget {
+class OnboardingScreen extends ConsumerStatefulWidget {
 
-  const OnboardingView({super.key});
+  const OnboardingScreen({super.key});
 
   @override
-  ConsumerState<OnboardingView> createState() => _OnboardingScreenState();
+  ConsumerState<OnboardingScreen> createState() => _OnboardingScreenState();
 }
 
-class _OnboardingScreenState extends ConsumerState<OnboardingView> {
+class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
 
   static const _description = TextStyle(
       fontFamily: 'gmarketSans',
@@ -46,18 +47,31 @@ class _OnboardingScreenState extends ConsumerState<OnboardingView> {
   final TextEditingController _textEditingController = TextEditingController();
   int _page = 0;
 
+  // final List<_OnboardingData> pages = [
+  //   const _OnboardingData(
+  //     imagePath: 'assets/pictures/onboarding_page_1.png',
+  //   ),
+  //   const _OnboardingData(
+  //     imagePath: 'assets/pictures/onboarding_page_2.png',
+  //   ),
+  //   const _OnboardingData(
+  //     imagePath: 'assets/pictures/onboarding_page_3.png',
+  //     isLast: true,
+  //   ),
+  // ];
   final List<_OnboardingData> pages = [
-    const _OnboardingData(
-      imagePath: 'assets/pictures/onboarding_page_1.png',
+    _OnboardingData(
+      imagePath: OnboardingImages.page1.path,
     ),
-    const _OnboardingData(
-      imagePath: 'assets/pictures/onboarding_page_2.png',
+    _OnboardingData(
+      imagePath: OnboardingImages.page2.path,
     ),
-    const _OnboardingData(
-      imagePath: 'assets/pictures/onboarding_page_3.png',
+    _OnboardingData(
+      imagePath: OnboardingImages.page3.path,
       isLast: true,
     ),
   ];
+
 
   @override
   Widget build(BuildContext context) {

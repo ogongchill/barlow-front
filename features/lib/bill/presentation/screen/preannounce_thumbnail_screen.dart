@@ -2,6 +2,7 @@ import 'package:design_system/theme/color_palette.dart';
 import 'package:design_system/theme/text_style_preset.dart';
 import 'package:features/bill/domain/constant/bill_post_tag.dart';
 import 'package:features/bill/domain/repositories/sort_key.dart';
+import 'package:features/bill/presentation/mapper/party_icon_mapper.dart';
 import 'package:features/bill/presentation/viewmodel/preannounce_thumbnail_viewmodel.dart';
 import 'package:features/bill/presentation/view/preannounce_thumbnail_view.dart';
 import 'package:features/bill/presentation/viewmodel/preannounce_thumbnail_tag_viewmodel.dart';
@@ -14,6 +15,7 @@ import 'package:features/shared/presentation/widget/appbar.dart';
 import 'package:features/shared/presentation/widget/modal_drag_handle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 
 class PreAnnounceThumbnailScreen extends ConsumerWidget {
 
@@ -121,8 +123,24 @@ class PreAnnounceThumbnailScreen extends ConsumerWidget {
             child: IconButton(onPressed: () => {_showPersistentBottomSheet(context)}, icon: const Icon(Icons.filter_list)),
           ),
           _createTagBox(CommitteeTag.legislationAndJudiciary,  Text(Committee.legislationAndJudiciary.value, style: _tagStyle,), ref),
-          _createTagBox(PartyTag.democratic, Party.democratic.toSvgPicture(24), ref),
-          _createTagBox(PartyTag.peoplePower, Party.peoplePower.toSvgPicture(24), ref),
+          _createTagBox(
+              PartyTag.democratic,
+              SvgPicture.asset(
+                PartyIconMapper.getPath(Party.democratic),
+                width: 24,
+                height: 24,
+              ),
+              ref
+          ),
+          _createTagBox(
+              PartyTag.peoplePower,
+              SvgPicture.asset(
+                PartyIconMapper.getPath(Party.peoplePower),
+                width: 24,
+                height: 24,
+              ),
+              ref
+          ),
           _createSortFilter(context, ref)
         ]
       ),
