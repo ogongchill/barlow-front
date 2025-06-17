@@ -3,9 +3,9 @@ import 'package:features/settings/presentation/viewmodel/notification_toggle_vie
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class NotificationWidget extends ConsumerStatefulWidget {
+class NotificationSettingListView extends ConsumerStatefulWidget {
 
-  const NotificationWidget({super.key});
+  const NotificationSettingListView({super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => NotificationWidgetState();
@@ -70,7 +70,6 @@ class NotificationWidgetState extends ConsumerState {
                 final entry = entries[index];
                 final type = entry.key;
                 final isEnabled = entry.value;
-
                 return SwitchListTile(
                   title: Text(
                     type.name,

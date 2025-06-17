@@ -7,7 +7,7 @@ import 'package:features/bill/domain/repositories/bill_repository.dart';
 import 'package:features/bill/domain/entities/bill_detail_sections.dart';
 import 'package:features/shared/domain/page.dart';
 import 'package:features/bill/domain/constant/party.dart';
-import 'package:features/bill/infra/bill_post_tag_processor.dart';
+import 'package:features/bill/data/bill_post_tag_processor.dart';
 import 'package:injectable/injectable.dart';
 
 @LazySingleton(as: BillDetailRepository)

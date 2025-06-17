@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:design_system/theme/test_style_preset.dart';
+import 'package:design_system/theme/text_style_preset.dart';
 import 'package:features/bill/domain/constant/party.dart';
 import 'package:flutter/material.dart';
 

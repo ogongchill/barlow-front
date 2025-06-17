@@ -4,7 +4,7 @@ import 'package:features/bill/domain/entities/preannounce_bill_thumbnail.dart';
 import 'package:features/bill/domain/repositories/preannounce_bill_thumbnail_repository.dart';
 import 'package:features/bill/domain/repositories/sort_key.dart';
 import 'package:features/shared/domain/page.dart';
-import 'package:features/bill/infra/bill_post_tag_processor.dart';
+import 'package:features/bill/data/bill_post_tag_processor.dart';
 import 'package:injectable/injectable.dart';
 
 @LazySingleton(as: PreAnnounceBillThumbnailRepository)

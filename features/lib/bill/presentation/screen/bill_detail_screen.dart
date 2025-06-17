@@ -1,5 +1,5 @@
 import 'package:design_system/theme/color_palette.dart';
-import 'package:design_system/theme/test_style_preset.dart';
+import 'package:design_system/theme/text_style_preset.dart';
 import 'package:features/bill/domain/entities/bill_detail.dart';
 import 'package:features/bill/presentation/viewmodel/bill_detail_provider.dart';
 import 'package:features/bill/presentation/widgets/bill_proposer_section_widget.dart';

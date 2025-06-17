@@ -4,7 +4,7 @@ import 'package:features/bill/domain/entities/bill_thumbnail.dart';
 import 'package:features/bill/domain/repositories/committee_bill_post_repository.dart';
 import 'package:features/bill/domain/constant/committee.dart';
 import 'package:features/shared/domain/page.dart';
-import 'package:features/bill/infra/bill_post_tag_processor.dart';
+import 'package:features/bill/data/bill_post_tag_processor.dart';
 import 'package:injectable/injectable.dart';
 
 @LazySingleton(as: CommitteeBillPostRepository)

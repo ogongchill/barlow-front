@@ -1,5 +1,5 @@
 // import 'package:design_system/theme/color_palette.dart';
-// import 'package:design_system/theme/test_style_preset.dart';
+// import 'package:design_system/theme/text_style_preset.dart';
 // import 'package:features/home/domain/entities/committee_account.dart';
 // import 'package:features/home/presentation/viewmodel/home_view_provider.dart';
 // import 'package:features/navigation/application_navigation_service.dart';

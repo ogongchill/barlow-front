@@ -5,9 +5,9 @@ import 'package:features/bill/presentation/screen/recent_bill_thumbnail_screen.d
 import 'package:features/bill/presentation/screen/committee_profile_screen.dart';
 import 'package:features/bill/presentation/screen/committee_list_screen.dart';
 import 'package:features/home/presentation/screen/home_screen.dart';
-import 'package:features/notification/presentation/view/notification_center_view.dart';
-import 'package:features/settings/presentation/view/notification_setting_view.dart';
-import 'package:features/settings/presentation/view/setting_view.dart';
+import 'package:features/home/presentation/screen/notification_center_screen.dart';
+import 'package:features/settings/presentation/screen/notification_setting_screen.dart';
+import 'package:features/settings/presentation/screen/setting_screen.dart';
 import 'package:features/bill/domain/constant/committee.dart';
 import 'package:features/splash/presentation/view/on_boarding_view.dart';
 import 'package:features/splash/presentation/view/permisssion_view.dart';
@@ -85,18 +85,18 @@ final GoRoute _preAnnounceRouter = GoRoute(
 
 final GoRoute _settingRouter = GoRoute(
   path: '/settings',
-  builder: (context, state) => const SettingView(),
+  builder: (context, state) => const SettingScreen(),
   routes: [
     GoRoute(
       path: '/notifications',
-      builder: (context, state) => const NotificationSettingView()
+      builder: (context, state) => const NotificationSettingScreen()
     )
   ]
 );
 
 final GoRoute _notificationRouter = GoRoute(
     path: '/notifications',
-    builder: (context, state) => const NotificationCenterView()
+    builder: (context, state) => const NotificationCenterScreen()
 );
 
 final GoRoute _splashRouter = GoRoute(

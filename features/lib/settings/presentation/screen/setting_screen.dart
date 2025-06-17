@@ -1,5 +1,5 @@
 import 'package:design_system/theme/color_palette.dart';
-import 'package:design_system/theme/test_style_preset.dart';
+import 'package:design_system/theme/text_style_preset.dart';
 import 'package:features/navigation/application_navigation_service.dart';
 import 'package:features/settings/presentation/viewmodel/delete_guest_user_provider.dart';
 import 'package:features/settings/presentation/viewmodel/user_info_viewmodel.dart';
@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-class SettingView extends ConsumerWidget {
+class SettingScreen extends ConsumerWidget {
 
   static const TextStyle _roleStyle = TextStyle(
     fontSize: 16,
@@ -39,7 +39,7 @@ class SettingView extends ConsumerWidget {
       color: Colors.redAccent
   );
 
-  const SettingView({super.key});
+  const SettingScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

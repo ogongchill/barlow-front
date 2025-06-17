@@ -1,5 +1,5 @@
 import 'package:core/storage/hive/notification/notification_read_status_hive_service.dart';
-import 'package:features/notification/domain/repositories/read_status_repository.dart';
+import 'package:features/home/domain/repositories/read_status_repository.dart';
 import 'package:injectable/injectable.dart';
 
 @LazySingleton(as: ReadStatusRepository)

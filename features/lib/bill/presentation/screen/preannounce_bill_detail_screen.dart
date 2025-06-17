@@ -1,4 +1,4 @@
-import 'package:design_system/theme/test_style_preset.dart';
+import 'package:design_system/theme/text_style_preset.dart';
 import 'package:features/bill/presentation/widgets/bill_proposer_section_widget.dart';
 import 'package:features/navigation/application_navigation_service.dart';
 import 'package:features/bill/domain/entities/preannounce_bill_detail.dart';

@@ -3,7 +3,7 @@ import 'package:features/bill/domain/constant/committee.dart';
 import 'package:core/api/common/legislation_type.dart';
 import 'package:features/bill/domain/entities/committee_profile.dart';
 import 'package:features/bill/domain/repositories/committee_profile_repository.dart';
-import 'package:features/bill/infra/cache.dart';
+import 'package:features/bill/data/cache.dart';
 import 'package:injectable/injectable.dart';
 
 @LazySingleton(as: CommitteeProfileRepository)

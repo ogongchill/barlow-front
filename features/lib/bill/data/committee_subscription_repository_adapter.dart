@@ -4,7 +4,7 @@ import 'package:features/bill/domain/entities/committee_subscription.dart';
 import 'package:features/bill/domain/repositories/committee_subscription_repository.dart';
 import 'package:features/bill/domain/constant/committee.dart';
 import 'package:core/api/common/legislation_type.dart';
-import 'package:features/bill/infra/cache.dart';
+import 'package:features/bill/data/cache.dart';
 import 'package:injectable/injectable.dart';
 
 @LazySingleton(as: CommitteeSubscriptionRepository)

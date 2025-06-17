@@ -1,5 +1,5 @@
 import 'package:design_system/theme/color_palette.dart';
-import 'package:design_system/theme/test_style_preset.dart';
+import 'package:design_system/theme/text_style_preset.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 

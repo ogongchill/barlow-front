@@ -2,7 +2,7 @@ import 'package:core/api/api_router.dart';
 import 'package:features/bill/domain/repositories/commitee_notification_repository.dart';
 import 'package:features/bill/domain/constant/committee.dart';
 import 'package:core/api/common/legislation_type.dart';
-import 'package:features/bill/infra/cache.dart';
+import 'package:features/bill/data/cache.dart';
 import 'package:injectable/injectable.dart';
 
 @LazySingleton(as: CommitteeNotificationRepository)

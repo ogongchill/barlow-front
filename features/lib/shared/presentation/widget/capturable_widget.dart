@@ -1,4 +1,4 @@
-import 'package:design_system/theme/test_style_preset.dart';
+import 'package:design_system/theme/text_style_preset.dart';
 import 'package:features/shared/widget_image_saver.dart';
 import 'package:flutter/material.dart';
 import 'package:screenshot/screenshot.dart';

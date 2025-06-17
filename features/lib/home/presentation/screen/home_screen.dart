@@ -1,5 +1,5 @@
 import 'package:design_system/theme/color_palette.dart';
-import 'package:design_system/theme/test_style_preset.dart';
+import 'package:design_system/theme/text_style_preset.dart';
 import 'package:features/home/presentation/view/subscribed_committee_list_view.dart';
 import 'package:features/home/presentation/widgets/home_appbar.dart';
 import 'package:features/home/presentation/widgets/home_shortcut_widget.dart';

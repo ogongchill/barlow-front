@@ -1,4 +1,4 @@
-import 'package:features/notification/domain/repositories/read_status_repository.dart';
+import 'package:features/home/domain/repositories/read_status_repository.dart';
 import 'package:injectable/injectable.dart';
 
 @injectable

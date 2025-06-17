@@ -1,18 +1,18 @@
 import 'dart:collection';
 import 'package:design_system/theme/color_palette.dart';
-import 'package:design_system/theme/test_style_preset.dart';
+import 'package:design_system/theme/text_style_preset.dart';
+import 'package:features/home/domain/entities/received_notificaton.dart';
 import 'package:features/navigation/application_navigation_service.dart';
-import 'package:features/notification/domain/entities/received_notificaton.dart';
-import 'package:features/notification/presentation/viewmodel/notification_viewmodel.dart';
+import 'package:features/home/presentation/viewmodel/notification_viewmodel.dart';
 import 'package:features/shared/presentation/widget/appbar.dart';
 import 'package:features/shared/presentation/widget/error.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
-class NotificationCenterView extends ConsumerWidget {
+class NotificationCenterScreen extends ConsumerWidget {
 
-  const NotificationCenterView({super.key});
+  const NotificationCenterScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -42,8 +42,6 @@ class NotificationCenterView extends ConsumerWidget {
   Widget _createItems(List<ReceivedNotification> notifications, WidgetRef ref) {
     final readMap = ref.watch(notificationReadStatusProvider);
     final notifier = ref.read(notificationReadStatusProvider.notifier);
-
-    // List<ReceivedNotification> sorted = _sortNotificationItems(notifications, readMap);
     List<ReceivedNotification> sorted = _getUnreadNotifications(notifications, readMap);
 
     return ListView.builder(

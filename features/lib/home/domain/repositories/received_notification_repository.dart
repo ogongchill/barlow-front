@@ -1,4 +1,4 @@
-import 'package:features/notification/domain/entities/received_notificaton.dart';
+import 'package:features/home/domain/entities/received_notificaton.dart';
 
 abstract interface class ReceivedNotificationRepository {
 

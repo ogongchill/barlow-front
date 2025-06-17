@@ -1,6 +1,6 @@
 import 'package:design_system/theme/color_palette.dart';
 import 'package:features/settings/domain/entities/user_reject.dart';
-import 'package:features/settings/presentation/view/notification_widget.dart';
+import 'package:features/settings/presentation/view/notification_setting_list_view.dart';
 import 'package:features/settings/presentation/viewmodel/user_reject_provider.dart';
 import 'package:features/shared/presentation/widget/appbar.dart';
 import 'package:features/shared/presentation/widget/error.dart';
@@ -10,7 +10,7 @@ import 'package:features/splash/presentation/viewmodel/permission_check_provider
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class NotificationSettingView extends ConsumerWidget {
+class NotificationSettingScreen extends ConsumerWidget {
 
   static const TextStyle _header = TextStyle(
       fontFamily: "gmarketSans",
@@ -33,7 +33,7 @@ class NotificationSettingView extends ConsumerWidget {
       fontWeight: FontWeight.w500
   );
 
-  const NotificationSettingView({super.key});
+  const NotificationSettingScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -59,7 +59,7 @@ class NotificationSettingView extends ConsumerWidget {
         child: Container(
           color: ColorPalette.background,
           padding: const EdgeInsets.all(15),
-          child: const NotificationWidget(),
+          child: const NotificationSettingListView(),
         ),
       ),
     );

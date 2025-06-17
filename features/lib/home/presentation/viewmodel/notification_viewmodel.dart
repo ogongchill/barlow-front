@@ -1,8 +1,8 @@
 import 'dart:collection';
 import 'package:core/dependency/dependency_container.dart';
-import 'package:features/notification/domain/entities/received_notificaton.dart';
-import 'package:features/notification/domain/usecases/fetch_received_notification_usecase.dart';
-import 'package:features/notification/domain/usecases/notification_read_status_usecase.dart';
+import 'package:features/home/domain/entities/received_notificaton.dart';
+import 'package:features/home/domain/usecases/fetch_received_notification_usecase.dart';
+import 'package:features/home/domain/usecases/notification_read_status_usecase.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final receivedNotificationFutureProvider = FutureProvider.autoDispose<List<ReceivedNotification>>( (ref) async {

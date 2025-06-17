@@ -1,5 +1,5 @@
 import 'package:design_system/theme/color_palette.dart';
-import 'package:design_system/theme/test_style_preset.dart';
+import 'package:design_system/theme/text_style_preset.dart';
 import 'package:flutter/cupertino.dart';
 
 class SomethingWentWrongWidget extends StatelessWidget {

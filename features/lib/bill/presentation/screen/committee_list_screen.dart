@@ -1,5 +1,5 @@
 import 'package:design_system/theme/color_palette.dart';
-import 'package:design_system/theme/test_style_preset.dart';
+import 'package:design_system/theme/text_style_preset.dart';
 import 'package:features/bill/domain/entities/committee_subscription.dart';
 import 'package:features/bill/presentation/view/committe_subscription_list_widget.dart';
 import 'package:features/bill/presentation/viewmodel/committee_subscription_viewmodel.dart';

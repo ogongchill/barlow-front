@@ -1,4 +1,4 @@
-import 'package:design_system/theme/test_style_preset.dart';
+import 'package:design_system/theme/text_style_preset.dart';
 import 'package:flutter/widgets.dart';
 
 class BillDetailParagraphWidget extends StatelessWidget {
