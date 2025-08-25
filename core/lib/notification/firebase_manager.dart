@@ -35,4 +35,5 @@ class RemoteConfigManager{
 
   String readPlayStoreUrl() => _firebaseRemoteConfig.getString("androidStoreUrl");
 
+  bool isServerUnderMaintenance() => _firebaseRemoteConfig.getBool("isServerUnderMaintenance");
 }
