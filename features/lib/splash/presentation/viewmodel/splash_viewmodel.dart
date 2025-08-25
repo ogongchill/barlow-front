@@ -18,6 +18,7 @@ class AppInitializeState {
   final bool isUpdateAvailable;
   final bool hasRejectUpdateDialog;
   final bool refreshFlag;
+  final bool isServerUnderMaintenance;
 
   const AppInitializeState({
     required this.needForceUpdate,
@@ -27,6 +28,7 @@ class AppInitializeState {
     required this.isUpdateAvailable,
     required this.hasRejectUpdateDialog,
     required this.refreshFlag,
+    required this.isServerUnderMaintenance
   });
 
   AppInitializeState copyWith({
@@ -37,6 +39,7 @@ class AppInitializeState {
     bool? isUpdateAvailable,
     bool? hasRejectUpdateDialog,
     bool? refreshFlag,
+    bool? isServerUnderMaintenance
   }) {
     return AppInitializeState(
       needForceUpdate: needForceUpdate ?? this.needForceUpdate,
@@ -46,6 +49,7 @@ class AppInitializeState {
       isUpdateAvailable: isUpdateAvailable ?? this.isUpdateAvailable,
       hasRejectUpdateDialog: hasRejectUpdateDialog ?? this.hasRejectUpdateDialog,
       refreshFlag: refreshFlag ?? this.refreshFlag,
+      isServerUnderMaintenance: isServerUnderMaintenance ?? this.isServerUnderMaintenance
     );
   }
 }
@@ -75,6 +79,7 @@ class AppInitializeInfoNotifier extends StateNotifier<AsyncValue<AppInitializeSt
         isFirstLaunch: appInitializeInfo.isFirstLaunch,
         isLoggedIn: appInitializeInfo.isLoggedIn,
         refreshFlag: false,
+        isServerUnderMaintenance: appInitializeInfo.isSeverUnderMaintenance
       ));
     } catch (e, st) {
       state = AsyncValue.error(e, st);

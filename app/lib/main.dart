@@ -7,6 +7,7 @@ import 'package:core/utils/device_info_manager.dart';
 import 'package:core/notification/fcm_config.dart';
 import 'package:features/barlow_app.dart';
 import 'package:core/storage/hive/hive_configs.dart';
+import 'package:core/notification/firebase_remote_config_initializer.dart';
 
 import 'di.dart';
 
@@ -24,12 +25,13 @@ void main() async {
     configureDependencies(_flavor);
   }
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-  FcmInitializer(
+  await FcmInitializer(
     plugin: FlutterLocalNotificationsPlugin(),
     onMessageForegroundHandler: (RemoteMessage message) {},
     onMessageBackgroundHandler: (RemoteMessage message) {},
     onMessageTerminatedHandler: (RemoteMessage message) {},
   ).initialize();
+  await FirebaseRemoteConfigInitializer().initialize();
   await DeviceInfoManager().init();
   FlutterNativeSplash.remove();
   runApp(barlowMobileApp);

@@ -42,4 +42,9 @@ class AppVersionStatusRemoteConfigRepositoryAdapter implements AppVersionStatusR
   Future<AppVersionStatus> fetchVersionInfo() async {
     return _service.checkAppVersion();
   }
+
+  @override
+  Future<bool> fetchServerUnderMaintenanceInfo() async {
+    return _service._remoteConfigManager.isServerUnderMaintenance();
+  }
 }
