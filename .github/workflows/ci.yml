@@ -83,6 +83,7 @@ jobs:
           keyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}
           keyAlias=upload
           storeFile=/home/runner/.android/release-key.jks
+          storeType=pkcs12
           EOF
 
       - name: Build Android AppBundle(.aab)
