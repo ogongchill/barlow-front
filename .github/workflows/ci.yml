@@ -87,7 +87,7 @@ jobs:
 
       - name: Build Android AppBundle(.aab)
         working-directory: app
-        run: flutter build appbundle --dart-define=FLAVOR=prod \
+        run: flutter build appbundle -- release\
               --build-name ${{ steps.bump.outputs.version_name }} \
               --build-number ${{ steps.bump.outputs.version_code }} \
               --dart-define=FLAVOR=prod
