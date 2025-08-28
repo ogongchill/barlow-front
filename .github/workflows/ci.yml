@@ -78,11 +78,12 @@ jobs:
         run: |
           mkdir -p $HOME/.android
           echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > $HOME/.android/release-key.jks
-          cat > android/key.properties <<EOF
-          storePassword="${{ secrets.ANDROID_STORE_PASSWORD }}"
-          keyPassword="${{ secrets.ANDROID_KEY_PASSWORD }}"
-          keyAlias=upload
-          storeFile=/home/runner/.android/release-key.jks
+          cat > android/key.properties <<'EOF'
+storePassword=${{ secrets.ANDROID_STORE_PASSWORD }}
+keyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}
+keyAlias=upload
+storeFile=/home/runner/.android/release-key.jks
+EOF
 
       - name: Build Android AppBundle(.aab)
         working-directory: app
