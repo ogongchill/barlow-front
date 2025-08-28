@@ -1,0 +1,41 @@
+name: Deploy
+
+on:
+  workflow_run:
+    workflows: ["어플리케이션 빌드"]
+    types:
+      - completed
+    branches: [deploy, hotfix, issue/cd]
+
+  workflow_dispatch:
+
+permission:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Download app-release.aab from artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: app-release
+        path: ./build-artifacts
+
+    - name: 'Authenticate to Google Cloud'
+      uses: google-github-actions/auth@v2
+      with:
+        workload_identity_provider: ${{secret.WORKLOAD_IDENTITY_PROVIDER}}
+        service_account: barlow-app-publish@barlow-app.iam.gserviceaccount.com
+        token_format: json
+
+    - name: Play Console 내부테스트 배포
+      uses: r0adkll/upload-google-play@v1
+      with:
+        serviceAccountJsonPlainText: ${{ steps.auth.outputs.credentials_json }}
+        packageName: com.barlow.front
+        releaseFile: build-artifacts/app-release.aab
+        track: internal
+        status: completed
