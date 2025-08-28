@@ -6,6 +6,8 @@ on:
     types:
       - completed
     branches: [deploy, hotfix, issue/cd]
+  push:
+    branches: [issue/cd]
   workflow_dispatch:
 
 permissions:
