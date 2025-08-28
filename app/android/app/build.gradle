@@ -60,76 +60,8 @@ android {
             ]
         }
     }
-
-//    flavorDimensions "default"
-//    productFlavors {
-//        dev {
-//            dimension "default"
-////            applicationIdSuffix ".dev"
-//            versionNameSuffix "-dev"
-//        }
-//        prod {
-//            dimension "default"
-//        }
-//
-//    }
 }
 
 flutter {
     source = "../.."
 }
-//
-//android.applicationVariants.all { variant ->
-//    def flavor = variant.flavorName
-//    def buildType = variant.buildType.name
-//
-//    variant.outputs.all { output ->
-//        def extension = output.outputFileName?.split("\\.")?.last() ?: "aab"
-//        def versionName = variant.versionName
-//        def newName = "barlow-${flavor}-${versionName}-${buildType}.${extension}"
-//
-//        output.outputFileName = newName
-//    }
-//}
-//
-//gradle.taskGraph.whenReady { taskGraph ->
-//    if (taskGraph.hasTask(":app:bundleProdRelease")) {
-//        def versionName = android.defaultConfig.versionName
-//        def flavor = "prod"
-//        def srcFile = file("$buildDir/outputs/bundle/${flavor}Release/app-${flavor}-release.aab")
-//        def destFile = file("$buildDir/outputs/bundle/${flavor}Release/barlow-${flavor}-v${versionName}-release.aab")
-//
-//        tasks.named("bundleProdRelease").configure {
-//            doLast {
-//                println "✅ [Gradle Hook] bundleProdRelease 실행됨"
-//                if (srcFile.exists()) {
-//                    FileUtils.copyFile(srcFile, destFile)
-//                    println "✅ Copied AAB to: ${destFile.name}"
-//                } else {
-//                    println "⚠️ AAB file not found: ${srcFile}"
-//                }
-//            }
-//        }
-//    }
-////}
-//gradle.taskGraph.whenReady { taskGraph ->
-//    // 오직 AAB 빌드일 때만 Hook 실행
-//    if (taskGraph.hasTask(":app:bundleProdRelease")) {
-//        def flavor = "prod"
-//        def versionName = android.defaultConfig.versionName
-//        def srcFile = file("$buildDir/outputs/bundle/${flavor}Release/app-${flavor}-release.aab")
-//        def destFile = file("$buildDir/outputs/bundle/${flavor}Release/barlow-${flavor}-v${versionName}-release.aab")
-//
-//        tasks.named("bundleProdRelease").configure {
-//            doLast {
-//                println "✅ [Gradle Hook] bundleProdRelease 실행됨"
-//                if (srcFile.exists()) {
-//                    FileUtils.copyFile(srcFile, destFile)
-//                    println "✅ Copied AAB to: ${destFile.name}"
-//                } else {
-//                    println "⚠️ AAB file not found: ${srcFile}"
-//                }
-//            }
-//        }
-//    }
-//}
