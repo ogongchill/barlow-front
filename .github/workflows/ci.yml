@@ -27,6 +27,27 @@ jobs:
           channel: stable
           version: 3.29.2
 
+      - name: Generate Android Keystore File
+        shell: bash
+        working-directory: app
+        run: |
+          set -e
+          mkdir -p $HOME/.android
+          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > $HOME/.android/release-key.jks
+          chmod 600 $HOME/.android/release-key.jks
+          
+          echo "Verifying keystore..."
+          keytool -list -keystore $HOME/.android/release-key.jks -storepass "${{ secrets.ANDROID_STORE_PASSWORD }}"
+          echo "✅ Keystore verification successful"
+          
+          cat > ./android/key.properties <<'EOF'
+          storePassword=${{ secrets.ANDROID_STORE_PASSWORD }}
+          keyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}
+          keyAlias=upload
+          storeFile=/home/runner/.android/release-key.jks
+          storeType=pkcs12
+          EOF
+
       - name: Bump build number (+1) in app/pubspec.yaml
         id: bump
         working-directory: app
@@ -71,21 +92,6 @@ jobs:
         shell: bash
         working-directory: app
         run: dart run flutter_native_splash:create
-
-      - name: Generate Android Keystore File
-        shell: bash
-        working-directory: app
-        run: |
-          mkdir -p $HOME/.android
-          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > $HOME/.android/release-key.jks
-          cat > ./android/key.properties <<'EOF'
-          storePassword=${{ secrets.ANDROID_STORE_PASSWORD }}
-          keyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}
-          keyAlias=upload
-          storeFile=/home/runner/.android/release-key.jks
-          storeType=pkcs12
-          EOF
-
       - name: Build Android AppBundle(.aab)
         working-directory: app
         run: |
