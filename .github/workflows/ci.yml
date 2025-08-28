@@ -33,7 +33,7 @@ jobs:
         run: |
           set -e
           mkdir -p $HOME/.android
-          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > $HOME/.android/release-key.jks
+          echo "${{ secrets.ANDROID_RELEASE_KEY_JKS_BASE64 }}" | base64 -d > $HOME/.android/release-key.jks
           chmod 600 $HOME/.android/release-key.jks
           
           echo "Verifying keystore..."
