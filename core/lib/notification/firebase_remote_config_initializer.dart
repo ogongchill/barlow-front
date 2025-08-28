@@ -11,7 +11,7 @@ class FirebaseRemoteConfigInitializer {
     ));
 
     await _remoteConfig.setDefaults(const {
-      'isServerUnderMaintenance': false, // 기본값
+      'isServerUnderMaintenance': false,
     });
 
     await _remoteConfig.fetchAndActivate();
