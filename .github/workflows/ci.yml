@@ -64,8 +64,6 @@ jobs:
         run: |
           set -e
           (cd core && flutter pub get && flutter pub run build_runner build --delete-conflicting-outputs)
-          (cd design_system && flutter pub get && flutter pub run build_runner build --delete-conflicting-outputs)
-          (cd common && flutter pub get && flutter pub run build_runner build --delete-conflicting-outputs)
           (cd features && flutter pub get && flutter pub run build_runner build --delete-conflicting-outputs) 
           (cd app && flutter pub get && flutter pub run build_runner build --delete-conflicting-outputs)
 
