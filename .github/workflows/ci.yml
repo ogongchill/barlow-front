@@ -63,10 +63,11 @@ jobs:
         shell: bash
         run: |
           set -e
-          for dir in app common core design_system features; do
-            echo ">>> dart run build_runner build in $dir"
-            (cd "$dir" && dart run build_runner build)
-          done
+          (cd core && flutter pub get && flutter pub run build_runner build --delete-conflicting-outputs)
+          (cd design_system && flutter pub get && flutter pub run build_runner build --delete-conflicting-outputs)
+          (cd common && flutter pub get && flutter pub run build_runner build --delete-conflicting-outputs)
+          (cd features && flutter pub get && flutter pub run build_runner build --delete-conflicting-outputs) 
+          (cd app && flutter pub get && flutter pub run build_runner build --delete-conflicting-outputs)
 
       - name: Generate Native Splash
         shell: bash
