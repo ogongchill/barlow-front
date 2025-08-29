@@ -81,12 +81,12 @@ jobs:
         set -e
         
         echo "📌 1. Create Edit"
-        EDIT_RESPONSE=$(curl -s -X POST \
+        EDIT_ID=$(curl -s -X POST \
           -H "Authorization: Bearer $ACCESS_TOKEN" \
           -H "Content-Type: application/json" \
-          "https://androidpublisher.googleapis.com/androidpublisher/v3/applications/$PACKAGE_NAME/edits")
-        echo "Got editId: $EDIT_RESPONSE"
-        echo << (echo "$EDIT_RESPONSE" | jq -r '.id')
+          "https://androidpublisher.googleapis.com/androidpublisher/v3/applications/$PACKAGE_NAME/edits" \
+          | jq -r '.id')
+        echo "Got editId: $EDIT_ID"
         
         echo "📌 2. Upload AAB"
         UPLOAD_URL="https://androidpublisher.googleapis.com/upload/androidpublisher/v3/applications/$PACKAGE_NAME/edits/$EDIT_ID/bundles?uploadType=resumable"
