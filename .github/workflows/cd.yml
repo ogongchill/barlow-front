@@ -64,15 +64,7 @@ jobs:
           --dir build-artifacts
 
         ls -lh build-artifacts
-#
-#    - name: Play Console 내부테스트 배포
-#      uses: r0adkll/upload-google-play@v1
-#      with:
-#        serviceAccountJsonPlainText: ${{ steps.auth.outputs.credentials_json }}
-#        packageName: com.barlow.front
-#        releaseFile: build-artifacts/app-release.aab
-#        track: internal
-#        status: completed
+
     - name: Deploy to Play Store
       env:
         ACCESS_TOKEN: ${{ steps.auth.outputs.access_token }}
@@ -94,15 +86,16 @@ jobs:
         
         echo "📌 2. Upload AAB"
         UPLOAD_URL="https://androidpublisher.googleapis.com/upload/androidpublisher/v3/applications/$PACKAGE_NAME/edits/$EDIT_ID/bundles?uploadType=resumable"
-        SESSION_URL=$(curl -s -X POST \
+        
+        SESSION_URL=$(curl -s -D - -o /dev/null \
           -H "Authorization: Bearer $ACCESS_TOKEN" \
           -H "X-Upload-Content-Type: application/octet-stream" \
           -H "Content-Type: application/octet-stream" \
-          --data-binary @build-artifacts/app-release.aab \
-          "$UPLOAD_URL" \
-          -D - | grep -i location | awk '{print $2}' | tr -d '\r')
+          -X POST "$UPLOAD_URL" \
+          | grep -Fi Location | awk '{print $2}' | tr -d '\r')
+
+        echo "Got session URL: $SESSION_URL"
         
-        # 실제 업로드 (resumable session)
         curl -X PUT \
           -H "Authorization: Bearer $ACCESS_TOKEN" \
           -H "Content-Type: application/octet-stream" \
