@@ -79,13 +79,16 @@ jobs:
         TRACK: internal
       run: |
         set -e
-        
+
         echo "📌 1. Create Edit"
-        EDIT_ID=$(curl -s -X POST \
-          -H "Authorization: Bearer $ACCESS_TOKEN" \
-          -H "Content-Type: application/json" \
-          "https://androidpublisher.googleapis.com/androidpublisher/v3/applications/$PACKAGE_NAME/edits" \
-          | jq -r '.id')
+        EDIT_RESPONSE=$(curl -s -X POST \
+        -H "Authorization: Bearer $ACCESS_TOKEN" \
+        -H "Content-Type: application/json" \
+        "https://androidpublisher.googleapis.com/androidpublisher/v3/applications/$PACKAGE_NAME/edits")
+        
+        echo "Full response: $EDIT_RESPONSE"
+         
+        EDIT_ID=$(echo "$EDIT_RESPONSE" | jq -r '.id')
         echo "Got editId: $EDIT_ID"
         
         echo "📌 2. Upload AAB"
