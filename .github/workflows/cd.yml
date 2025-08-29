@@ -35,6 +35,9 @@ jobs:
 #        run-id: ${{ github.event.workflow_run.id }}
 #        path: ./build-artifacts
 #
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
     - name: Download latest CI artifact (app-release)
       env:
         GH_TOKEN: ${{ github.token }}
