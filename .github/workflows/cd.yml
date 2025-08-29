@@ -20,13 +20,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-    - name: Download app-release.aab from artifacts
-      uses: actions/download-artifact@v4
-      with:
-        name: app-release
-        run-id: ${{ github.event.workflow_run.id }}
-        path: ./build-artifacts
-
     - name: 'Authenticate to Google Cloud'
       id: auth
       uses: google-github-actions/auth@v2
@@ -34,6 +27,39 @@ jobs:
         workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
         service_account: barlow-app-publish@barlow-app.iam.gserviceaccount.com
         token_format: json
+
+#    - name: Download app-release.aab from artifacts
+#      uses: actions/download-artifact@v4
+#      with:
+#        name: app-release
+#        run-id: ${{ github.event.workflow_run.id }}
+#        path: ./build-artifacts
+#
+    - name: Download latest CI artifact (app-release)
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        # CI 워크플로우 이름 (ci.yml에서 설정한 name과 일치해야 함)
+        CI_WORKFLOW="어플리케이션 빌드"
+
+        # 가장 최근 성공한 CI 실행의 run id 찾기
+        CI_RUN_ID=$(gh run list \
+          --workflow "$CI_WORKFLOW" \
+          --branch deploy \
+          --status success \
+          --limit 1 \
+          --json databaseId \
+          --jq '.[0].databaseId')
+
+        echo "ℹ️ Latest CI run id: $CI_RUN_ID"
+
+        # 해당 run의 artifact 다운로드
+        mkdir -p build-artifacts
+        gh run download "$CI_RUN_ID" \
+          --name app-release \
+          --dir build-artifacts
+
+        ls -lh build-artifacts
 
     - name: Play Console 내부테스트 배포
       uses: r0adkll/upload-google-play@v1
