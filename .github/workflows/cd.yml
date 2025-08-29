@@ -105,7 +105,7 @@ jobs:
         VERSION_CODE=$(curl -s -X GET \
           -H "Authorization: Bearer $ACCESS_TOKEN" \
           "https://androidpublisher.googleapis.com/androidpublisher/v3/applications/$PACKAGE_NAME/edits/$EDIT_ID/bundles" \
-          | jq -r '.bundles[0].versionCode')
+          | jq -r '.bundles | max_by(.versionCode) | .versionCode')
         echo "Uploaded bundle versionCode: $VERSION_CODE"
         
         echo "📌 3. Assign to Track"
