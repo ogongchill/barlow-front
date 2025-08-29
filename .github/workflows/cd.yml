@@ -26,7 +26,7 @@ jobs:
       with:
         workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
         service_account: barlow-app-publish@barlow-app.iam.gserviceaccount.com
-        token_format: json
+        token_format: access-token
 
 #    - name: Download app-release.aab from artifacts
 #      uses: actions/download-artifact@v4
@@ -60,12 +60,64 @@ jobs:
           --dir build-artifacts
 
         ls -lh build-artifacts
-
-    - name: Play Console 내부테스트 배포
-      uses: r0adkll/upload-google-play@v1
-      with:
-        serviceAccountJsonPlainText: ${{ steps.auth.outputs.credentials_json }}
-        packageName: com.barlow.front
-        releaseFile: build-artifacts/app-release.aab
-        track: internal
-        status: completed
+#
+#    - name: Play Console 내부테스트 배포
+#      uses: r0adkll/upload-google-play@v1
+#      with:
+#        serviceAccountJsonPlainText: ${{ steps.auth.outputs.credentials_json }}
+#        packageName: com.barlow.front
+#        releaseFile: build-artifacts/app-release.aab
+#        track: internal
+#        status: completed
+    - name: Deploy to Play Store
+      env:
+        ACCESS_TOKEN: ${{ steps.auth.outputs.access_token }}
+        PACKAGE_NAME: com.barlow.front
+        TRACK: internal
+      run: |
+        set -e
+        
+        echo "📌 1. Create Edit"
+        EDIT_ID=$(curl -s -X POST \
+          -H "Authorization: Bearer $ACCESS_TOKEN" \
+          -H "Content-Type: application/json" \
+          "https://androidpublisher.googleapis.com/androidpublisher/v3/applications/$PACKAGE_NAME/edits" \
+          | jq -r '.id')
+        echo "Got editId: $EDIT_ID"
+        
+        echo "📌 2. Upload AAB"
+        UPLOAD_URL="https://androidpublisher.googleapis.com/upload/androidpublisher/v3/applications/$PACKAGE_NAME/edits/$EDIT_ID/bundles?uploadType=resumable"
+        SESSION_URL=$(curl -s -X POST \
+          -H "Authorization: Bearer $ACCESS_TOKEN" \
+          -H "X-Upload-Content-Type: application/octet-stream" \
+          -H "Content-Type: application/octet-stream" \
+          --data-binary @build-artifacts/app-release.aab \
+          "$UPLOAD_URL" \
+          -D - | grep -i location | awk '{print $2}' | tr -d '\r')
+        
+        # 실제 업로드 (resumable session)
+        curl -X PUT \
+          -H "Authorization: Bearer $ACCESS_TOKEN" \
+          -H "Content-Type: application/octet-stream" \
+          --data-binary @build-artifacts/app-release.aab \
+          "$SESSION_URL"
+        
+        VERSION_CODE=$(curl -s -X GET \
+          -H "Authorization: Bearer $ACCESS_TOKEN" \
+          "https://androidpublisher.googleapis.com/androidpublisher/v3/applications/$PACKAGE_NAME/edits/$EDIT_ID/bundles" \
+          | jq -r '.bundles[0].versionCode')
+        echo "Uploaded bundle versionCode: $VERSION_CODE"
+        
+        echo "📌 3. Assign to Track"
+        curl -s -X PUT \
+          -H "Authorization: Bearer $ACCESS_TOKEN" \
+          -H "Content-Type: application/json" \
+          -d "{\"releases\": [{\"versionCodes\": [\"$VERSION_CODE\"], \"status\": \"completed\"}]}" \
+          "https://androidpublisher.googleapis.com/androidpublisher/v3/applications/$PACKAGE_NAME/edits/$EDIT_ID/tracks/$TRACK"
+        
+        echo "📌 4. Commit Edit"
+        curl -s -X POST \
+          -H "Authorization: Bearer $ACCESS_TOKEN" \
+          "https://androidpublisher.googleapis.com/androidpublisher/v3/applications/$PACKAGE_NAME/edits/$EDIT_ID:commit"
+        
+        echo "✅ Deployment to $TRACK completed"
