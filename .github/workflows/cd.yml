@@ -26,7 +26,7 @@ jobs:
       with:
         workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
         service_account: barlow-app-publish@barlow-app.iam.gserviceaccount.com
-        token_format: access-token
+        token_format: access_token
 
 #    - name: Download app-release.aab from artifacts
 #      uses: actions/download-artifact@v4
