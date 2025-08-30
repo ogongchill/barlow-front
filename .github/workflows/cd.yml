@@ -34,35 +34,6 @@ jobs:
         run-id: ${{ github.event.workflow_run.id }}
         path: ./build-artifacts
 
-    - name: Checkout repository
-      uses: actions/checkout@v4
-
-    - name: Download latest CI artifact (app-release)
-      env:
-        GH_TOKEN: ${{ github.token }}
-      run: |
-        # CI 워크플로우 이름 (ci.yml에서 설정한 name과 일치해야 함)
-        CI_WORKFLOW="어플리케이션 빌드"
-
-        # 가장 최근 성공한 CI 실행의 run id 찾기
-        CI_RUN_ID=$(gh run list \
-          --workflow "$CI_WORKFLOW" \
-          --branch deploy \
-          --status success \
-          --limit 1 \
-          --json databaseId \
-          --jq '.[0].databaseId')
-
-        echo "ℹ️ Latest CI run id: $CI_RUN_ID"
-
-        # 해당 run의 artifact 다운로드
-        mkdir -p build-artifacts
-        gh run download "$CI_RUN_ID" \
-          --name app-release \
-          --dir build-artifacts
-
-        ls -lh build-artifacts
-
     - name: Set Track by Branch
       id: set-track
       run: |
