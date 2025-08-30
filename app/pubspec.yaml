@@ -2,7 +2,7 @@ name: front
 description: "국회의원 정보 및 발의 법안 정보 제공 프로젝트"
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.0.1+18
+version: 1.0.1+19
 
 environment:
   sdk: ^3.5.4
