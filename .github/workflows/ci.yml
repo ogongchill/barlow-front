@@ -79,7 +79,7 @@ jobs:
           echo "new:     $NEW_NAME+$NEW_CODE"
           
           # pubspec.yaml 덮어쓰기
-          sed -i "s/^version: .*/version: ${NEW_NAME}+${NEW_CODE}/" pubspec.yaml
+          sed -i "s/^version: .*/version: ${NAME}+${NEW_CODE}/" pubspec.yaml
           
           # 빌드 인자로 넘길 값 export
           echo "version_name=$NEW_NAME" >> $GITHUB_OUTPUT
