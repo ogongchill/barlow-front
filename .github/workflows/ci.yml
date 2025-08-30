@@ -1,0 +1,141 @@
+name: 어플리케이션 빌드
+
+on:
+  push:
+    branches: [main, release, hotfix, dev, issue/51]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup JAVA 18 SDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '18'
+
+      - name: Setup Flutter SDK
+        uses: flutter-actions/setup-flutter@v4
+        with:
+          channel: stable
+          version: 3.29.2
+
+      - name: Generate Android Keystore File
+        shell: bash
+        working-directory: app
+        run: |
+          set -e
+          mkdir -p $HOME/.android
+          echo "${{ secrets.ANDROID_RELEASE_KEY_JKS_BASE64 }}" | base64 -d > $HOME/.android/release-key.jks
+          chmod 600 $HOME/.android/release-key.jks
+          
+          echo "Verifying keystore..."
+          keytool -list -keystore $HOME/.android/release-key.jks -storepass "${{ secrets.ANDROID_STORE_PASSWORD }}"
+          echo "✅ Keystore verification successful"
+          
+          cat > ./android/key.properties <<'EOF'
+          storePassword=${{ secrets.ANDROID_STORE_PASSWORD }}
+          keyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}
+          keyAlias=upload
+          storeFile=/home/runner/.android/release-key.jks
+          storeType=pkcs12
+          EOF
+
+      - name: Bump build number (+1) in app/pubspec.yaml
+        id: bump
+        working-directory: app
+        shell: bash
+        run: |
+          set -e
+          # version 라인 추출 (예: "version: 1.2.3+45")
+          LINE=$(grep -E '^version:' pubspec.yaml)
+          NAME=$(echo "$LINE" | awk '{print $2}' | cut -d'+' -f1)   # 1.2.3
+          CODE=$(echo "$LINE" | awk -F'+' '{print $2}')             # 45
+          NEW_CODE=$((CODE+1))
+          
+          # 브랜치별 접미사 결정
+          if [[ "$BRANCH" == dev* ]]; then
+            SUFFIX="-alpha"
+          elif [[ "$BRANCH" == release* ]]; then
+            SUFFIX="-rc"
+          elif [[ "$BRANCH" == hotfix* ]]; then
+            SUFFIX=""   # prefix 없음
+          elif [[ "$BRANCH" == main ]]; then
+            SUFFIX=""   # prefix 없음
+          else
+            SUFFIX=""   # 기본값
+          fi
+          
+          NEW_NAME="${NAME}${SUFFIX}"
+          
+          echo "current: $NAME+$CODE"
+          echo "new:     $NEW_NAME+$NEW_CODE"
+          
+          # pubspec.yaml 덮어쓰기
+          sed -i "s/^version: .*/version: ${NEW_NAME}+${NEW_CODE}/" pubspec.yaml
+          
+          # 빌드 인자로 넘길 값 export
+          echo "version_name=$NAME" >> $GITHUB_OUTPUT
+          echo "version_code=$NEW_CODE" >> $GITHUB_OUTPUT
+
+
+      - name: Install dependencies
+        shell: bash
+        run: |
+          set -e
+          for dir in app common core design_system features; do
+            echo ">>> flutter pub get in $dir"
+            (cd "$dir" && flutter pub get)
+          done
+
+      - name: Generating Injectable
+        shell: bash
+        run: |
+          set -e
+          (cd core && flutter pub get && flutter pub run build_runner build --delete-conflicting-outputs)
+          (cd features && flutter pub get && flutter pub run build_runner build --delete-conflicting-outputs) 
+          (cd app && flutter pub get && flutter pub run build_runner build --delete-conflicting-outputs)
+
+      - name: Generate Native Splash
+        shell: bash
+        working-directory: app
+        run: dart run flutter_native_splash:create
+
+      - name: Build Android AppBundle(.aab)
+        working-directory: app
+        run: |
+          flutter build appbundle --release \
+          --build-name ${{ steps.bump.outputs.version_name }} \
+          --build-number ${{ steps.bump.outputs.version_code }} \
+          --dart-define=FLAVOR=prod
+
+      - name: Upload .aab artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release
+          path: app/build/app/outputs/bundle/release/app-release.aab
+          if-no-files-found: error
+
+      - name: Commit & push bumped pubspec.yaml
+        if: ${{ success() }}
+        shell: bash
+        working-directory: app
+        run: |
+          set -e
+          git config user.name  "${GITHUB_ACTOR}"
+          git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+          
+          if ! git diff --quiet -- pubspec.yaml; then
+            git add pubspec.yaml
+            git commit -m "ci: bump build number to ${{ steps.bump.outputs.version_code }}"
+            git push
+          else
+            echo "No changes to commit."
+          fi

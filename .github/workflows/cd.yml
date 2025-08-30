@@ -1,0 +1,141 @@
+name: Deploy
+
+on:
+  workflow_run:
+    workflows: ["어플리케이션 빌드"]
+    types:
+      - completed
+    branches: [main, hotfix, dev, release]
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+  actions: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: 'Authenticate to Google Cloud'
+      id: auth
+      uses: google-github-actions/auth@v2
+      with:
+        workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+        service_account: barlow-app-publish@barlow-app.iam.gserviceaccount.com
+        token_format: access_token
+        access_token_scopes: https://www.googleapis.com/auth/androidpublisher
+
+    - name: Download app-release.aab from artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: app-release
+        run-id: ${{ github.event.workflow_run.id }}
+        path: ./build-artifacts
+
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Download latest CI artifact (app-release)
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        # CI 워크플로우 이름 (ci.yml에서 설정한 name과 일치해야 함)
+        CI_WORKFLOW="어플리케이션 빌드"
+
+        # 가장 최근 성공한 CI 실행의 run id 찾기
+        CI_RUN_ID=$(gh run list \
+          --workflow "$CI_WORKFLOW" \
+          --branch deploy \
+          --status success \
+          --limit 1 \
+          --json databaseId \
+          --jq '.[0].databaseId')
+
+        echo "ℹ️ Latest CI run id: $CI_RUN_ID"
+
+        # 해당 run의 artifact 다운로드
+        mkdir -p build-artifacts
+        gh run download "$CI_RUN_ID" \
+          --name app-release \
+          --dir build-artifacts
+
+        ls -lh build-artifacts
+
+    - name: Set Track by Branch
+      id: set-track
+      run: |
+        case "${GITHUB_REF_NAME}" in
+          main)
+            echo "TRACK=production" >> $GITHUB_ENV
+            ;;
+          hotfix)
+            echo "TRACK=internal" >> $GITHUB_ENV
+            ;;
+          dev)
+            echo "TRACK=internal" >> $GITHUB_ENV
+            ;;
+          release)
+            echo "TRACK=rc" >> $GITHUB_ENV
+            ;;
+          *)
+            echo "TRACK=internal" >> $GITHUB_ENV
+            ;;
+        esac
+
+    - name: Deploy to Play Store
+      env:
+        ACCESS_TOKEN: ${{ steps.auth.outputs.access_token }}
+        PACKAGE_NAME: com.barlow.front
+      run: |
+        set -e
+
+        echo "📌 1. Create Edit"
+        EDIT_RESPONSE=$(curl -s -X POST \
+        -H "Authorization: Bearer $ACCESS_TOKEN" \
+        -H "Content-Type: application/json" \
+        "https://androidpublisher.googleapis.com/androidpublisher/v3/applications/$PACKAGE_NAME/edits")
+        
+        echo "Full response: $EDIT_RESPONSE"
+         
+        EDIT_ID=$(echo "$EDIT_RESPONSE" | jq -r '.id')
+        echo "Got editId: $EDIT_ID"
+        
+        echo "📌 2. Upload AAB"
+        UPLOAD_URL="https://androidpublisher.googleapis.com/upload/androidpublisher/v3/applications/$PACKAGE_NAME/edits/$EDIT_ID/bundles?uploadType=resumable"
+        
+        SESSION_URL=$(curl -s -D - -o /dev/null \
+          -H "Authorization: Bearer $ACCESS_TOKEN" \
+          -H "X-Upload-Content-Type: application/octet-stream" \
+          -H "Content-Type: application/octet-stream" \
+          -X POST "$UPLOAD_URL" \
+          | grep -Fi Location | awk '{print $2}' | tr -d '\r')
+
+        echo "Got session URL: $SESSION_URL"
+        
+        curl -X PUT \
+          -H "Authorization: Bearer $ACCESS_TOKEN" \
+          -H "Content-Type: application/octet-stream" \
+          --data-binary @build-artifacts/app-release.aab \
+          "$SESSION_URL"
+        
+        VERSION_CODE=$(curl -s -X GET \
+          -H "Authorization: Bearer $ACCESS_TOKEN" \
+          "https://androidpublisher.googleapis.com/androidpublisher/v3/applications/$PACKAGE_NAME/edits/$EDIT_ID/bundles" \
+          | jq -r '.bundles | max_by(.versionCode) | .versionCode')
+        echo "Uploaded bundle versionCode: $VERSION_CODE"
+        
+        echo "📌 3. Assign to Track"
+        curl -s -X PUT \
+          -H "Authorization: Bearer $ACCESS_TOKEN" \
+          -H "Content-Type: application/json" \
+          -d "{\"releases\": [{\"versionCodes\": [\"$VERSION_CODE\"], \"status\": \"completed\"}]}" \
+          "https://androidpublisher.googleapis.com/androidpublisher/v3/applications/$PACKAGE_NAME/edits/$EDIT_ID/tracks/$TRACK"
+        
+        echo "📌 4. Commit Edit"
+        curl -s -X POST \
+          -H "Authorization: Bearer $ACCESS_TOKEN" \
+          "https://androidpublisher.googleapis.com/androidpublisher/v3/applications/$PACKAGE_NAME/edits/$EDIT_ID:commit?changesNotSentForReview=true"
+        
+        echo "✅ Deployment to $TRACK completed"

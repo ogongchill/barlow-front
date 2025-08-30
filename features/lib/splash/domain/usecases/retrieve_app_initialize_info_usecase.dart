@@ -14,6 +14,7 @@ class AppInitializeStatus {
   final bool isLoggedIn;
   final bool hasCheckNotificationPermission;
   final bool hasRejectUpdateDialog;
+  final bool isSeverUnderMaintenance;
 
   AppInitializeStatus({
       required this.isFirstLaunch,
@@ -21,7 +22,8 @@ class AppInitializeStatus {
       required this.needForceUpdate,
       required this.isLoggedIn,
       required this.hasCheckNotificationPermission,
-      required this.hasRejectUpdateDialog
+      required this.hasRejectUpdateDialog,
+      required this.isSeverUnderMaintenance
   });
 }
 
@@ -42,13 +44,15 @@ class RetrieveAppInitializeInfoUseCase {
     AppVersionStatus versionStatus = await _appVersionStatusRepository.fetchVersionInfo();
     final rejectUpdateDialog = await _userRejectRepository.findByCategory(UserRejectCategory.updateAvailableDialog);
     bool hasRejectDialog = (rejectUpdateDialog != null) && (rejectUpdateDialog.expiredAt.isAfter(DateTime.now()));
+    bool isServerUnderMaintenance = await _appVersionStatusRepository.fetchServerUnderMaintenanceInfo();
     return AppInitializeStatus(
       isFirstLaunch: info.isFirstLaunch,
       isLoggedIn: info.isLoggedIn,
       hasCheckNotificationPermission: info.hasCheckNotificationPermission,
       isUpdateAvailable: versionStatus == AppVersionStatus.updateAvailable,
       needForceUpdate: versionStatus == AppVersionStatus.needForceUpdate,
-      hasRejectUpdateDialog: hasRejectDialog
+      hasRejectUpdateDialog: hasRejectDialog,
+      isSeverUnderMaintenance: isServerUnderMaintenance
     );
   }
 }

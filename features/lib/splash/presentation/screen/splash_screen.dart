@@ -3,6 +3,7 @@ import 'package:features/navigation/application_navigation_service.dart';
 import 'package:features/splash/presentation/widget/splash_screen_widget.dart';
 import 'package:features/splash/presentation/viewmodel/splash_viewmodel.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -43,7 +44,9 @@ class SplashScreen extends ConsumerWidget {
     ref.listen(appInitializeStateProvider, (prev, next) {
       bool updateTemporaryRejected = ref.read(temporaryDisableUpdateNotifierProvider);
       next.whenData((state) {
-        if (state.needForceUpdate) {
+        if (state.isServerUnderMaintenance) {
+          return _showServerUnderMaintenance(context, ref);
+        } else if (state.needForceUpdate) {
           _showForceUpdateDialog(context, ref);
         } else if (state.isUpdateAvailable && !state.hasRejectUpdateDialog && !updateTemporaryRejected) {
           _showUpdateDialog(context, ref);
@@ -57,6 +60,40 @@ class SplashScreen extends ConsumerWidget {
       });
     });
     return const SplashScreenWidget();
+  }
+
+  Future<void> _showServerUnderMaintenance(BuildContext context, WidgetRef ref) async {
+    final result = await showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        title: const Column(
+          children: [
+            SizedBox(height: 80, child: Text(":(", style: _emoji,),),
+            Text("서버 점검중이에요", style: _header, textAlign: TextAlign.center,),
+            SizedBox(height: 40,),
+            Divider()
+          ],
+        ),
+        content: const Text("현재 서버 점검중입니다. 나중에 다시 시도해주세요 :(", style: _subtitle,),
+        backgroundColor: Colors.white,
+        actions: [
+          TextButton(
+              onPressed: () {
+                SystemNavigator.pop();
+              },
+              child: const Row(
+                mainAxisSize: MainAxisSize.min,
+                spacing: 10,
+                children: [
+                  Text("종료", style: _description,),
+                  Icon(Icons.arrow_circle_right_rounded, color: Colors.greenAccent, size: 24,),
+                ],
+              )
+          ),
+        ],
+      ),
+    );
   }
 
   Future<void> _showForceUpdateDialog(BuildContext context, WidgetRef ref) async {
