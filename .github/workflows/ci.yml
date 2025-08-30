@@ -61,13 +61,13 @@ jobs:
           NEW_CODE=$((CODE+1))
           
           # 브랜치별 접미사 결정
-          if [[ "$BRANCH" == dev* ]]; then
+          if [[ "$GITHUB_REF_NAME" == dev* ]]; then
             SUFFIX="-alpha"
-          elif [[ "$BRANCH" == release* ]]; then
+          elif [[ "$GITHUB_REF_NAME" == release* ]]; then
             SUFFIX="-rc"
-          elif [[ "$BRANCH" == hotfix* ]]; then
+          elif [[ "$GITHUB_REF_NAME" == hotfix* ]]; then
             SUFFIX=""   # prefix 없음
-          elif [[ "$BRANCH" == main ]]; then
+          elif [[ "$GITHUB_REF_NAME" == main ]]; then
             SUFFIX=""   # prefix 없음
           else
             SUFFIX=""   # 기본값
