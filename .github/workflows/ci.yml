@@ -2,7 +2,7 @@ name: 어플리케이션 빌드
 
 on:
   push:
-    branches: [deploy, hotfix, issue/51]
+    branches: [main, release, hotfix, dev, issue/51]
   workflow_dispatch:
 
 permissions:
@@ -60,11 +60,26 @@ jobs:
           CODE=$(echo "$LINE" | awk -F'+' '{print $2}')             # 45
           NEW_CODE=$((CODE+1))
           
+          # 브랜치별 접미사 결정
+          if [[ "$BRANCH" == dev* ]]; then
+            SUFFIX="-alpha"
+          elif [[ "$BRANCH" == release* ]]; then
+            SUFFIX="-rc"
+          elif [[ "$BRANCH" == hotfix* ]]; then
+            SUFFIX=""   # prefix 없음
+          elif [[ "$BRANCH" == main ]]; then
+            SUFFIX=""   # prefix 없음
+          else
+            SUFFIX=""   # 기본값
+          fi
+          
+          NEW_NAME="${NAME}${SUFFIX}"
+          
           echo "current: $NAME+$CODE"
-          echo "new:     $NAME+$NEW_CODE"
+          echo "new:     $NEW_NAME+$NEW_CODE"
           
           # pubspec.yaml 덮어쓰기
-          sed -i "s/^version: .*/version: ${NAME}+${NEW_CODE}/" pubspec.yaml
+          sed -i "s/^version: .*/version: ${NEW_NAME}+${NEW_CODE}/" pubspec.yaml
           
           # 빌드 인자로 넘길 값 export
           echo "version_name=$NAME" >> $GITHUB_OUTPUT
@@ -92,6 +107,7 @@ jobs:
         shell: bash
         working-directory: app
         run: dart run flutter_native_splash:create
+
       - name: Build Android AppBundle(.aab)
         working-directory: app
         run: |

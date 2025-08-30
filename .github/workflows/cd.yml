@@ -5,9 +5,7 @@ on:
     workflows: ["어플리케이션 빌드"]
     types:
       - completed
-    branches: [deploy, hotfix, issue/cd]
-  push:
-    branches: [issue/cd]
+    branches: [main, hotfix, dev, release]
   workflow_dispatch:
 
 permissions:
@@ -29,13 +27,13 @@ jobs:
         token_format: access_token
         access_token_scopes: https://www.googleapis.com/auth/androidpublisher
 
-      #    - name: Download app-release.aab from artifacts
-#      uses: actions/download-artifact@v4
-#      with:
-#        name: app-release
-#        run-id: ${{ github.event.workflow_run.id }}
-#        path: ./build-artifacts
-#
+    - name: Download app-release.aab from artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: app-release
+        run-id: ${{ github.event.workflow_run.id }}
+        path: ./build-artifacts
+
     - name: Checkout repository
       uses: actions/checkout@v4
 
@@ -65,11 +63,31 @@ jobs:
 
         ls -lh build-artifacts
 
+    - name: Set Track by Branch
+      id: set-track
+      run: |
+        case "${GITHUB_REF_NAME}" in
+          main)
+            echo "TRACK=production" >> $GITHUB_ENV
+            ;;
+          hotfix)
+            echo "TRACK=internal" >> $GITHUB_ENV
+            ;;
+          dev)
+            echo "TRACK=internal" >> $GITHUB_ENV
+            ;;
+          release)
+            echo "TRACK=rc" >> $GITHUB_ENV
+            ;;
+          *)
+            echo "TRACK=internal" >> $GITHUB_ENV
+            ;;
+        esac
+
     - name: Deploy to Play Store
       env:
         ACCESS_TOKEN: ${{ steps.auth.outputs.access_token }}
         PACKAGE_NAME: com.barlow.front
-        TRACK: internal
       run: |
         set -e
 
