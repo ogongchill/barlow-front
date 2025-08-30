@@ -27,13 +27,18 @@ jobs:
         token_format: access_token
         access_token_scopes: https://www.googleapis.com/auth/androidpublisher
 
-    - name: Download app-release.aab from artifacts
-      uses: actions/download-artifact@v4
-      with:
-        name: app-release
-        run-id: ${{ github.event.workflow_run.id }}
-        path: ./build-artifacts
+    - name: Download artifact from triggering workflow
+      if: github.event_name == 'workflow_run'
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        echo "Triggered by run id: ${{ github.event.workflow_run.id }}"
+        mkdir -p build-artifacts
+        gh run download ${{ github.event.workflow_run.id }} \
+          --name app-release \
+          --dir build-artifacts
 
+        ls -lh build-artifacts
     - name: Set Track by Branch
       id: set-track
       run: |
