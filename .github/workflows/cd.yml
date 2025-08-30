@@ -1,4 +1,4 @@
-name: Deploy
+name: Google Play 배포
 
 on:
   workflow_run:
@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-    - name: 'Authenticate to Google Cloud'
+    - name: Authenticate to Google Cloud
       id: auth
       uses: google-github-actions/auth@v2
       with:
