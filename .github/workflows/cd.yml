@@ -116,6 +116,6 @@ jobs:
         echo "📌 4. Commit Edit"
         curl -s -X POST \
           -H "Authorization: Bearer $ACCESS_TOKEN" \
-          "https://androidpublisher.googleapis.com/androidpublisher/v3/applications/$PACKAGE_NAME/edits/$EDIT_ID:commit"
+          "https://androidpublisher.googleapis.com/androidpublisher/v3/applications/$PACKAGE_NAME/edits/$EDIT_ID:commit?changesNotSentForReview=true"
         
         echo "✅ Deployment to $TRACK completed"
