@@ -12,8 +12,7 @@ class DioConfig {
 }
 
 final DioConfig testServerConfig = DioConfig(
-    hostUrl: 'http://43.201.132.160:8080/',
+    hostUrl: 'http://barlow-api.site:8080/',
     connectionTimeOut: const Duration(seconds: 10),
     receiveTimeOut: const Duration(seconds: 10)
 );
-
