@@ -12,18 +12,18 @@ abstract class DioConfigModule {
   @LazySingleton(env: [Env.dev])
   Dio get dioDev =>  Dio(
       BaseOptions(
-          connectTimeout: testServerConfig.connectionTimeOut,
-          receiveTimeout: testServerConfig.receiveTimeOut,
-          baseUrl: testServerConfig.hostUrl
+          connectTimeout: apiServerConfig.connectionTimeOut,
+          receiveTimeout: apiServerConfig.receiveTimeOut,
+          baseUrl: apiServerConfig.hostUrl
       )
   ).. interceptors.addAll([LoggerInterceptor(), GetIt.instance<HeaderInterceptor>()]);
 
   @LazySingleton(env: [Env.prod])
   Dio get dioProd =>  Dio(
       BaseOptions(
-          connectTimeout: testServerConfig.connectionTimeOut,
-          receiveTimeout: testServerConfig.receiveTimeOut,
-          baseUrl: testServerConfig.hostUrl
+          connectTimeout: apiServerConfig.connectionTimeOut,
+          receiveTimeout: apiServerConfig.receiveTimeOut,
+          baseUrl: apiServerConfig.hostUrl
       )
   ).. interceptors.addAll([GetIt.instance<HeaderInterceptor>()]);
 }
