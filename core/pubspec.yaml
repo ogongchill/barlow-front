@@ -24,9 +24,6 @@ dependencies:
   firebase_remote_config: ^5.4.4
 
   #storage
-  hive: ^2.2.3
-  hive_flutter: ^1.1.0
-  hive_generator: ^2.0.1
   flutter_secure_storage: ^9.2.4
   shared_preferences: ^2.5.3
 
