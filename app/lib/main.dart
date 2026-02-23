@@ -6,7 +6,7 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:core/utils/device_info_manager.dart';
 import 'package:core/notification/fcm_config.dart';
 import 'package:features/barlow_app.dart';
-import 'package:core/storage/hive/hive_configs.dart';
+import 'package:core/storage/shared-preferences/shared_prefs_read_status_service.dart';
 import 'package:core/notification/firebase_remote_config_initializer.dart';
 
 import 'di.dart';
@@ -17,13 +17,8 @@ void main() async {
   _assertFlavor();
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  await HiveInitializer.initializeApp();
-  if(_flavor == 'prod:clearHive') {
-    HiveInitializer.clearBox();
-    configureDependencies('prod');
-  } else {
-    configureDependencies(_flavor);
-  }
+  await SharedPrefsReadStatusService.clean();
+  configureDependencies(_flavor);
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await FcmInitializer(
     plugin: FlutterLocalNotificationsPlugin(),
