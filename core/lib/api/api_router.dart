@@ -2,6 +2,7 @@ import 'package:core/api/account/account_router.dart';
 import 'package:core/api/common/api_client.dart';
 import 'package:core/api/legislation-account/legislation_account_router.dart';
 import 'package:core/api/menu/menu_router.dart';
+import 'package:core/api/term/term_router.dart';
 import 'package:injectable/injectable.dart';
 import 'auth/auth_router.dart';
 import 'home/home_router.dart';
@@ -20,6 +21,7 @@ class ApiRouter {
   final RecentBillRouter recentBillRouter;
   final VersionCheckRouter versionCheckRouter;
   final AccountRouter accountRouter;
+  final TermRouter termRouter;
 
   ApiRouter({required ApiClient apiClient})
     : authRouter = AuthRouter(apiClient),
@@ -29,5 +31,6 @@ class ApiRouter {
       menuRouter = MenuRouter(apiClient),
       recentBillRouter = RecentBillRouter(apiClient),
       versionCheckRouter = VersionCheckRouter(apiClient),
-      accountRouter = AccountRouter(apiClient);
+      accountRouter = AccountRouter(apiClient),
+      termRouter = TermRouter(apiClient);
 }
