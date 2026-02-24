@@ -30,6 +30,7 @@ app/.dart_tool/
 .pub-cache/
 .pub/
 /build/
+app/build/
 
 # Symbolication related
 app.*.symbols
@@ -42,9 +43,18 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
+#android
+app/android/app/.cxx/
+
+#ios
+
 # widget preview plugin
 .widget_preview/
 
 # for build runner outputs
 *.g.dart
 *.module.dart
+
+# claude local
+
+.claude/settings.local.json
