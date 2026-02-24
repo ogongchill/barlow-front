@@ -1,3 +1,4 @@
+import 'package:core/api/auth/oidc_requests.dart';
 import 'package:core/api/common/api_client.dart';
 
 import 'auth_requests.dart';
@@ -15,6 +16,21 @@ class AuthRouter {
       method: HttpMethod.post,
       requiresAuth: false
   );
+  static const ApiRoute _oidcSignup = ApiRoute(
+      path: 'api/v1/auth/oidc/signup',
+      method: HttpMethod.post,
+      requiresAuth: false
+  );
+  static const ApiRoute _oidcPromote = ApiRoute(
+      path: 'api/v1/auth/oidc/promote',
+      method: HttpMethod.post,
+      requiresAuth: true
+  );
+  static const ApiRoute _oidcLogin = ApiRoute(
+      path: 'api/v1/auth/oidc/login',
+      method: HttpMethod.post,
+      requiresAuth: false
+  );
 
   final ApiClient _apiClient;
 
@@ -28,6 +44,12 @@ class AuthRouter {
 
   Future<LoginResponse?> guestLogin(LoginRequestBody requestBody) => _apiClient.request(
       apiRoute: _guestLoginRoute,
+      fromJson: (json) => LoginResponse.fromJson(json),
+      data: requestBody.toJson()
+  );
+
+  Future<LoginResponse?> oidcSignUp(OidcSignupRequest requestBody) => _apiClient.request(
+      apiRoute: _oidcSignup,
       fromJson: (json) => LoginResponse.fromJson(json),
       data: requestBody.toJson()
   );
