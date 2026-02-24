@@ -8,7 +8,7 @@ import 'package:core/notification/fcm_config.dart';
 import 'package:features/barlow_app.dart';
 import 'package:core/storage/shared-preferences/shared_prefs_read_status_service.dart';
 import 'package:core/notification/firebase_remote_config_initializer.dart';
-
+import 'package:core/oidc/kakao_initializer.dart';
 import 'di.dart';
 
 const _flavor = String.fromEnvironment('FLAVOR');
@@ -27,6 +27,7 @@ void main() async {
     onMessageTerminatedHandler: (RemoteMessage message) {},
   ).initialize();
   await FirebaseRemoteConfigInitializer().initialize();
+  await KakaoInitializer().initialize();
   await DeviceInfoManager().init();
   FlutterNativeSplash.remove();
   runApp(barlowMobileApp);

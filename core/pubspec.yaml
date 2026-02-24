@@ -11,6 +11,9 @@ dependencies:
   flutter:
     sdk: flutter
 
+  #oauth
+  kakao_flutter_sdk_user: ^1.10.0
+
   #network
   dio: ^5.8.0+1
 
