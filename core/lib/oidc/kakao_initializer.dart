@@ -1,10 +1,12 @@
 import 'package:kakao_flutter_sdk_auth/kakao_flutter_sdk_auth.dart';
 
+const String _kakaoNativeAppKey = String.fromEnvironment('KAKAO_NATIVE_APP_KEY');
+
 class KakaoInitializer {
 
   Future<void> initialize() async {
     KakaoSdk.init(
-      nativeAppKey: "7c84ea3bc121d1c003c9daa9b147b1ed"
+      nativeAppKey: _kakaoNativeAppKey
     );
   }
 }
