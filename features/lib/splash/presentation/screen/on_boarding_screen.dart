@@ -164,14 +164,14 @@ class _GuestButton extends StatelessWidget {
     return OutlinedButton(
       onPressed: onPressed,
       style: OutlinedButton.styleFrom(
-        minimumSize: const Size.fromHeight(52),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        minimumSize: const Size.fromHeight(42),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         side: const BorderSide(color: ColorPalette.greyDark),
         foregroundColor: ColorPalette.greyDark,
       ),
       child: const Text(
         '게스트로 시작하기',
-        style: TextStyle(fontFamily: 'gmarketSans', fontWeight: FontWeight.w500, fontSize: 16),
+        style: TextStyle(fontFamily: 'gmarketSans', fontWeight: FontWeight.w500, fontSize: 14),
       ),
     );
   }
