@@ -9,6 +9,10 @@ import 'package:features/home/presentation/screen/notification_center_screen.dar
 import 'package:features/settings/presentation/screen/notification_setting_screen.dart';
 import 'package:features/settings/presentation/screen/setting_screen.dart';
 import 'package:features/bill/domain/constant/committee.dart';
+import 'package:features/signup/domain/entities/oidc_signup_info.dart';
+import 'package:features/signup/domain/entities/signup_option.dart';
+import 'package:features/signup/presentation/screen/kakao_signup_terms_screen.dart';
+import 'package:features/signup/presentation/screen/signup_screen.dart';
 import 'package:features/splash/presentation/screen/on_boarding_screen.dart';
 import 'package:features/splash/presentation/view/permisssion_view.dart';
 import 'package:features/splash/presentation/screen/splash_screen.dart';
@@ -18,7 +22,8 @@ import 'package:features/navigation/application_navigation_service.dart';
 
 final GoRouter applicationRouter = GoRouter(
   navigatorKey: ApplicationNavigatorService.navigatorKey,
-  initialLocation: '/splash',
+  // initialLocation: '/splash',
+  initialLocation: '/signup/default',
   routes: <RouteBase>[
     _homeRouter,
     _billRouter,
@@ -27,7 +32,8 @@ final GoRouter applicationRouter = GoRouter(
     _settingRouter,
     _notificationRouter,
     _splashRouter,
-    _onBoardingRouter
+    _onBoardingRouter,
+    _signupRouter,
   ],
 );
 
@@ -113,4 +119,25 @@ final GoRoute _splashRouter = GoRoute(
 final GoRoute _onBoardingRouter = GoRoute(
   path: '/onboarding',
   builder: (context, state) => const OnboardingScreen()
+);
+
+final GoRoute _signupRouter = GoRoute(
+  path: '/signup',
+  builder: (context, state) => const SizedBox.shrink(),
+  routes: [
+    GoRoute(
+      path: '/default',
+      builder: (context, state) => const SignupScreen(),
+    ),
+    GoRoute(
+      path: '/kakao/terms',
+      builder: (context, state) {
+        final extra = state.extra as Map<String, dynamic>;
+        return KakaoSignupTermsScreen(
+          option: extra['option'] as SignupOption,
+          terms: extra['terms'] as List<TermAgreementItem>,
+        );
+      },
+    ),
+  ],
 );

@@ -1,32 +1,36 @@
 import 'package:features/signup/domain/entities/oidc_signup_info.dart';
-import 'package:features/signup/presentation/viewmodel/kakao_signup_notifier.dart';
-import 'package:features/signup/presentation/viewmodel/kakao_signup_state.dart';
+import 'package:features/signup/domain/entities/signup_option.dart';
+import 'package:features/signup/presentation/viewmodel/signup_notifier.dart';
+import 'package:features/signup/presentation/viewmodel/signup_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 // 테스트 전용 Notifier: UseCase 를 콜백으로 주입받아 kakao SDK 트랜지티브 의존 회피
 
-class _TestableKakaoSignupNotifier extends KakaoSignupNotifier {
+class _TestableSignupNotifier extends SignupNotifier {
   final Future<String> Function() getIdToken;
   final Future<List<TermAgreementItem>> Function() fetchTerms;
 
-  _TestableKakaoSignupNotifier({
+  _TestableSignupNotifier({
     required this.getIdToken,
     required this.fetchTerms,
   });
 
   @override
-  Future<void> onKakaoLoginButtonTapped() async {
-    if (state is KakaoSignupLoading) return;
+  Future<void> startKakaoSignup() async {
+    if (state is SignupLoading) return;
 
-    state = const KakaoSignupLoading();
+    state = const SignupLoading();
 
     try {
       final idToken = await getIdToken();
       final terms = await fetchTerms();
-      state = KakaoSignupTermsReady(idToken: idToken, terms: terms);
+      state = SignupTermsReady(
+        option: KakaoSignupOption(idToken: idToken),
+        terms: terms,
+      );
     } catch (e) {
-      state = KakaoSignupError(message: e.toString());
+      state = SignupError(message: e.toString());
     }
   }
 }
@@ -39,8 +43,8 @@ ProviderContainer _makeContainer({
 }) {
   return ProviderContainer(
     overrides: [
-      kakaoSignupProvider.overrideWith(
-        () => _TestableKakaoSignupNotifier(
+      signupProvider.overrideWith(
+        () => _TestableSignupNotifier(
           getIdToken: getIdToken,
           fetchTerms: fetchTerms,
         ),
@@ -73,67 +77,62 @@ final _testTerms = [
 // 테스트
 
 void main() {
-  group('KakaoSignupNotifier', () {
-    test('초기 상태는 KakaoSignupIdle 이다', () {
+  group('SignupNotifier', () {
+    test('초기 상태는 SignupIdle 이다', () {
       final container = _makeContainer(
         getIdToken: () async => _testIdToken,
         fetchTerms: () async => _testTerms,
       );
       addTearDown(container.dispose);
 
-      expect(container.read(kakaoSignupProvider), isA<KakaoSignupIdle>());
+      expect(container.read(signupProvider), isA<SignupIdle>());
     });
 
-    test('onKakaoLoginButtonTapped 호출 시 KakaoSignupTermsReady 로 전이된다', () async {
+    test('startKakaoSignup 호출 시 SignupTermsReady 로 전이된다', () async {
       final container = _makeContainer(
         getIdToken: () async => _testIdToken,
         fetchTerms: () async => _testTerms,
       );
       addTearDown(container.dispose);
 
-      await container
-          .read(kakaoSignupProvider.notifier)
-          .onKakaoLoginButtonTapped();
+      await container.read(signupProvider.notifier).startKakaoSignup();
 
-      final state = container.read(kakaoSignupProvider);
-      expect(state, isA<KakaoSignupTermsReady>());
+      final state = container.read(signupProvider);
+      expect(state, isA<SignupTermsReady>());
 
-      final readyState = state as KakaoSignupTermsReady;
-      expect(readyState.idToken, _testIdToken);
+      final readyState = state as SignupTermsReady;
+      expect(readyState.option, isA<KakaoSignupOption>());
+      expect((readyState.option as KakaoSignupOption).idToken, _testIdToken);
       expect(readyState.terms.length, 2);
       expect(readyState.terms.first.id, 1);
     });
 
-    test('idToken 획득 실패 시 KakaoSignupError 로 전이된다', () async {
+    test('idToken 획득 실패 시 SignupError 로 전이된다', () async {
       final container = _makeContainer(
         getIdToken: () async => throw StateError('OIDC 스코프 없음'),
         fetchTerms: () async => _testTerms,
       );
       addTearDown(container.dispose);
 
-      await container
-          .read(kakaoSignupProvider.notifier)
-          .onKakaoLoginButtonTapped();
+      await container.read(signupProvider.notifier).startKakaoSignup();
 
-      final state = container.read(kakaoSignupProvider);
-      expect(state, isA<KakaoSignupError>());
-      expect((state as KakaoSignupError).message, contains('OIDC 스코프 없음'));
+      final state = container.read(signupProvider);
+      expect(state, isA<SignupError>());
+      expect((state as SignupError).message, contains('OIDC 스코프 없음'));
     });
 
-    test('약관 조회 실패 시 KakaoSignupError 로 전이된다', () async {
+    test('약관 조회 실패 시 SignupError 로 전이된다', () async {
       final container = _makeContainer(
         getIdToken: () async => _testIdToken,
         fetchTerms: () async => throw Exception('네트워크 오류'),
       );
       addTearDown(container.dispose);
 
-      await container
-          .read(kakaoSignupProvider.notifier)
-          .onKakaoLoginButtonTapped();
+      await container.read(signupProvider.notifier).startKakaoSignup();
 
-      final state = container.read(kakaoSignupProvider);
-      expect(state, isA<KakaoSignupError>());
-      expect((state as KakaoSignupError).message, contains('네트워크 오류'));
+      final state = container.read(signupProvider);
+      expect(state, isA<SignupError>());
+      expect((state as SignupError).message, contains('네트워크 오류'));
     });
 
     test('로딩 중 중복 탭은 무시된다', () async {
@@ -149,32 +148,27 @@ void main() {
       );
       addTearDown(container.dispose);
 
-      final firstTap = container
-          .read(kakaoSignupProvider.notifier)
-          .onKakaoLoginButtonTapped();
+      final firstTap =
+          container.read(signupProvider.notifier).startKakaoSignup();
       // 첫 번째 탭 완료 전에 두 번째 탭 — 무시되어야 한다
-      await container
-          .read(kakaoSignupProvider.notifier)
-          .onKakaoLoginButtonTapped();
+      await container.read(signupProvider.notifier).startKakaoSignup();
       await firstTap;
 
       expect(idTokenCallCount, 1, reason: 'UseCase 는 정확히 1회만 호출되어야 한다');
     });
 
-    test('resetToIdle 호출 시 KakaoSignupIdle 로 복귀한다', () async {
+    test('resetToIdle 호출 시 SignupIdle 로 복귀한다', () async {
       final container = _makeContainer(
         getIdToken: () async => throw Exception('오류'),
         fetchTerms: () async => [],
       );
       addTearDown(container.dispose);
 
-      await container
-          .read(kakaoSignupProvider.notifier)
-          .onKakaoLoginButtonTapped();
-      expect(container.read(kakaoSignupProvider), isA<KakaoSignupError>());
+      await container.read(signupProvider.notifier).startKakaoSignup();
+      expect(container.read(signupProvider), isA<SignupError>());
 
-      container.read(kakaoSignupProvider.notifier).resetToIdle();
-      expect(container.read(kakaoSignupProvider), isA<KakaoSignupIdle>());
+      container.read(signupProvider.notifier).resetToIdle();
+      expect(container.read(signupProvider), isA<SignupIdle>());
     });
   });
 }

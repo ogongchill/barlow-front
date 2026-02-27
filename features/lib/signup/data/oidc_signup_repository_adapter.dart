@@ -6,6 +6,7 @@ import 'package:core/utils/device_info_manager.dart';
 import 'package:features/signup/domain/entities/oidc_signup_info.dart';
 import 'package:features/signup/domain/repositories/oidc_signup_repository.dart';
 import 'package:injectable/injectable.dart';
+import 'package:uuid/uuid.dart';
 
 @LazySingleton(as: OidcSignupRepository)
 class OidcSignupRepositoryAdapter implements OidcSignupRepository {
@@ -37,7 +38,7 @@ class OidcSignupRepositoryAdapter implements OidcSignupRepository {
       ),
       signupPayload: SignupRequestBody(
         deviceOs: DeviceOs.fromString(_deviceInfo.deviceOs),
-        deviceId: _deviceInfo.deviceId,
+        deviceId: Uuid().v4(),
         deviceToken: fcmToken!,
         nickname: info.nickname,
       ),

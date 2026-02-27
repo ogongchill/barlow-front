@@ -1,4 +1,5 @@
 import 'package:features/signup/domain/entities/oidc_signup_info.dart';
+import 'package:features/signup/domain/entities/signup_option.dart';
 import 'package:features/signup/presentation/viewmodel/term_agreement_notifier.dart';
 import 'package:features/signup/presentation/viewmodel/term_agreement_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,7 +18,6 @@ class _TestableTermAgreementNotifier extends TermAgreementNotifier {
     required String deviceId,
     required String deviceToken,
     required String deviceOs,
-    OidcProvider provider = OidcProvider.kakao,
   }) async {
     final current = state;
     if (current is! TermAgreementIdle) return;
@@ -27,8 +27,8 @@ class _TestableTermAgreementNotifier extends TermAgreementNotifier {
 
     try {
       final info = OidcSignupInfo(
-        idToken: current.idToken,
-        provider: provider,
+        idToken: (current.option as KakaoSignupOption).idToken,
+        provider: OidcProvider.kakao,
         termAgreements: current.terms,
         nickname: nickname,
         deviceId: deviceId,
@@ -64,6 +64,7 @@ ProviderContainer _makeContainer({
 // 테스트 픽스처
 
 const _testIdToken = 'kakao.oidc.id.token';
+const _testOption = KakaoSignupOption(idToken: _testIdToken);
 
 final _requiredTerms = [
   const TermAgreementItem(
@@ -121,14 +122,14 @@ void main() {
     // 초기 상태
     // -----------------------------------------------------------------------
 
-    test('초기 상태는 TermAgreementIdle 이며 terms 와 idToken 이 비어있다', () {
+    test('초기 상태는 TermAgreementIdle 이며 terms 가 비어있다', () {
       final container = _makeContainer();
       addTearDown(container.dispose);
 
       final s = container.read(termAgreementProvider);
       expect(s, isA<TermAgreementIdle>());
       final idle = s as TermAgreementIdle;
-      expect(idle.idToken, isEmpty);
+      expect(idle.option, isA<GuestSignupOption>());
       expect(idle.terms, isEmpty);
     });
 
@@ -136,16 +137,16 @@ void main() {
     // initialize
     // -----------------------------------------------------------------------
 
-    test('initialize 호출 후 idToken 과 terms 가 올바르게 설정된다', () {
+    test('initialize 호출 후 option 과 terms 가 올바르게 설정된다', () {
       final container = _makeContainer();
       addTearDown(container.dispose);
 
       container
           .read(termAgreementProvider.notifier)
-          .initialize(_testIdToken, _requiredTerms);
+          .initialize(_testOption, _requiredTerms);
 
       final s = container.read(termAgreementProvider) as TermAgreementIdle;
-      expect(s.idToken, _testIdToken);
+      expect((s.option as KakaoSignupOption).idToken, _testIdToken);
       expect(s.terms.length, 2);
       expect(s.terms.first.id, 1);
       expect(s.terms.first.isAgreed, false);
@@ -161,7 +162,7 @@ void main() {
 
       container
           .read(termAgreementProvider.notifier)
-          .initialize(_testIdToken, _requiredTerms);
+          .initialize(_testOption, _requiredTerms);
       container.read(termAgreementProvider.notifier).toggleTerm(1);
 
       final s = container.read(termAgreementProvider) as TermAgreementIdle;
@@ -175,7 +176,7 @@ void main() {
 
       container
           .read(termAgreementProvider.notifier)
-          .initialize(_testIdToken, _requiredTerms);
+          .initialize(_testOption, _requiredTerms);
       container.read(termAgreementProvider.notifier).toggleTerm(1);
       container.read(termAgreementProvider.notifier).toggleTerm(1);
 
@@ -193,7 +194,7 @@ void main() {
 
       container
           .read(termAgreementProvider.notifier)
-          .initialize(_testIdToken, _requiredTerms);
+          .initialize(_testOption, _requiredTerms);
 
       final s = container.read(termAgreementProvider) as TermAgreementIdle;
       expect(s.canSubmit, false);
@@ -205,7 +206,7 @@ void main() {
 
       container
           .read(termAgreementProvider.notifier)
-          .initialize(_testIdToken, _requiredTerms);
+          .initialize(_testOption, _requiredTerms);
       container.read(termAgreementProvider.notifier).toggleTerm(1);
       container.read(termAgreementProvider.notifier).toggleTerm(2);
 
@@ -219,7 +220,7 @@ void main() {
 
       container
           .read(termAgreementProvider.notifier)
-          .initialize(_testIdToken, _mixedTerms);
+          .initialize(_testOption, _mixedTerms);
       container.read(termAgreementProvider.notifier).toggleTerm(1);
       container.read(termAgreementProvider.notifier).toggleTerm(2);
       // id:3 (선택) 은 미동의 상태 유지
@@ -234,7 +235,7 @@ void main() {
 
       container
           .read(termAgreementProvider.notifier)
-          .initialize(_testIdToken, []);
+          .initialize(_testOption, []);
 
       final s = container.read(termAgreementProvider) as TermAgreementIdle;
       expect(s.canSubmit, false);
@@ -250,7 +251,7 @@ void main() {
 
       container
           .read(termAgreementProvider.notifier)
-          .initialize(_testIdToken, _mixedTerms);
+          .initialize(_testOption, _mixedTerms);
       container.read(termAgreementProvider.notifier).toggleAll();
 
       final s = container.read(termAgreementProvider) as TermAgreementIdle;
@@ -264,7 +265,7 @@ void main() {
 
       container
           .read(termAgreementProvider.notifier)
-          .initialize(_testIdToken, _mixedTerms);
+          .initialize(_testOption, _mixedTerms);
       container.read(termAgreementProvider.notifier).toggleAll();
       container.read(termAgreementProvider.notifier).toggleAll();
 
@@ -279,7 +280,7 @@ void main() {
 
       container
           .read(termAgreementProvider.notifier)
-          .initialize(_testIdToken, _mixedTerms);
+          .initialize(_testOption, _mixedTerms);
       container.read(termAgreementProvider.notifier).toggleTerm(1);
       container.read(termAgreementProvider.notifier).toggleAll();
 
@@ -297,7 +298,7 @@ void main() {
 
       container
           .read(termAgreementProvider.notifier)
-          .initialize(_testIdToken, _requiredTerms);
+          .initialize(_testOption, _requiredTerms);
       container.read(termAgreementProvider.notifier).toggleTerm(1);
       container.read(termAgreementProvider.notifier).toggleTerm(2);
 
@@ -322,7 +323,7 @@ void main() {
 
       container
           .read(termAgreementProvider.notifier)
-          .initialize(_testIdToken, _requiredTerms);
+          .initialize(_testOption, _requiredTerms);
       container.read(termAgreementProvider.notifier).toggleTerm(1);
       container.read(termAgreementProvider.notifier).toggleTerm(2);
 
@@ -349,7 +350,7 @@ void main() {
 
       container
           .read(termAgreementProvider.notifier)
-          .initialize(_testIdToken, _requiredTerms);
+          .initialize(_testOption, _requiredTerms);
       container.read(termAgreementProvider.notifier).toggleTerm(1);
       container.read(termAgreementProvider.notifier).toggleTerm(2);
 
@@ -376,7 +377,7 @@ void main() {
 
       container
           .read(termAgreementProvider.notifier)
-          .initialize(_testIdToken, _requiredTerms);
+          .initialize(_testOption, _requiredTerms);
 
       await container.read(termAgreementProvider.notifier).submit(
             nickname: _submitArgs.nickname,
@@ -406,7 +407,7 @@ void main() {
 
       container
           .read(termAgreementProvider.notifier)
-          .initialize(_testIdToken, _requiredTerms);
+          .initialize(_testOption, _requiredTerms);
       container.read(termAgreementProvider.notifier).toggleTerm(1);
       container.read(termAgreementProvider.notifier).toggleTerm(2);
 
@@ -440,7 +441,7 @@ void main() {
 
       container
           .read(termAgreementProvider.notifier)
-          .initialize(_testIdToken, _requiredTerms);
+          .initialize(_testOption, _requiredTerms);
       container.read(termAgreementProvider.notifier).toggleTerm(1);
       container.read(termAgreementProvider.notifier).toggleTerm(2);
 
@@ -462,12 +463,12 @@ void main() {
 
       container
           .read(termAgreementProvider.notifier)
-          .initialize(_testIdToken, _requiredTerms);
+          .initialize(_testOption, _requiredTerms);
       container.read(termAgreementProvider.notifier).resetToIdle();
 
       final s = container.read(termAgreementProvider);
       expect(s, isA<TermAgreementIdle>());
-      expect((s as TermAgreementIdle).idToken, _testIdToken);
+      expect((s as TermAgreementIdle).option, isA<KakaoSignupOption>());
     });
   });
 }

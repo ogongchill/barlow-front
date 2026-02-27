@@ -7,7 +7,13 @@ class _FakeKakaoAuthService implements KakaoAuthService {
   _FakeKakaoAuthService({this.idToken});
 
   @override
-  Future<String?> getIdToken() async => idToken;
+  Future<String?> getIdToken({required bool? forceLogin}) async => idToken;
+
+  @override
+  Future<void> logOut() {
+    // TODO: implement logOut
+    throw UnimplementedError();
+  }
 }
 
 void main() {

@@ -1,6 +1,8 @@
 import 'package:features/bill/presentation/viewmodel/committee_subscription_viewmodel.dart';
 import 'package:features/home/presentation/viewmodel/home_view_provider.dart';
 import 'package:features/bill/domain/constant/committee.dart';
+import 'package:features/signup/domain/entities/oidc_signup_info.dart';
+import 'package:features/signup/domain/entities/signup_option.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -55,6 +57,17 @@ class ApplicationNavigatorService {
   static void pushToNotificationCenter() => GoRouter.of(_context!).push('/notifications');
 
   static void pushToDonation() => GoRouter.of(_context!).push('/donation');
+
+  static void pushToSignupTerms({
+    required SignupOption option,
+    required List<TermAgreementItem> terms,
+  }) {
+    final context = _context;
+    if (context == null) return;
+    context.push('/signup/kakao/terms', extra: {'option': option, 'terms': terms});
+  }
+
+  static void pushToSignup() => GoRouter.of(_context!).go('/signup/default');
 
   static void goToSplash() => GoRouter.of(_context!).go('/splash');
 

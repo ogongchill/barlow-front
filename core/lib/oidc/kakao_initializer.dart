@@ -1,4 +1,4 @@
-import 'package:kakao_flutter_sdk_auth/kakao_flutter_sdk_auth.dart';
+import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 
 const String _kakaoNativeAppKey = String.fromEnvironment('KAKAO_NATIVE_APP_KEY');
 

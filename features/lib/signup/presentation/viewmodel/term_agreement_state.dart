@@ -1,9 +1,10 @@
 import 'package:features/signup/domain/entities/oidc_signup_info.dart';
+import 'package:features/signup/domain/entities/signup_option.dart';
 
 /// 약관 동의 화면의 UI 상태를 표현한다.
 ///
 /// - [TermAgreementIdle]    : 약관 목록 보유, 사용자 입력 대기 중
-/// - [TermAgreementLoading] : OidcSignupUseCase 실행 중
+/// - [TermAgreementLoading] : SignupUseCase 실행 중
 /// - [TermAgreementSuccess] : 회원가입 완료
 /// - [TermAgreementError]   : 오류 발생
 sealed class TermAgreementState {
@@ -11,11 +12,11 @@ sealed class TermAgreementState {
 }
 
 final class TermAgreementIdle extends TermAgreementState {
-  final String idToken;
+  final SignupOption option;
   final List<TermAgreementItem> terms;
 
   const TermAgreementIdle({
-    required this.idToken,
+    required this.option,
     required this.terms,
   });
 
@@ -30,11 +31,11 @@ final class TermAgreementIdle extends TermAgreementState {
   bool get isAllAgreed => terms.isNotEmpty && terms.every((t) => t.isAgreed);
 
   TermAgreementIdle copyWith({
-    String? idToken,
+    SignupOption? option,
     List<TermAgreementItem>? terms,
   }) {
     return TermAgreementIdle(
-      idToken: idToken ?? this.idToken,
+      option: option ?? this.option,
       terms: terms ?? this.terms,
     );
   }
