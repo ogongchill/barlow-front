@@ -1,7 +1,9 @@
 import 'package:core/api/api_exception.dart';
 import 'package:core/dependency/dependency_container.dart';
+import 'package:features/signup/domain/entities/guest_signup_info.dart';
 import 'package:features/signup/domain/entities/oidc_signup_info.dart';
 import 'package:features/signup/domain/entities/signup_option.dart';
+import 'package:features/signup/domain/usecases/guest_signup_usecase.dart';
 import 'package:features/signup/domain/usecases/oidc_signup_usecase.dart';
 import 'package:features/signup/presentation/viewmodel/term_agreement_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -91,8 +93,8 @@ class TermAgreementNotifier extends Notifier<TermAgreementState> {
           );
           await dependencyContainer<OidcSignupUseCase>().execute(info);
         case GuestSignupOption():
-          // TODO: GuestSignupUseCase 구현 시 교체
-          throw UnimplementedError('게스트 회원가입은 아직 구현되지 않았습니다.');
+          final info = GuestSignupInfo(nickname: nickname);
+          await dependencyContainer<GuestSignupUseCase>().execute(info);
       }
 
       state = const TermAgreementSuccess();
