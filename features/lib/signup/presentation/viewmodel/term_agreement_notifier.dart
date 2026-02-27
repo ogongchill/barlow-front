@@ -1,3 +1,4 @@
+import 'package:core/api/api_exception.dart';
 import 'package:core/dependency/dependency_container.dart';
 import 'package:features/signup/domain/entities/oidc_signup_info.dart';
 import 'package:features/signup/domain/entities/signup_option.dart';
@@ -96,7 +97,10 @@ class TermAgreementNotifier extends Notifier<TermAgreementState> {
 
       state = const TermAgreementSuccess();
     } catch (e) {
-      state = TermAgreementError(message: e.toString());
+      state = TermAgreementError(
+        message: e is ApiException ? e.message : e.toString(),
+        isApiError: e is ApiException,
+      );
     }
   }
 

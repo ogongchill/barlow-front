@@ -1,3 +1,4 @@
+import 'package:core/api/api_exception.dart';
 import 'package:core/dependency/dependency_container.dart';
 import 'package:features/signup/domain/entities/signup_option.dart';
 import 'package:features/signup/domain/usecases/fetch_active_terms_usecase.dart';
@@ -32,7 +33,7 @@ class SignupNotifier extends Notifier<SignupState> {
         terms: terms,
       );
     } catch (e) {
-      state = SignupError(message: e.toString());
+      state = SignupError(message: e is ApiException ? e.message : e.toString());
     }
   }
 
@@ -48,7 +49,7 @@ class SignupNotifier extends Notifier<SignupState> {
         terms: terms,
       );
     } catch (e) {
-      state = SignupError(message: e.toString());
+      state = SignupError(message: e is ApiException ? e.message : e.toString());
     }
   }
 

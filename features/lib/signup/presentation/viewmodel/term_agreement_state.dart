@@ -52,5 +52,13 @@ final class TermAgreementSuccess extends TermAgreementState {
 final class TermAgreementError extends TermAgreementState {
   final String message;
 
-  const TermAgreementError({required this.message});
+  /// API 서버에서 반환한 에러([ApiException])인 경우 true.
+  ///
+  /// true이면 UI는 스낵바 표시 후 초기 화면(SignupScreen)으로 복귀해야 한다.
+  final bool isApiError;
+
+  const TermAgreementError({
+    required this.message,
+    this.isApiError = false,
+  });
 }

@@ -1,5 +1,5 @@
-import 'package:design_system/theme/color_palette.dart';
 import 'package:features/navigation/application_navigation_service.dart';
+import 'package:features/signup/presentation/util/error_dialog.dart';
 import 'package:features/signup/presentation/view/signup_view.dart';
 import 'package:features/signup/presentation/viewmodel/signup_notifier.dart';
 import 'package:features/signup/presentation/viewmodel/signup_state.dart';
@@ -19,13 +19,12 @@ class SignupScreen extends ConsumerWidget {
         );
         ref.read(signupProvider.notifier).resetToIdle();
       } else if (next is SignupError) {
-        _showErrorSnackBar(context, next.message);
-        ref.read(signupProvider.notifier).resetToIdle();
+        _handleSignupError(context, ref, next);
       }
     });
 
     return Scaffold(
-      backgroundColor: ColorPalette.background,
+      backgroundColor: const Color(0xffF2F2F2),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
@@ -45,19 +44,18 @@ class SignupScreen extends ConsumerWidget {
     );
   }
 
-  void _showErrorSnackBar(BuildContext context, String message) {
-    if (!context.mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          message,
-          style: const TextStyle(fontFamily: 'gmarketSans', color: Colors.white),
-        ),
-        backgroundColor: ColorPalette.greyDark,
-        behavior: SnackBarBehavior.floating,
-        duration: const Duration(seconds: 3),
-      ),
-    );
+  Future<void> _handleSignupError(
+    BuildContext context,
+    WidgetRef ref,
+    SignupError error,
+  ) async {
+    await showSignupErrorDialog(
+        context: context,
+        title: "오류",
+        message: error.message,
+        onPressed: () => Navigator.of(context).pop());
+    ref.read(signupProvider.notifier).resetToIdle();
+    // SignupScreen은 이미 초기 화면 — 별도 이동 없음
   }
 }
 

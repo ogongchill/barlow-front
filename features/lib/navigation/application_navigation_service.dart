@@ -69,6 +69,12 @@ class ApplicationNavigatorService {
 
   static void pushToSignup() => GoRouter.of(_context!).go('/signup/default');
 
+  /// 인증 진입점으로 이동한다.
+  ///
+  /// 현재는 회원가입 선택 화면으로 이동한다.
+  /// 로그인 화면 도입 시 이 메서드의 목적지만 수정하면 된다.
+  static void goToAuthEntry() => GoRouter.of(_context!).go('/signup/default');
+
   static void goToSplash() => GoRouter.of(_context!).go('/splash');
 
   static void goToOnBoarding() => GoRouter.of(_context!).go('/onboarding');

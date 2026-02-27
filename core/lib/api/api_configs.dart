@@ -1,5 +1,6 @@
 import 'package:core/api/auth_interceptor.dart';
 import 'package:core/api/dio_configs.dart';
+import 'package:core/api/error_handler_interceptor.dart';
 import 'package:core/api/logger_interceptor.dart';
 import 'package:core/dependency/environment.dart';
 import 'package:dio/dio.dart';
@@ -16,7 +17,7 @@ abstract class DioConfigModule {
           receiveTimeout: apiServerConfig.receiveTimeOut,
           baseUrl: apiServerConfig.hostUrl
       )
-  ).. interceptors.addAll([LoggerInterceptor(), GetIt.instance<HeaderInterceptor>()]);
+  ).. interceptors.addAll([LoggerInterceptor(), GetIt.instance<HeaderInterceptor>(), ErrorHandlerInterceptor()]);
 
   @LazySingleton(env: [Env.prod])
   Dio get dioProd =>  Dio(
@@ -25,5 +26,5 @@ abstract class DioConfigModule {
           receiveTimeout: apiServerConfig.receiveTimeOut,
           baseUrl: apiServerConfig.hostUrl
       )
-  ).. interceptors.addAll([GetIt.instance<HeaderInterceptor>()]);
+  ).. interceptors.addAll([GetIt.instance<HeaderInterceptor>(), ErrorHandlerInterceptor()]);
 }

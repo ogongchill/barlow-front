@@ -35,10 +35,14 @@ class ApiClient {
       Response response = await _sendRequest(apiRoute, params, Options(extra: {'requiresAuth' : apiRoute.requiresAuth}), data);
       return _parseResponse(response, fromJson);
     } on DioException catch (dioException) {
-      int? code = dioException.response?.statusCode;
-      String? responseBody = dioException.response?.data.toString();
-      String statusCode = code == null ? 'unknown' : code.toString();
-      throw ApiException(code: statusCode, message: responseBody ?? dioException.message ?? '');
+      final error = dioException.error;
+      if (error is ApiException) throw error;
+      // ErrorHandlerInterceptor 미적용 환경 fallback
+      final statusCode = dioException.response?.statusCode?.toString() ?? 'unknown';
+      final message = dioException.response?.data?.toString()
+          ?? dioException.message
+          ?? '알 수 없는 오류가 발생했습니다.';
+      throw ApiException(code: statusCode, message: message);
     } on CheckedFromJsonException catch (jsonException) {
       throw ApiException(code: 'unknown', message: jsonException.message ?? '');
     } on Exception catch(e) {
@@ -51,6 +55,13 @@ class ApiClient {
       response.data,
           (json) => fromJson(json as Map<String, dynamic>),
     );
+    if (apiResponse.result == ResultType.error) {
+      final error = apiResponse.error;
+      throw ApiException(
+        code: error?.code ?? 'unknown',
+        message: error?.message ?? '알 수 없는 오류가 발생했습니다.',
+      );
+    }
     return apiResponse.data;
   }
 

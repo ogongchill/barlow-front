@@ -5,6 +5,7 @@ import 'package:design_system/theme/color_palette.dart';
 import 'package:features/navigation/application_navigation_service.dart';
 import 'package:features/signup/domain/entities/oidc_signup_info.dart';
 import 'package:features/signup/domain/entities/signup_option.dart';
+import 'package:features/signup/presentation/util/error_dialog.dart';
 import 'package:features/signup/presentation/viewmodel/term_agreement_notifier.dart';
 import 'package:features/signup/presentation/viewmodel/term_agreement_state.dart';
 import 'package:flutter/material.dart';
@@ -56,8 +57,7 @@ class _KakaoSignupTermsScreenState
       if (next is TermAgreementSuccess) {
         ApplicationNavigatorService.goToHome();
       } else if (next is TermAgreementError) {
-        _showErrorSnackBar(context, next.message);
-        ref.read(termAgreementProvider.notifier).resetToIdle();
+        _handleOauthSignupError(context, ref, next);
       }
     });
 
@@ -104,7 +104,11 @@ class _KakaoSignupTermsScreenState
   Future<void> _submit() async {
     final nickname = _nicknameController.text.trim();
     if (nickname.isEmpty) {
-      _showErrorSnackBar(context, '닉네임을 입력해주세요.');
+      await showSignupErrorDialog(
+          context: context,
+          title: '닉네임을 입력해주세요.',
+          message: '닉네임은 빈칸으로 생성 할 수 없습니다',
+          onPressed: () => Navigator.of(context).pop());
       return;
     }
     final deviceInfo = dependencyContainer<DeviceInfo>();
@@ -117,23 +121,17 @@ class _KakaoSignupTermsScreenState
           deviceOs: deviceInfo.deviceOs,
         );
   }
-
-  void _showErrorSnackBar(BuildContext context, String message) {
-    if (!context.mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          message,
-          style: const TextStyle(
-            fontFamily: 'gmarketSans',
-            color: Colors.white,
-          ),
-        ),
-        backgroundColor: ColorPalette.greyDark,
-        behavior: SnackBarBehavior.floating,
-        duration: const Duration(seconds: 3),
-      ),
-    );
+  Future<void> _handleOauthSignupError(
+    BuildContext context,
+    WidgetRef ref,
+    TermAgreementError error,
+  ) async {
+    ref.read(termAgreementProvider.notifier).resetToIdle();
+    await showSignupErrorDialog(
+        context: context,
+        title: "계정을 가입할 수 없습니다 :(",
+        message: error.message,
+        onPressed: () => ApplicationNavigatorService.goToAuthEntry() );
   }
 }
 
