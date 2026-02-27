@@ -11,8 +11,8 @@ import 'package:features/settings/presentation/screen/setting_screen.dart';
 import 'package:features/bill/domain/constant/committee.dart';
 import 'package:features/signup/domain/entities/oidc_signup_info.dart';
 import 'package:features/signup/domain/entities/signup_option.dart';
-import 'package:features/signup/presentation/screen/kakao_signup_terms_screen.dart';
-import 'package:features/signup/presentation/screen/signup_screen.dart';
+import 'package:features/signup/presentation/screen/signup_terms_screen.dart';
+import 'package:features/signup/presentation/screen/login_screen.dart';
 import 'package:features/splash/presentation/screen/on_boarding_screen.dart';
 import 'package:features/splash/presentation/view/permisssion_view.dart';
 import 'package:features/splash/presentation/screen/splash_screen.dart';
@@ -23,7 +23,6 @@ import 'package:features/navigation/application_navigation_service.dart';
 final GoRouter applicationRouter = GoRouter(
   navigatorKey: ApplicationNavigatorService.navigatorKey,
   initialLocation: '/splash',
-  // initialLocation: '/signup/default',
   routes: <RouteBase>[
     _homeRouter,
     _billRouter,
@@ -34,6 +33,7 @@ final GoRouter applicationRouter = GoRouter(
     _splashRouter,
     _onBoardingRouter,
     _signupRouter,
+    _loginRouter,
   ],
 );
 
@@ -46,15 +46,15 @@ final GoRoute _homeRouter = GoRoute(
 
 final GoRoute _billRouter = GoRoute(
     path: '/bill',
-    builder: (context, state) => Text("notFound"), // ✅ `/bill`에 대한 builder 추가
+    builder: (context, state) => Text("notFound"),
     routes:[
       GoRoute(
           path: '/detail/:billId',
           builder: (context, state) {
-            final Map<String, dynamic>? extraData = state.extra as Map<String, dynamic>?; // ✅ extra를 Map으로 변환
+            final Map<String, dynamic>? extraData = state.extra as Map<String, dynamic>?;
             final String title = extraData?["title"] ?? "법안 상세 정보";
             String? subtitle = extraData?["subtitile"];
-            final String billId = state.pathParameters['billId']!; // ✅ id 추출
+            final String billId = state.pathParameters['billId']!;
             return BillDetailScreen(title: title, subtitle: subtitle, billId: billId);
           }),
       GoRoute(
@@ -126,14 +126,10 @@ final GoRoute _signupRouter = GoRoute(
   builder: (context, state) => const SizedBox.shrink(),
   routes: [
     GoRoute(
-      path: '/default',
-      builder: (context, state) => const SignupScreen(),
-    ),
-    GoRoute(
       path: '/kakao/terms',
       builder: (context, state) {
         final extra = state.extra as Map<String, dynamic>;
-        return KakaoSignupTermsScreen(
+        return SignupTermsScreen(
           option: extra['option'] as SignupOption,
           terms: extra['terms'] as List<TermAgreementItem>,
           nickname: extra['nickname'] as String,
@@ -141,4 +137,9 @@ final GoRoute _signupRouter = GoRoute(
       },
     ),
   ],
+);
+
+final GoRoute _loginRouter = GoRoute(
+  path: '/login',
+  builder: (context, state) => const LoginScreen()
 );
