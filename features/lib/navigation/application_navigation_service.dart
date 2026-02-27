@@ -56,15 +56,18 @@ class ApplicationNavigatorService {
 
   static void pushToNotificationCenter() => GoRouter.of(_context!).push('/notifications');
 
-  static void pushToDonation() => GoRouter.of(_context!).push('/donation');
-
   static void pushToSignupTerms({
     required SignupOption option,
     required List<TermAgreementItem> terms,
+    required String nickname,
   }) {
     final context = _context;
     if (context == null) return;
-    context.push('/signup/kakao/terms', extra: {'option': option, 'terms': terms});
+    context.push('/signup/kakao/terms', extra: {
+      'option': option,
+      'terms': terms,
+      'nickname': nickname,
+    });
   }
 
   static void pushToSignup() => GoRouter.of(_context!).go('/signup/default');

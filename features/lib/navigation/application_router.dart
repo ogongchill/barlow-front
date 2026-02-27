@@ -22,8 +22,8 @@ import 'package:features/navigation/application_navigation_service.dart';
 
 final GoRouter applicationRouter = GoRouter(
   navigatorKey: ApplicationNavigatorService.navigatorKey,
-  // initialLocation: '/splash',
-  initialLocation: '/signup/default',
+  initialLocation: '/splash',
+  // initialLocation: '/signup/default',
   routes: <RouteBase>[
     _homeRouter,
     _billRouter,
@@ -136,6 +136,7 @@ final GoRoute _signupRouter = GoRoute(
         return KakaoSignupTermsScreen(
           option: extra['option'] as SignupOption,
           terms: extra['terms'] as List<TermAgreementItem>,
+          nickname: extra['nickname'] as String,
         );
       },
     ),

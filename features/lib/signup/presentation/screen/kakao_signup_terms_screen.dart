@@ -19,11 +19,13 @@ import 'package:url_launcher/url_launcher.dart';
 class KakaoSignupTermsScreen extends ConsumerStatefulWidget {
   final SignupOption option;
   final List<TermAgreementItem> terms;
+  final String nickname;
 
   const KakaoSignupTermsScreen({
     super.key,
     required this.option,
     required this.terms,
+    required this.nickname,
   });
 
   @override
@@ -33,11 +35,12 @@ class KakaoSignupTermsScreen extends ConsumerStatefulWidget {
 
 class _KakaoSignupTermsScreenState
     extends ConsumerState<KakaoSignupTermsScreen> {
-  final _nicknameController = TextEditingController();
+  late final TextEditingController _nicknameController;
 
   @override
   void initState() {
     super.initState();
+    _nicknameController = TextEditingController(text: widget.nickname);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref
           .read(termAgreementProvider.notifier)

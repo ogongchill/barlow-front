@@ -22,8 +22,13 @@ final class SignupLoading extends SignupState {
 final class SignupTermsReady extends SignupState {
   final SignupOption option;
   final List<TermAgreementItem> terms;
+  final String nickname;
 
-  const SignupTermsReady({required this.option, required this.terms});
+  const SignupTermsReady({
+    required this.option,
+    required this.terms,
+    required this.nickname,
+  });
 }
 
 final class SignupError extends SignupState {

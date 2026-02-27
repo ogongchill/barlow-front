@@ -20,7 +20,9 @@ class SignupNotifier extends Notifier<SignupState> {
   SignupState build() => const SignupIdle();
 
   /// 카카오 OIDC 로그인 → idToken 획득 → 약관 조회.
-  Future<void> startKakaoSignup() async {
+  ///
+  /// [nickname]은 SignupScreen에서 사용자가 입력(또는 랜덤 기본값)한 닉네임.
+  Future<void> startKakaoSignup({required String nickname}) async {
     if (state is SignupLoading) return;
     state = const SignupLoading();
     try {
@@ -31,6 +33,7 @@ class SignupNotifier extends Notifier<SignupState> {
       state = SignupTermsReady(
         option: KakaoSignupOption(idToken: idToken),
         terms: terms,
+        nickname: nickname,
       );
     } catch (e) {
       state = SignupError(message: e is ApiException ? e.message : e.toString());
@@ -38,7 +41,9 @@ class SignupNotifier extends Notifier<SignupState> {
   }
 
   /// 게스트 회원가입 → 약관 조회 (별도 credential 없음).
-  Future<void> startGuestSignup() async {
+  ///
+  /// [nickname]은 SignupScreen에서 사용자가 입력(또는 랜덤 기본값)한 닉네임.
+  Future<void> startGuestSignup({required String nickname}) async {
     if (state is SignupLoading) return;
     state = const SignupLoading();
     try {
@@ -47,6 +52,7 @@ class SignupNotifier extends Notifier<SignupState> {
       state = SignupTermsReady(
         option: const GuestSignupOption(),
         terms: terms,
+        nickname: nickname,
       );
     } catch (e) {
       state = SignupError(message: e is ApiException ? e.message : e.toString());

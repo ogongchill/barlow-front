@@ -16,6 +16,7 @@ class SignupScreen extends ConsumerWidget {
         ApplicationNavigatorService.pushToSignupTerms(
           option: next.option,
           terms: next.terms,
+          nickname: '',
         );
         ref.read(signupProvider.notifier).resetToIdle();
       } else if (next is SignupError) {
@@ -32,10 +33,10 @@ class SignupScreen extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const SignupView(),
+              const SignupView(nickname: '',),
               const SizedBox(height: 12),
               _GuestButton(
-                onPressed: () => ref.read(signupProvider.notifier).startGuestSignup(),
+                onPressed: () => ref.read(signupProvider.notifier).startGuestSignup(nickname: ''),
               ),
             ],
           ),
