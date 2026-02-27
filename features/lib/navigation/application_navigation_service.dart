@@ -73,7 +73,6 @@ class ApplicationNavigatorService {
   /// 인증 진입점으로 이동한다.
   ///
   /// 에러 발생 시 온보딩 화면으로 돌아간다.
-  // static void goToAuthEntry() => GoRouter.of(_context!).go('/onboarding');
 
   static void goToSplash() => GoRouter.of(_context!).go('/splash');
 
@@ -82,7 +81,7 @@ class ApplicationNavigatorService {
   static void goToPermissions() => GoRouter.of(_context!).go('/splash/permissions');
 
   /// 로그인 화면으로 이동한다.
-  static void goToLogin() => GoRouter.of(_context!).go('/login');
+  static void pushToLogin() => GoRouter.of(_context!).push('/login');
 
   static void popWithResult(BuildContext context) {
     return Navigator.pop(context, true);

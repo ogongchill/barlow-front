@@ -191,7 +191,7 @@ class _HasAccountLink extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: isLoading ? null : ApplicationNavigatorService.goToLogin,
+      onTap: isLoading ? null : ApplicationNavigatorService.pushToLogin,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8),
         child: Text(
