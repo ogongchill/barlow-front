@@ -1,4 +1,5 @@
 import 'package:design_system/imgs/onboarding_imgs.dart';
+import 'package:design_system/kakao_assets.dart';
 import 'package:design_system/theme/color_palette.dart';
 import 'package:features/navigation/application_navigation_service.dart';
 import 'package:features/signup/presentation/util/error_dialog.dart';
@@ -123,40 +124,32 @@ class _KakaoButton extends StatelessWidget {
   final bool isLoading;
   final VoidCallback? onPressed;
   const _KakaoButton({required this.isLoading, required this.onPressed});
-  static const _kakaoYellow = Color(0xFFFEE500);
-  static const _kakaoLabel = Color(0xFF191919);
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: onPressed,
-      style: ElevatedButton.styleFrom(
-        backgroundColor: _kakaoYellow,
-        foregroundColor: _kakaoLabel,
-        disabledBackgroundColor: _kakaoYellow.withValues(alpha: 0.6),
-        minimumSize: const Size.fromHeight(52),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        elevation: 0,
-      ),
-      child: isLoading
-          ? const SizedBox(
-              width: 22, height: 22,
+    return GestureDetector(
+      onTap: onPressed,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Opacity(
+            opacity: isLoading ? 0.6 : 1.0,
+            child: Image.asset(
+              KakaoAssets.signupLargeWide,
+              fit: BoxFit.fitWidth,
+            ),
+          ),
+          if (isLoading)
+            const SizedBox(
+              width: 22,
+              height: 22,
               child: CircularProgressIndicator(
                 strokeWidth: 2.5,
-                valueColor: AlwaysStoppedAnimation<Color>(_kakaoLabel),
+                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF191919)),
               ),
-            )
-          : const Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              spacing: 8,
-              children: [
-                Icon(Icons.chat_bubble_rounded, size: 20),
-                Text(
-                  '카카오로 시작하기',
-                  style: TextStyle(fontFamily: 'gmarketSans', fontWeight: FontWeight.w700, fontSize: 16),
-                ),
-              ],
             ),
+        ],
+      ),
     );
   }
 }
